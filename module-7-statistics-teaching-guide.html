@@ -1,0 +1,2146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 7: Statistics basics · Teaching guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Recursive:slnt,wght,CASL,CRSV,MONO@-15..0,300..1000,0..1,0..1,0..1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#17133A;--ink-2:#1F1A4A;--ink-3:#29235C;--deep:#120F2E;
+  --line:#3A3377;--text:#EEECFA;--muted:#B0AADB;
+  --violet:#A493FF;--teal:#43D2C3;--coral:#FF8472;--gold:#F6CB60;
+  --sans:"Recursive",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --measure:47rem;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:4.5rem}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--ink);color:var(--text);font-family:var(--sans);font-size:1.0625rem;line-height:1.65;font-variation-settings:"CASL" 0,"MONO" 0,"slnt" 0;-webkit-font-smoothing:antialiased}
+.wrap{max-width:var(--measure);margin-inline:auto;padding-inline:1.25rem}
+a{color:var(--teal);text-underline-offset:.2em}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
+h1,h2,h3,h4{margin:0;line-height:1.15;letter-spacing:-.015em;text-wrap:balance}
+p,ul,ol{margin:0 0 1rem}
+ul,ol{padding-left:1.3rem}
+li{margin-bottom:.35rem}
+li::marker{color:var(--muted)}
+code,pre,.calc,.fx{font-variation-settings:"MONO" 1,"CASL" 0,"slnt" 0}
+code{font-size:.9em;background:var(--ink-3);padding:.08em .38em;border-radius:5px}
+.xbar{text-decoration:overline}
+
+/* Hero */
+.hero{padding-top:clamp(2.5rem,7vw,5rem)}
+.hero h1{font-size:clamp(2.6rem,9vw,5.2rem);font-weight:900;letter-spacing:-.04em;line-height:.98;max-width:11ch}
+.lede{font-size:clamp(1.1rem,2.4vw,1.3rem);line-height:1.55;margin-top:1.5rem;max-width:38rem}
+.meta{color:var(--muted)}
+.bell-hero{display:block;width:100%;height:auto;margin:2.25rem 0 .5rem}
+
+/* Sticky contents */
+.toc{position:sticky;top:0;z-index:20;background:rgba(23,19,58,.94);border-block:1px solid var(--line);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.toc ol{display:flex;gap:.4rem;list-style:none;margin:0 auto;padding:.6rem 1.25rem;max-width:64rem;overflow-x:auto;scrollbar-width:none}
+.toc ol::-webkit-scrollbar{display:none}
+.toc li{margin:0;flex:none}
+.toc a{display:block;padding:.3rem .8rem;border:1px solid var(--line);border-radius:999px;color:var(--muted);text-decoration:none;font-size:.88rem;white-space:nowrap}
+.toc a:hover{color:var(--text);border-color:var(--violet)}
+
+/* Plan */
+.plan{padding-top:3rem}
+.plan h2{font-size:clamp(1.6rem,4vw,2.1rem);font-weight:800;margin-bottom:.75rem}
+.roadmap{list-style:none;padding:0;margin:1.5rem 0 2.5rem;border-bottom:1px solid var(--line)}
+.roadmap li{display:grid;grid-template-columns:3rem 1fr auto;column-gap:1rem;padding:.9rem 0;margin:0;border-top:1px solid var(--line)}
+.roadmap .n{font-weight:300;color:var(--muted);font-variant-numeric:tabular-nums}
+.roadmap a{color:var(--text);font-weight:700;text-decoration:none}
+.roadmap a:hover{color:var(--teal)}
+.roadmap .time{color:var(--gold);font-variant-numeric:tabular-nums;white-space:nowrap}
+.roadmap .sub{grid-column:2/-1;color:var(--muted);font-size:.95rem}
+.key-h{font-size:1.2rem;font-weight:750;margin-bottom:.9rem}
+.key{display:grid;grid-template-columns:repeat(auto-fit,minmax(14.5rem,1fr));gap:1rem 1.5rem;margin:0}
+.key div{margin:0}
+.key .lbl{margin:0 0 .15rem}
+.key dd{margin:0;color:var(--muted);font-size:.95rem}
+
+/* Units and topics */
+.unit{padding-top:4.5rem;margin-top:3rem;border-top:1px solid var(--line)}
+.unit h2{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 .9rem;font-size:clamp(2.2rem,7vw,3.4rem);font-weight:850;letter-spacing:-.035em}
+.unit h2 .n{font-weight:300;color:var(--muted);font-variant-numeric:tabular-nums}
+.unit-intro{font-size:1.15rem;margin-top:1.1rem}
+.unit-meta{color:var(--gold);font-size:.95rem}
+.topic{margin-top:3rem;padding-top:2.5rem;border-top:1px dashed var(--line)}
+.topic h3{font-size:clamp(1.5rem,4vw,1.9rem);font-weight:800;margin-bottom:.9rem}
+.ex h4{font-size:1.08rem;font-weight:750;margin:0 0 .5rem}
+.sub-h{font-size:1.15rem;font-weight:750;margin:2rem 0 .6rem}
+
+/* Block labels */
+.lbl{display:flex;align-items:center;gap:.55rem;margin:1.9rem 0 .55rem;font-size:.9rem;font-weight:700;color:var(--muted)}
+.lbl::before{content:"";flex:none;width:.72rem;height:.72rem;border-radius:2px;background:currentColor}
+.lbl.cue{color:var(--coral)}
+.lbl.cue::before{border-radius:50%}
+.lbl.fxl{color:var(--gold)}
+.lbl.exl{color:var(--teal)}
+.lbl.live{color:var(--teal)}
+.lbl.live::before{background:none;border:2px solid currentColor;border-radius:50%}
+.lbl.py{color:var(--violet)}
+.lbl.use{color:var(--muted)}
+.lbl.warn{color:var(--coral)}
+.lbl.warn::before{border-radius:0;clip-path:polygon(50% 0,100% 100%,0 100%)}
+
+/* Blocks */
+.say{margin:0;padding:.2rem 0 .2rem 1.15rem;border-left:3px solid var(--coral);font-size:1.2rem;line-height:1.55;font-weight:480;font-variation-settings:"CASL" 1,"MONO" 0,"slnt" -9}
+.fx{margin:0;padding:1rem 1.2rem;background:var(--deep);border:1px solid var(--line);border-radius:12px;color:var(--gold);font-size:1rem;line-height:2;overflow-x:auto;white-space:nowrap}
+.fx-note{display:block;white-space:normal;line-height:1.5;margin-top:.35rem;color:var(--muted);font-size:.9rem;font-variation-settings:"MONO" 0,"CASL" 0,"slnt" 0}
+.ex{background:var(--ink-2);border:1px solid var(--line);border-radius:16px;padding:1.2rem 1.25rem .35rem}
+.ex + .ex{margin-top:1rem}
+.calc{background:var(--deep);border-radius:8px;padding:.55rem .8rem;margin:0 0 1rem;font-size:.93rem;overflow-x:auto;white-space:nowrap}
+pre{margin:0;padding:1rem 1.15rem;background:var(--deep);border:1px solid var(--line);border-radius:10px;overflow-x:auto;font-size:.86rem;line-height:1.65}
+pre .c{color:#9089C6}
+.warn-box{background:rgba(255,132,114,.07);border:1px solid rgba(255,132,114,.34);border-radius:12px;padding:.95rem 1.15rem .1rem}
+.aside{border-left:3px solid var(--violet);padding:.1rem 0 .1rem 1rem;color:var(--muted);margin:1.25rem 0}
+
+/* Tables */
+.tbl{overflow-x:auto;margin:0 0 1.1rem;border:1px solid var(--line);border-radius:12px;background:var(--ink)}
+.ex .tbl{background:var(--deep)}
+table{width:100%;border-collapse:collapse;font-size:.93rem;font-variant-numeric:tabular-nums}
+th,td{padding:.55rem .8rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+thead th{background:var(--ink-3);color:var(--muted);font-weight:650;white-space:nowrap}
+tbody th{font-weight:650}
+tbody tr:last-child>*{border-bottom:0}
+.num{text-align:right}
+tr.total>*{font-weight:700;background:rgba(246,203,96,.06)}
+tr.hl>*{background:rgba(67,210,195,.1)}
+
+/* Figures */
+.fig{margin:1.25rem 0}
+.chart{display:block;width:100%;height:auto;max-width:620px}
+.fig-note{color:var(--muted);font-size:.9rem;margin-top:.5rem}
+.panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:.9rem;margin:1.25rem 0 .75rem}
+.panels figure{margin:0;padding:.7rem .7rem .6rem;background:var(--deep);border:1px solid var(--line);border-radius:14px}
+.panels svg{display:block;width:100%;height:auto}
+.panels figcaption{font-size:.88rem;color:var(--muted);margin-top:.45rem;line-height:1.45}
+.legend{display:flex;flex-wrap:wrap;gap:.35rem 1.25rem;margin:0 0 1rem;padding:0;list-style:none;font-size:.9rem;color:var(--muted)}
+.legend li{margin:0;display:flex;align-items:center;gap:.45rem}
+.legend li::before{content:"";width:1.1rem;height:3px;border-radius:2px;background:var(--c)}
+.legend li.dash::before{background:repeating-linear-gradient(90deg,var(--c) 0 5px,transparent 5px 9px)}
+
+/* SVG pieces */
+.s-axis{stroke:var(--muted);stroke-opacity:.55;stroke-width:1.5}
+.s-grid{stroke:var(--line);stroke-width:1}
+.s-text{fill:var(--muted);font-family:var(--sans);font-size:15px}
+.s-strong{fill:var(--text);font-weight:700}
+.bell-line{fill:none;stroke:var(--text);stroke-width:3;stroke-linejoin:round}
+.b3{fill:rgba(246,203,96,.16)}
+.b2{fill:rgba(164,147,255,.28)}
+.b1{fill:rgba(67,210,195,.36)}
+.bracket{fill:none;stroke-width:2}
+.mark{stroke-width:2.5;stroke-linecap:round}
+.dashed{stroke-dasharray:5 5}
+.fit{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.dot{stroke:var(--deep);stroke-width:1.5}
+.skew-area{fill:rgba(164,147,255,.22);stroke:var(--violet);stroke-width:2}
+.sd-band{fill:rgba(67,210,195,.22)}
+.path-euc{stroke:var(--teal);stroke-width:3.5;stroke-linecap:round}
+.path-man{fill:none;stroke:var(--coral);stroke-width:3.5;stroke-dasharray:8 6;stroke-linejoin:round}
+.pt{fill:var(--text);stroke:var(--deep);stroke-width:2}
+.box{fill:rgba(67,210,195,.2);stroke:var(--teal);stroke-width:2}
+.whisk{stroke:var(--text);stroke-width:2}
+.fence{stroke:var(--gold);stroke-width:1.5;stroke-dasharray:4 5}
+.st-teal{stroke:var(--teal)}.st-coral{stroke:var(--coral)}.st-gold{stroke:var(--gold)}.st-violet{stroke:var(--violet)}.st-text{stroke:var(--text)}
+.fl-teal{fill:var(--teal)}.fl-coral{fill:var(--coral)}.fl-gold{fill:var(--gold)}.fl-violet{fill:var(--violet)}.fl-text{fill:var(--text)}
+.mover{transition:transform .55s cubic-bezier(.3,.7,.2,1)}
+@media (prefers-reduced-motion:no-preference){
+  .animate .bell-line{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw 1.7s cubic-bezier(.3,.7,.2,1) .2s forwards}
+  .animate .band{opacity:0;animation:fade .8s ease-out forwards;animation-delay:var(--d)}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  @keyframes fade{to{opacity:1}}
+}
+@media (prefers-reduced-motion:reduce){.mover{transition:none}}
+
+/* Interactive widgets */
+.widget{margin:1.75rem 0;padding:1.2rem 1.25rem;background:var(--ink-2);border:1px solid rgba(67,210,195,.45);border-radius:20px}
+.widget .lbl{margin-top:0}
+.readout{display:flex;flex-wrap:wrap;gap:.5rem 2rem;margin:.5rem 0 1rem;color:var(--muted)}
+.readout b{display:block;font-size:1.6rem;line-height:1.2;color:var(--text);font-variant-numeric:tabular-nums}
+.readout .calc-out{display:block;color:var(--text);font-variation-settings:"MONO" 1,"CASL" 0,"slnt" 0;font-size:1rem}
+.btn-row{display:flex;flex-wrap:wrap;gap:.6rem;margin:.25rem 0 1rem}
+button{font:inherit;font-size:.95rem;font-weight:700;line-height:1.2;padding:.6rem 1.1rem;border-radius:999px;border:1px solid transparent;background:var(--teal);color:var(--deep);cursor:pointer}
+button:hover{filter:brightness(1.08)}
+button.ghost{background:transparent;color:var(--text);border-color:var(--line)}
+button.ghost:hover{border-color:var(--teal)}
+input,textarea{font:inherit;font-variation-settings:"MONO" 1,"CASL" 0,"slnt" 0;font-size:.95rem;color:var(--text);background:var(--deep);border:1px solid var(--line);border-radius:10px;padding:.5rem .65rem;width:100%}
+textarea{min-height:5.5rem;resize:vertical;line-height:1.5}
+.field-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;margin-bottom:1rem}
+.field-grid label{font-size:.85rem;color:var(--muted);display:grid;gap:.25rem}
+.err{color:var(--coral);font-weight:600;min-height:1.2em;margin:.25rem 0 .75rem}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1.25rem;align-items:start}
+.grid2 td{min-width:5.5rem}
+.interp{font-weight:600;margin-top:.75rem}
+
+/* Checkpoints */
+.gate{margin-top:3.5rem;padding:1.4rem 1.4rem .6rem;border:2px dashed rgba(246,203,96,.55);border-radius:24px;background:rgba(246,203,96,.035)}
+.gate h3{font-size:1.45rem;font-weight:800;color:var(--gold);margin-bottom:.4rem}
+.gate>p{color:var(--muted)}
+details.q{border-top:1px solid var(--line);padding:.8rem 0}
+details.q summary{display:flex;gap:.75rem;cursor:pointer;list-style:none;font-weight:600}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary::before{content:"+";flex:none;width:1.1rem;color:var(--gold);font-weight:800;font-size:1.15rem;line-height:1.45}
+details.q[open] summary::before{content:"\2212"}
+.ans{margin:.6rem 0 0 1.85rem;padding:.7rem .9rem;background:var(--ink-2);border-radius:10px}
+.ans p:last-child,.ans ol:last-child{margin-bottom:0}
+
+/* End matter */
+.endsec{padding-top:4.5rem;margin-top:3rem;border-top:1px solid var(--line)}
+.endsec h2{font-size:clamp(2rem,6vw,3rem);font-weight:850;letter-spacing:-.03em;margin-bottom:1rem}
+.foot{margin-top:5rem;border-top:1px solid var(--line);padding-block:2rem 3rem;color:var(--muted);font-size:.95rem}
+.foot strong{color:var(--text)}
+
+@media (max-width:640px){
+  body{font-size:1rem}
+  .say{font-size:1.08rem}
+  .split{grid-template-columns:1fr}
+  .field-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ex{padding:1rem 1rem .25rem}
+  .widget{padding:1rem}
+  .gate{padding:1.1rem 1rem .4rem}
+  .roadmap li{grid-template-columns:2.6rem 1fr auto}
+  .ans{margin-left:0}
+}
+
+/* Plain-words boxes and pictures */
+.plain{margin:0 0 1.3rem;padding:.9rem 1.15rem;border-radius:14px;background:rgba(164,147,255,.12);border:1px solid rgba(164,147,255,.38);font-size:1.14rem;line-height:1.5;font-weight:560}
+.plain::before{content:"In one line";display:block;font-size:.82rem;font-weight:700;color:var(--violet);margin-bottom:.2rem}
+.lbl.plain{color:var(--violet)}
+.lbl.plain::before{background:none;border:2px solid currentColor;border-radius:4px}
+.pic{margin:1.1rem 0 1.5rem;padding:.9rem .9rem .75rem;background:var(--deep);border:1px solid var(--line);border-radius:16px}
+.ex .pic{background:var(--ink)}
+.pic svg{display:block;width:100%;height:auto}
+.pic figcaption{color:var(--muted);font-size:.93rem;line-height:1.5;margin-top:.55rem}
+.s-big{font-size:18px;font-weight:700}
+.s-small{font-size:13px}
+.chip{stroke:var(--line);stroke-width:1}
+@media (max-width:640px){.plain{font-size:1.05rem}}
+</style>
+</head>
+<body>
+
+<header class="hero wrap">
+  <h1>Module 7: Statistics basics</h1>
+  <p class="lede">A trainer's guide to the statistics every data scientist leans on. Every concept opens with one plain sentence and a picture, then a Tanglish class cue, a worked real-time example, Python you can run live, and a checkpoint before you move on.</p>
+  <p class="meta">Six units, about six and a half hours of class time. Assumes learners already know Python lists and pandas Series.</p>
+  <svg id="hero-bell" class="bell-hero" viewBox="0 0 800 352" role="img" aria-label="Bell curve of a normal distribution. 68 percent of values fall within one standard deviation of the mean, 95 percent within two, and 99.7 percent within three."></svg>
+</header>
+
+<nav class="toc" aria-label="Units in this guide">
+  <ol>
+    <li><a href="#u1">7.1 Central tendency</a></li>
+    <li><a href="#u2">7.2 Probability</a></li>
+    <li><a href="#u3">7.3 Standard deviation</a></li>
+    <li><a href="#u4">7.4 Bias–variance</a></li>
+    <li><a href="#u5">7.5 Distance metrics</a></li>
+    <li><a href="#u6">7.6 Outliers</a></li>
+    <li><a href="#cheatsheet">Cheat sheet</a></li>
+    <li><a href="#practice">Practice</a></li>
+  </ol>
+</nav>
+
+<main>
+<section class="plan wrap" aria-labelledby="plan-h">
+  <h2 id="plan-h">How to run this module</h2>
+  <p>Teach the units in order; each one builds on the last. Every unit ends with a checkpoint. Move on when most of the batch answers without help, otherwise replay the example that tripped them up.</p>
+  <ol class="roadmap">
+    <li><span class="n">7.1</span><span><a href="#u1">Central tendency</a></span><span class="time">90 min</span><span class="sub">Mean, median, mode, skewness, normal distribution</span></li>
+    <li><span class="n">7.2</span><span><a href="#u2">Probability basics</a></span><span class="time">70 min</span><span class="sub">What probability means, types of probability, odds ratio</span></li>
+    <li><span class="n">7.3</span><span><a href="#u3">Standard deviation</a></span><span class="time">50 min</span><span class="sub">Data deviation and distribution, variance</span></li>
+    <li><span class="n">7.4</span><span><a href="#u4">Bias–variance tradeoff</a></span><span class="time">60 min</span><span class="sub">Underfitting, overfitting</span></li>
+    <li><span class="n">7.5</span><span><a href="#u5">Distance metrics</a></span><span class="time">45 min</span><span class="sub">Euclidean distance, Manhattan distance</span></li>
+    <li><span class="n">7.6</span><span><a href="#u6">Outlier analysis</a></span><span class="time">75 min</span><span class="sub">What an outlier is, interquartile range, box and whisker plot, upper whisker</span></li>
+  </ol>
+
+  <h3 class="key-h">What you'll find under every topic</h3>
+  <dl class="key">
+    <div><dt class="lbl plain">In one line</dt><dd>The whole idea in one simple sentence, with a picture right below it.</dd></div>
+    <div><dt class="lbl cue">Say it in class</dt><dd>A Tanglish analogy to open the topic before any formula.</dd></div>
+    <div><dt class="lbl fxl">Formula</dt><dd>The maths, written the way you'd put it on the board.</dd></div>
+    <div><dt class="lbl exl">Real-time example</dt><dd>A worked scenario from everyday Chennai life and business, with every number calculated.</dd></div>
+    <div><dt class="lbl live">Try it live</dt><dd>An interactive demo to project and play with in class.</dd></div>
+    <div><dt class="lbl py">Python</dt><dd>pandas, NumPy or SciPy code with its real output in the comments.</dd></div>
+    <div><dt class="lbl use">Where it's used</dt><dd>Where the idea shows up again in data science and ML.</dd></div>
+    <div><dt class="lbl warn">Watch out</dt><dd>The mistake learners, and interview candidates, make most often.</dd></div>
+  </dl>
+</section>
+
+<!-- ============ 7.1 CENTRAL TENDENCY ============ -->
+<section class="unit wrap" id="u1" aria-labelledby="u1-h">
+  <h2 id="u1-h"><span class="n">7.1</span> Central tendency</h2>
+  <p class="unit-intro">One number that says where the middle of the data sits. There are three ways to pick it (mean, median and mode), and skewness tells you which one to trust.</p>
+  <p class="unit-meta">About 90 minutes</p>
+
+  <!-- Mean -->
+  <article class="topic" id="mean">
+    <h3>Mean</h3>
+    <p class="plain">Add everything up and share it equally. The mean is what each person would get if the total were split fairly.</p>
+
+    <figure class="pic"><svg id="v-seesaw" viewBox="0 0 520 190" role="img" aria-label="Five salaries from 4 to 8 LPA sit on a see-saw that balances exactly at 6 LPA, the mean."></svg><figcaption>Put every value on a see-saw. The mean is the one point where it balances.</figcaption></figure>
+
+    <p>Add up every value and divide by how many values there are. The mean uses every single data point, which is both its strength and its weakness: one extreme value can drag it a long way.</p>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"5 friends hotel-la saapttu ₹1,000 bill vandhaa, ellarum equal-aa ₹200 podanum. Andha equal share dhaan mean. Aana oruthan mattum ₹600-ku order pannirundhaalum share ₹200 dhaan. Adhu dhaan mean-oda problem."</p>
+
+    <p class="lbl fxl">Formula</p>
+    <p class="fx"><span class="xbar">x</span> = Σx / n<span class="fx-note">Sample mean: add all values, divide by the count n.</span>μ = Σx / N<span class="fx-note">Population mean: same idea, when you have every member of the group.</span></p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>Salaries of a five-person startup team on OMR</h4>
+      <p>Annual salaries in lakhs per annum (LPA): 4, 5, 6, 7, 8.</p>
+      <p class="calc">Mean = (4 + 5 + 6 + 7 + 8) / 5 = 30 / 5 = 6 LPA</p>
+      <p>Now the founder adds his own salary to the payroll sheet: 60 LPA.</p>
+      <p class="calc">Mean = (4 + 5 + 6 + 7 + 8 + 60) / 6 = 90 / 6 = 15 LPA</p>
+      <p>A job post that says "average team salary 15 LPA" is technically true and completely misleading. Five of the six people earn 8 LPA or less. One extreme value pulled the mean up two and a half times.</p>
+    </div>
+
+    <div class="widget" id="w-mean">
+      <p class="lbl live">Try it live</p>
+      <p>Add the founder's salary and watch which marker jumps.</p>
+      <svg id="mm-svg" class="chart" viewBox="0 0 520 150" role="img" aria-label="Dot plot of team salaries with markers for the mean and the median."></svg>
+      <div class="readout" aria-live="polite">
+        <span>Mean<b><span id="mm-mean">6</span> LPA</b></span>
+        <span>Median<b><span id="mm-med">6</span> LPA</b></span>
+      </div>
+      <div class="btn-row"><button type="button" id="mm-toggle" aria-pressed="false">Add the founder at 60 LPA</button></div>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>import pandas as pd
+
+salary = pd.Series([4, 5, 6, 7, 8, 60])
+salary.mean()     <span class="c"># 15.0</span>
+salary.median()   <span class="c"># 6.5  (next topic explains why)</span></pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>Filling missing numeric values when a column has no outliers, standardising features (StandardScaler subtracts the mean), and business KPIs like average order value.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>The mean gets pulled by extreme values. Before reporting the mean of salaries, prices, rents or delivery times, check the median. If the two are far apart, the mean is misleading you.</p></div>
+  </article>
+
+  <!-- Median -->
+  <article class="topic" id="median">
+    <h3>Median</h3>
+    <p class="plain">Line the values up from smallest to biggest. The one standing in the middle is the median.</p>
+
+    <figure class="pic"><svg id="v-median" viewBox="0 0 520 230" role="img" aria-label="Five OMR rents sorted as bars: 12,000, 14,000, 15,000, 18,000 and 85,000. The middle bar, 15,000, is the median. The mean line at 28,800 sits above four of the five bars."></svg><figcaption>Sorted rents. The middle bar is the median. One ₹85,000 flat drags the mean line above four of the five flats.</figcaption></figure>
+
+    <p>The middle value once the data is sorted. It only cares about position, not size, so extreme values at either end barely move it.</p>
+    <ul>
+      <li>Odd number of values: the single middle value.</li>
+      <li>Even number of values: the average of the two middle values.</li>
+    </ul>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Class-la ellaraiyum height order-la line-aa nikka vechaa, correct-aa naduvula nikkiravar height dhaan median. Line-la kadaisi aal 6 adi-yaa irundhaalum 7 adi-yaa irundhaalum, naduvula irukkuravar adhe aal dhaan."</p>
+
+    <p class="lbl fxl">Formula</p>
+    <p class="fx">Median position = (n + 1) / 2<span class="fx-note">Always sort first. If the position lands between two values (like 3.5), average those two.</span></p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>Rents in one OMR apartment block</h4>
+      <p>Monthly rents of five flats: ₹15,000, ₹12,000, ₹18,000, ₹85,000 (the penthouse), ₹14,000.</p>
+      <p class="calc">Sorted: 12,000 | 14,000 | 15,000 | 18,000 | 85,000</p>
+      <p class="calc">Position = (5 + 1) / 2 = 3rd value, so median = ₹15,000</p>
+      <p>The mean is ₹28,800, and not a single tenant pays anywhere near that. This is why rent and salary reports quote the median.</p>
+      <p><strong>Even count:</strong> back to the salaries 4, 5, 6, 7, 8, 60. Position (6 + 1) / 2 = 3.5, so the median is (6 + 7) / 2 = 6.5 LPA, against a mean of 15.</p>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>rent = pd.Series([15000, 12000, 18000, 85000, 14000])
+rent.median()   <span class="c"># 15000.0  (pandas sorts for you)</span>
+rent.mean()     <span class="c"># 28800.0</span></pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>Filling missing values in skewed columns (income, fare, price), robust summaries in EDA reports, and RobustScaler, which centres data on the median.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>Forgetting to sort is the most common by-hand mistake. Also, the median ignores size completely: 10, 20, 30 and 19, 20, 900 both have a median of 20.</p></div>
+  </article>
+
+  <!-- Mode -->
+  <article class="topic" id="mode">
+    <h3>Mode</h3>
+    <p class="plain">The value that turns up most often. The crowd favourite.</p>
+
+    <figure class="pic"><svg id="v-mode" viewBox="0 0 520 210" role="img" aria-label="Bar chart of shoe sizes sold: size 7 twice, size 8 four times, size 9 twice, size 10 once. Size 8 is the tallest bar."></svg><figcaption>The tallest bar is the mode. Size 8 sells most, so the shop stocks it most.</figcaption></figure>
+
+    <p>The value that appears most often. It's the only measure of centre that works for categories like city, payment method or dish. A dataset can have one mode, two (bimodal), several (multimodal), or none when every value appears once.</p>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Kalyana veetla 200 per-la 120 per 'chicken biryani' kettaanga-na, biryani dhaan mode. Biryani-kkum curd rice-kkum 'average' kandupidikka mudiyaadhu. Adhanaala text data-ku mode mattum dhaan work aagum."</p>
+
+    <p class="lbl fxl">Formula</p>
+    <p class="fx">Mode = value with the highest frequency<span class="fx-note">Build a frequency table and pick the top row.</span></p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>Shoe sizes sold in one day at a T. Nagar footwear shop</h4>
+      <p>Sizes sold: 7, 8, 8, 9, 8, 10, 7, 8, 9.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Size</th><th class="num">Pairs sold</th></tr></thead>
+        <tbody>
+          <tr class="hl"><td>8</td><td class="num">4</td></tr>
+          <tr><td>7</td><td class="num">2</td></tr>
+          <tr><td>9</td><td class="num">2</td></tr>
+          <tr><td>10</td><td class="num">1</td></tr>
+        </tbody>
+      </table></div>
+      <p>The mode is size 8, so the owner restocks size 8 first. The mean shoe size is 8.22, which is useless because nobody makes a size 8.22.</p>
+      <p><strong>Bimodal:</strong> hourly orders at a Chennai restaurant peak around 1 PM and again around 8 PM. With two modes, the manager plans two rush shifts, not one "average" rush at 4:30 PM.</p>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>sizes = pd.Series([7, 8, 8, 9, 8, 10, 7, 8, 9])
+sizes.value_counts()   <span class="c"># 8: 4, 7: 2, 9: 2, 10: 1</span>
+sizes.mode()           <span class="c"># a Series containing 8</span>
+sizes.mode()[0]        <span class="c"># 8, the form to use when filling missing values</span></pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>Filling missing categorical values (most common city or payment mode), the majority-class baseline every classifier has to beat, and inventory or menu decisions.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>pandas <code>.mode()</code> returns a Series because there can be ties, so use <code>.mode()[0]</code> for a single value. On continuous data like exact rupee amounts every value may be unique; group the values into ranges first.</p></div>
+
+    <h4 class="sub-h">Mean, median and mode side by side</h4>
+    <div class="tbl"><table>
+      <thead><tr><th></th><th>Mean</th><th>Median</th><th>Mode</th></tr></thead>
+      <tbody>
+        <tr><th>Uses every value</th><td>Yes</td><td>No, only position</td><td>No, only frequency</td></tr>
+        <tr><th>Pulled by outliers</th><td>Strongly</td><td>Barely</td><td>No</td></tr>
+        <tr><th>Works on categories</th><td>No</td><td>Only if ordered (poor, good, excellent)</td><td>Yes</td></tr>
+        <tr><th>Best for</th><td>Symmetric numeric data</td><td>Skewed numeric data</td><td>Categorical data, most popular item</td></tr>
+      </tbody>
+    </table></div>
+  </article>
+
+  <!-- Skewness -->
+  <article class="topic" id="skewness">
+    <h3>Skewness</h3>
+    <p class="plain">Which side has the long tail? The mean always gets dragged toward that tail.</p>
+
+    <p>Skewness measures how lopsided a distribution is: which side has the longer tail. The mean always gets pulled toward the tail, so the order of mean, median and mode tells you the direction.</p>
+
+    <div class="panels" id="skew-panels"></div>
+    <ul class="legend">
+      <li style="--c:var(--gold)">Mode</li>
+      <li style="--c:var(--teal)">Median</li>
+      <li style="--c:var(--coral)">Mean</li>
+    </ul>
+
+    <div class="tbl"><table>
+      <thead><tr><th>Type</th><th>Tail</th><th>Order</th><th>Everyday examples</th></tr></thead>
+      <tbody>
+        <tr><th>Positive (right) skew</th><td>Long tail to the right</td><td>Mean &gt; median &gt; mode</td><td>Salaries, house prices, delivery times, hospital bills</td></tr>
+        <tr><th>Zero skew</th><td>Balanced</td><td>Mean ≈ median ≈ mode</td><td>Heights, machine fill volumes, measurement errors</td></tr>
+        <tr><th>Negative (left) skew</th><td>Long tail to the left</td><td>Mean &lt; median &lt; mode</td><td>Marks in an easy test, online star ratings, retirement age</td></tr>
+      </tbody>
+    </table></div>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Tail endha pakkam neelamaa pogudho, adhu dhaan skew direction. Mean eppovume andha tail pakkam izhukkapadum. Median konjam dhaan nagarum, mode nagaravae nagaraadhu."</p>
+
+    <p class="lbl fxl">Formula</p>
+    <p class="fx">Pearson's skewness = 3 × (Mean − Median) / SD<span class="fx-note">Rough guide: between −0.5 and 0.5 is fairly symmetric, 0.5 to 1 (either sign) is moderate, beyond ±1 is highly skewed. pandas <code>.skew()</code> uses a moment-based formula, so its number differs from this shortcut, but the sign always tells the same direction.</span></p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>Delivery times on a rainy Chennai evening (right skew)</h4>
+      <p>Ten food orders, in minutes: 22, 25, 26, 28, 30, 30, 32, 35, 60, 95.</p>
+      <p class="calc">Mean = 38.3 | Median = 30 | Mode = 30 | SD = 22.54</p>
+      <p class="calc">Pearson = 3 × (38.3 − 30) / 22.54 ≈ 1.10, highly right-skewed</p>
+      <p>Advertising "38 minutes on average" misleads both ways. Eight of the ten customers got their food within 35 minutes, while two waited an hour or more. The operations team should chase the tail, those 60 and 95 minute orders, not the average.</p>
+    </div>
+    <div class="ex">
+      <h4>Marks in an easy Python quiz (left skew)</h4>
+      <p>Nine learners, out of 100: 30, 45, 80, 85, 88, 90, 90, 92, 95.</p>
+      <p class="calc">Mean = 77.2 &lt; Median = 88 &lt; Mode = 90</p>
+      <p>Most of the batch is comfortable; two learners need a doubt-clearing session. The class average of 77 hides both facts.</p>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>delivery = pd.Series([22, 25, 26, 28, 30, 30, 32, 35, 60, 95])
+delivery.skew()   <span class="c"># 2.20, positive so right-skewed</span>
+
+quiz = pd.Series([30, 45, 80, 85, 88, 90, 90, 92, 95])
+quiz.skew()       <span class="c"># -1.59, negative so left-skewed</span></pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>Choosing between mean and median imputation, deciding when to log-transform a feature or target before linear regression (house prices are the classic case), and spotting data that breaks normality assumptions.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>Skewness from a handful of rows is unstable; one extra value can flip it. Always look at a histogram alongside the number.</p></div>
+  </article>
+
+  <!-- Normal distribution -->
+  <article class="topic" id="normal">
+    <h3>Normal distribution</h3>
+    <p class="plain">Most values sit near the middle, fewer and fewer as you move away, the same on both sides. Shaped like a temple bell.</p>
+
+    <p>A symmetric, bell-shaped distribution described completely by two numbers: the mean μ, where the centre sits, and the standard deviation σ, how wide the bell is. Mean, median and mode are all equal. Values near the centre are common and values far from it are rare, in a very predictable way:</p>
+    <ul>
+      <li>About 68% of values fall within 1 standard deviation of the mean.</li>
+      <li>About 95% fall within 2 standard deviations.</li>
+      <li>About 99.7% fall within 3 standard deviations.</li>
+    </ul>
+    <p>This is the empirical rule, or the 68–95–99.7 rule.</p>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Kovil mani (bell) shape-ai nenachukkonga. Naduvula dhaan kootam adhigam; rendu pakkamum poga poga aalunga kammi, rendu pakkamum same-aa irukkum. Mean, median, mode moonum ore idathula nikkum."</p>
+
+    <p class="lbl fxl">Formula</p>
+    <p class="fx">z = (x − μ) / σ<span class="fx-note">The z-score: how many standard deviations a value sits from the mean.</span>f(x) = 1 / (σ√(2π)) × e<sup>−(x − μ)² / 2σ²</sup><span class="fx-note">The density formula behind the curve. Learners don't need to memorise it; they need the z-score and the 68–95–99.7 rule.</span></p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>A milk packet filling machine</h4>
+      <p>A dairy plant's machine fills 500 ml packets. Over thousands of packets, the fill volume is normally distributed with μ = 502 ml and σ = 3 ml.</p>
+      <figure class="fig"><svg id="milk-bell" class="chart" viewBox="0 0 520 300" role="img" aria-label="Bell curve of milk fill volumes centred at 502 ml. 68 percent between 499 and 505, 95 percent between 496 and 508, 99.7 percent between 493 and 511."></svg></figure>
+      <div class="tbl"><table>
+        <thead><tr><th>Range</th><th>Volume</th><th class="num">Share of packets</th></tr></thead>
+        <tbody>
+          <tr><td>μ ± 1σ</td><td>499 to 505 ml</td><td class="num">about 68%</td></tr>
+          <tr><td>μ ± 2σ</td><td>496 to 508 ml</td><td class="num">about 95%</td></tr>
+          <tr><td>μ ± 3σ</td><td>493 to 511 ml</td><td class="num">about 99.7%</td></tr>
+        </tbody>
+      </table></div>
+      <p>A quality inspector picks up a 490 ml packet.</p>
+      <p class="calc">z = (490 − 502) / 3 = −4</p>
+      <p>A value four standard deviations below the mean happens about 3 times in 100,000 packets by chance. So the line is stopped and the machine is checked. That's statistical quality control in one line.</p>
+    </div>
+    <div class="ex">
+      <h4>Comparing marks across subjects</h4>
+      <p>Priya scores 78 in Maths (class mean 65, SD 5) and 85 in English (class mean 80, SD 10).</p>
+      <p class="calc">Maths: z = (78 − 65) / 5 = 2.6<br>English: z = (85 − 80) / 10 = 0.5</p>
+      <p>Her English mark is higher, but her Maths performance is far more exceptional compared with her class. z-scores let you compare marks on different scales fairly.</p>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>from scipy import stats
+
+<span class="c"># Share of packets between 496 and 508 ml</span>
+stats.norm.cdf(508, loc=502, scale=3) - stats.norm.cdf(496, loc=502, scale=3)   <span class="c"># 0.9545</span>
+
+z = (490 - 502) / 3   <span class="c"># -4.0</span>
+stats.norm.cdf(z)     <span class="c"># 0.00003, about 3 packets in 100,000</span></pre>
+
+    <p class="aside"><strong>One-line bonus:</strong> the bell shows up everywhere because of the Central Limit Theorem. Averages of many random samples tend to be normal even when the raw data isn't. It becomes important later for confidence intervals and hypothesis tests.</p>
+
+    <p class="lbl use">Where it's used</p>
+    <p>StandardScaler (it turns every feature into z-scores), the |z| &gt; 3 outlier rule, the assumptions behind linear regression residuals and Gaussian Naive Bayes, and confidence intervals.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>Don't assume every column is normal. Salaries, rents and delivery times are skewed, and the 68–95–99.7 rule gives wrong answers on them. Check a histogram or a Q-Q plot first.</p></div>
+  </article>
+
+  <aside class="gate" aria-labelledby="g1-h">
+    <h3 id="g1-h">Checkpoint 7.1</h3>
+    <p>Ask these before starting 7.2. Tap a question to reveal its answer.</p>
+    <details class="q"><summary>Q1. Find the mean, median and mode of 3, 7, 7, 2, 9.</summary><div class="ans"><p>Sorted: 2, 3, 7, 7, 9. Mean = 28 / 5 = 5.6, median = 7, mode = 7. The mean sitting below the median hints at a slight left skew.</p></div></details>
+    <details class="q"><summary>Q2. A Chennai IT company's salaries show a mean of ₹9 LPA and a median of ₹6 LPA. Which way is the data skewed, and which figure should HR quote to freshers?</summary><div class="ans"><p>Right (positive) skew: a few high salaries pull the mean above the median. HR should quote the median, because it's what a typical employee earns.</p></div></details>
+    <details class="q"><summary>Q3. Which measure would you use to fill missing values in a "Payment method" column?</summary><div class="ans"><p>The mode. The column is categorical, so a mean or median doesn't exist.</p></div></details>
+    <details class="q"><summary>Q4. Exam marks are normally distributed with mean 60 and SD 8. Roughly what share of students scored between 44 and 76?</summary><div class="ans"><p>44 is μ − 2σ and 76 is μ + 2σ, so about 95%.</p></div></details>
+  </aside>
+</section>
+
+<!-- ============ 7.2 PROBABILITY ============ -->
+<section class="unit wrap" id="u2" aria-labelledby="u2-h">
+  <h2 id="u2-h"><span class="n">7.2</span> Probability basics</h2>
+  <p class="unit-intro">Almost every model learners will build outputs a probability: will this customer leave, is this email spam, is this transaction fraud. This unit gives them the language for "how likely", plus the odds ratio that logistic regression speaks in.</p>
+  <p class="unit-meta">About 70 minutes</p>
+
+  <!-- What is probability -->
+  <article class="topic" id="probability">
+    <h3>What does probability mean?</h3>
+    <p class="plain">A number from 0 (never happens) to 1 (always happens) that says how likely something is.</p>
+
+    <figure class="pic"><svg id="v-scale" viewBox="0 0 520 160" role="img" aria-label="A probability scale from 0 to 1 with five markers: impossible at 0, rolling a six at 0.17, a coin landing heads at 0.5, a fraud score at 0.92, and certain at 1."></svg><figcaption>Every probability lives somewhere on this line.</figcaption></figure>
+
+    <p>Probability is a number from 0 to 1 that measures how likely an event is. 0 means impossible, 1 means certain, and 0.5 is a coin flip. You can write the same probability as a fraction (1/2), a decimal (0.5) or a percentage (50%).</p>
+    <p>When all outcomes are equally likely, you can count: favourable outcomes divided by total outcomes. The chance that the event doesn't happen is 1 minus its probability.</p>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Weather app 'naalaikku 70% mazhai' nu sonnaa, idhe maadhiri climate irundha 100 naal-la kitta thatta 70 naal mazhai peidhirukku nu artham. 100% guarantee illa. Aana kudai eduthuttu povadhu nalladhu."</p>
+
+    <p class="lbl fxl">Formula</p>
+    <p class="fx">P(E) = favourable outcomes / total outcomes<br>0 ≤ P(E) ≤ 1<br>P(not E) = 1 − P(E)</p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>A sweet box, a mail server and a bank</h4>
+      <p><strong>Sweet box:</strong> 12 sweets inside, 4 Mysore pak and 8 laddus. Pick one without looking.</p>
+      <p class="calc">P(Mysore pak) = 4 / 12 ≈ 0.33<br>P(not Mysore pak) = 1 − 0.33 = 0.67</p>
+      <p><strong>Mail server:</strong> a company received 1,000 emails yesterday and 150 were spam.</p>
+      <p class="calc">P(spam) = 150 / 1,000 = 0.15</p>
+      <p><strong>Bank:</strong> a fraud model scores a card transaction at P(fraud) = 0.92. The bank doesn't wait for certainty. Anything above its chosen threshold, say 0.80, is held and an OTP goes to the customer.</p>
+      <div class="tbl"><table>
+        <thead><tr><th class="num">Probability</th><th class="num">Percent</th><th>Reads as</th></tr></thead>
+        <tbody>
+          <tr><td class="num">0</td><td class="num">0%</td><td>Impossible</td></tr>
+          <tr><td class="num">0.17</td><td class="num">17%</td><td>Rolling a 6 on one dice</td></tr>
+          <tr><td class="num">0.5</td><td class="num">50%</td><td>A coin landing heads</td></tr>
+          <tr><td class="num">0.92</td><td class="num">92%</td><td>Very likely, like the fraud score above</td></tr>
+          <tr><td class="num">1</td><td class="num">100%</td><td>Certain</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>import numpy as np
+
+rolls = np.random.randint(1, 7, size=10_000)   <span class="c"># 10,000 dice rolls</span>
+(rolls == 6).mean()                             <span class="c"># about 0.167, close to 1/6</span></pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>Every classifier's <code>predict_proba</code> output, choosing decision thresholds, A/B test results and risk scores.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>A probability describes the long run, not a promise. A 0.92 fraud score can still be a genuine customer, which is why banks confirm with an OTP instead of blocking the card outright. And the probabilities of all possible outcomes must add up to 1.</p></div>
+  </article>
+
+  <!-- Types -->
+  <article class="topic" id="types">
+    <h3>Types of probability</h3>
+    <p class="plain">Chance of one thing (marginal), of two things together (joint), or of one thing when you already know another (conditional).</p>
+
+    <p>Teach this in two groups. The first is about where the number comes from. The second is about how many events you're looking at, and that second group is the one ML uses every day.</p>
+
+    <h4 class="sub-h">By where the number comes from</h4>
+    <div class="tbl"><table>
+      <thead><tr><th>Type</th><th>How it's worked out</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><th>Classical (theoretical)</th><td>By reasoning, when every outcome is equally likely</td><td>P(King from a deck of cards) = 4 / 52 ≈ 0.077</td></tr>
+        <tr><th>Empirical (experimental)</th><td>By counting what actually happened in data</td><td>240 of 2,000 broadband customers cancelled last quarter, so P(cancel) = 0.12</td></tr>
+        <tr><th>Subjective</th><td>From judgement or experience</td><td>A sales head feels 80% sure the Coimbatore client signs this month</td></tr>
+      </tbody>
+    </table></div>
+    <p><strong>Axiomatic</strong> probability is the rulebook under all three: a probability is never negative, all outcomes add up to 1, and for events that can't happen together you add their probabilities. Data scientists mostly work with empirical probability, because the dataset is the experiment.</p>
+
+    <h4 class="sub-h">By how many events are involved</h4>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Motha class-la evlo per late-aa varaanga? Adhu marginal. Bus-la vandhu AND late-aa varavanga evlo per? Adhu joint. Bus-la varavangala mattum eduthaa, adhula evlo per late? Adhu conditional."</p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>Customer churn at a Chennai telecom company</h4>
+      <p>200 customers, split by plan and by whether they left in the last quarter.</p>
+      <div class="tbl"><table>
+        <thead><tr><th></th><th class="num">Churned</th><th class="num">Stayed</th><th class="num">Total</th></tr></thead>
+        <tbody>
+          <tr><th>Prepaid</th><td class="num">40</td><td class="num">60</td><td class="num">100</td></tr>
+          <tr><th>Postpaid</th><td class="num">10</td><td class="num">90</td><td class="num">100</td></tr>
+          <tr class="total"><th>Total</th><td class="num">50</td><td class="num">150</td><td class="num">200</td></tr>
+        </tbody>
+      </table></div>
+      <div class="tbl"><table>
+        <thead><tr><th>Type</th><th>Question it answers</th><th>From the table</th></tr></thead>
+        <tbody>
+          <tr><th>Marginal</th><td>How likely is one event, ignoring everything else?</td><td>P(Churn) = 50 / 200 = 0.25</td></tr>
+          <tr><th>Joint</th><td>How likely are two events together?</td><td>P(Prepaid and Churn) = 40 / 200 = 0.20</td></tr>
+          <tr><th>Conditional</th><td>How likely is one event, once we know another happened?</td><td>P(Churn | Prepaid) = 40 / 100 = 0.40<br>P(Churn | Postpaid) = 10 / 100 = 0.10</td></tr>
+        </tbody>
+      </table></div>
+      <figure class="pic"><svg id="v-churn" viewBox="0 0 520 270" role="img" aria-label="200 customers drawn as squares in two blocks of 100. In the prepaid block 40 squares are coral for churned; in the postpaid block only 10 are coral."></svg><figcaption>Each square is one customer; coral squares left. Marginal: all 50 coral squares out of 200. Joint: the 40 coral squares in the prepaid block, out of all 200. Conditional: look only inside one block, so 40 out of 100.</figcaption></figure>
+      <p>Prepaid customers churn at four times the rate of postpaid customers (0.40 against 0.10), so the retention budget should go to prepaid first.</p>
+      <p>If plan type and churn were unrelated, P(Prepaid and Churn) would be 0.5 × 0.25 = 0.125. It's actually 0.20, so the two are linked.</p>
+    </div>
+
+    <p class="lbl fxl">Formula</p>
+    <p class="fx">Marginal: P(A) = count of A / total<br>Joint: P(A ∩ B) = count of A and B together / total<br>Conditional: P(A | B) = P(A ∩ B) / P(B)<br>Independent events only: P(A ∩ B) = P(A) × P(B)</p>
+
+    <p class="lbl py">Python</p>
+<pre>df = pd.DataFrame({
+    "plan":  ["Prepaid"] * 100 + ["Postpaid"] * 100,
+    "churn": ["Yes"] * 40 + ["No"] * 60 + ["Yes"] * 10 + ["No"] * 90,
+})
+
+pd.crosstab(df["plan"], df["churn"], margins=True)       <span class="c"># counts with totals</span>
+pd.crosstab(df["plan"], df["churn"], normalize="all")    <span class="c"># joint probabilities</span>
+pd.crosstab(df["plan"], df["churn"], normalize="index")  <span class="c"># P(churn | plan): Prepaid, Yes = 0.40</span></pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>Naive Bayes is built entirely on conditional probability. Churn and conversion rates by segment drive most business dashboards. Bayes' theorem, the natural next step, flips P(A | B) into P(B | A).</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>P(A | B) is not P(B | A). P(Churn | Prepaid) = 0.40, but P(Prepaid | Churn) = 40 / 50 = 0.80. "40% of prepaid users churn" and "80% of churners are prepaid" are different statements, and mixing them up leads to wrong business calls.</p></div>
+  </article>
+
+  <!-- Odds ratio -->
+  <article class="topic" id="odds">
+    <h3>Odds ratio</h3>
+    <p class="plain">Odds compare "it happens" with "it doesn't happen". The odds ratio compares those odds between two groups.</p>
+
+    <p><strong>Odds</strong> compare the chance an event happens with the chance it doesn't. A probability of 0.8 gives odds of 0.8 / 0.2 = 4, read as "4 to 1".</p>
+    <p>The <strong>odds ratio</strong> (OR) compares the odds in two groups, like the odds of churning for prepaid against postpaid customers.</p>
+    <ul>
+      <li>OR = 1: the group makes no difference.</li>
+      <li>OR &gt; 1: the first group has higher odds.</li>
+      <li>OR &lt; 1: the first group has lower odds.</li>
+    </ul>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Home ground-la 5 match-la 4 jeichu 1 thothaa, jeikkira odds 4 : 1. Probability 4/5 = 0.8. Rendu group-oda odds-ai divide panni compare panradhu dhaan odds ratio."</p>
+
+    <p class="lbl fxl">Formula</p>
+    <p class="fx">Odds = p / (1 − p)<br>p = odds / (1 + odds)<br>OR = odds in group 1 / odds in group 2<br>For a 2×2 table with cells a, b (row 1) and c, d (row 2): OR = (a × d) / (b × c)</p>
+
+    <div class="tbl"><table>
+      <thead><tr><th class="num">Probability</th><th class="num">Odds</th><th>Read as</th></tr></thead>
+      <tbody>
+        <tr><td class="num">0.20</td><td class="num">0.25</td><td>1 to 4</td></tr>
+        <tr><td class="num">0.50</td><td class="num">1</td><td>1 to 1, even</td></tr>
+        <tr><td class="num">0.80</td><td class="num">4</td><td>4 to 1</td></tr>
+        <tr><td class="num">0.90</td><td class="num">9</td><td>9 to 1</td></tr>
+        <tr><td class="num">0.99</td><td class="num">99</td><td>99 to 1</td></tr>
+      </tbody>
+    </table></div>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>The same telecom churn table</h4>
+      <p class="calc">Odds of churn, prepaid = 40 / 60 = 0.667<br>Odds of churn, postpaid = 10 / 90 = 0.111<br>OR = 0.667 / 0.111 = 6.0</p>
+      <p class="calc">Shortcut: (40 × 90) / (60 × 10) = 3,600 / 600 = 6</p>
+      <figure class="pic"><svg id="v-odds" viewBox="0 0 520 200" role="img" aria-label="Two bars of 100 customers each. Prepaid: 40 churned against 60 stayed, odds 0.67. Postpaid: 10 churned against 90 stayed, odds 0.11. Dividing gives an odds ratio of 6."></svg><figcaption>Odds = the coral part divided by the grey part of each bar. Divide one group's odds by the other's to get the odds ratio.</figcaption></figure>
+      <p><strong>Say it as:</strong> prepaid customers have 6 times the odds of churning compared with postpaid customers.</p>
+      <p>The ratio of probabilities (relative risk) is 0.40 / 0.10 = 4, so prepaid customers are 4 times as likely to churn. Both statements are correct; they measure different things. Train learners to say "times the odds" for the odds ratio and "times as likely" for relative risk.</p>
+    </div>
+
+    <div class="widget" id="w-prob">
+      <p class="lbl live">Try it live</p>
+      <p>Change the counts and every probability, odds and ratio updates. Ask the class to predict the odds ratio before you type.</p>
+      <div class="tbl"><table class="grid2">
+        <thead><tr><th></th><th>Churned</th><th>Stayed</th></tr></thead>
+        <tbody>
+          <tr><th>Prepaid</th><td><input id="pa" type="number" min="0" step="1" value="40" aria-label="Prepaid customers who churned"></td><td><input id="pb" type="number" min="0" step="1" value="60" aria-label="Prepaid customers who stayed"></td></tr>
+          <tr><th>Postpaid</th><td><input id="pc" type="number" min="0" step="1" value="10" aria-label="Postpaid customers who churned"></td><td><input id="pd" type="number" min="0" step="1" value="90" aria-label="Postpaid customers who stayed"></td></tr>
+        </tbody>
+      </table></div>
+      <p class="err" id="p-note" aria-live="polite"></p>
+      <div class="tbl"><table>
+        <thead><tr><th>Measure</th><th>Calculation</th><th class="num">Value</th></tr></thead>
+        <tbody id="p-out"></tbody>
+      </table></div>
+      <p class="interp" id="p-interp" aria-live="polite"></p>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>a, b = 40, 60   <span class="c"># prepaid: churned, stayed</span>
+c, d = 10, 90   <span class="c"># postpaid: churned, stayed</span>
+
+odds_prepaid  = a / b              <span class="c"># 0.667</span>
+odds_postpaid = c / d              <span class="c"># 0.111</span>
+odds_ratio    = (a * d) / (b * c)  <span class="c"># 6.0</span>
+
+<span class="c"># In logistic regression, each coefficient converts to an odds ratio:</span>
+<span class="c"># np.exp(model.coef_)</span></pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>Reading logistic regression (the exponent of a coefficient is the odds ratio for a one-unit increase in that feature), medical and insurance studies such as smokers against non-smokers, credit risk, and marketing campaign results.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>"6 times the odds" is not "6 times as likely". The two only come close when the event is rare, roughly under 10%. And if any cell in the table is 0 the formula breaks; the usual fix is to add 0.5 to every cell.</p></div>
+  </article>
+
+  <aside class="gate" aria-labelledby="g2-h">
+    <h3 id="g2-h">Checkpoint 7.2</h3>
+    <p>Ask these before starting 7.3.</p>
+    <details class="q"><summary>Q1. A laptop passes quality check with probability 0.8. What are the odds of passing?</summary><div class="ans"><p>0.8 / 0.2 = 4, or 4 to 1.</p></div></details>
+    <details class="q"><summary>Q2. "Over the last six months, 12% of orders were cancelled." Which type of probability is this?</summary><div class="ans"><p>Empirical. It's counted from observed data.</p></div></details>
+    <details class="q"><summary>Q3. From the churn table, what is P(Prepaid | Churn), and why isn't it 0.40?</summary><div class="ans"><p>40 / 50 = 0.80. It asks "of the customers who churned, how many were prepaid?", while 0.40 answers "of the prepaid customers, how many churned?"</p></div></details>
+    <details class="q"><summary>Q4. A WhatsApp coupon campaign: 120 of 500 customers who got a coupon made a purchase, and 60 of 500 without a coupon did. What's the odds ratio?</summary><div class="ans"><p>Coupon: 120 bought, 380 didn't. No coupon: 60 bought, 440 didn't. OR = (120 × 440) / (380 × 60) ≈ 2.32. Customers with a coupon had about 2.3 times the odds of buying.</p></div></details>
+  </aside>
+</section>
+
+<!-- ============ 7.3 STANDARD DEVIATION ============ -->
+<section class="unit wrap" id="u3" aria-labelledby="u3-h">
+  <h2 id="u3-h"><span class="n">7.3</span> Standard deviation</h2>
+  <p class="unit-intro">The mean says where the centre is. It says nothing about how spread out the data is, and two datasets with the same mean can behave completely differently.</p>
+  <p class="unit-meta">About 50 minutes</p>
+
+  <!-- Deviation & distribution -->
+  <article class="topic" id="deviation">
+    <h3>Data deviation and distribution</h3>
+    <p class="plain">How far each value sits from the average. Standard deviation is the typical distance.</p>
+
+    <p>A <strong>deviation</strong> is how far one value sits from the mean: x − <span class="xbar">x</span>. Values above the mean have positive deviations and values below have negative ones.</p>
+    <p>Deviations always add up to exactly zero, so averaging them tells you nothing. Standard deviation fixes that: square the deviations, average them, then take the square root. The result is the typical distance of a data point from the mean.</p>
+    <ul>
+      <li><strong>Small SD:</strong> values packed tightly around the mean. Consistent and predictable.</li>
+      <li><strong>Large SD:</strong> values spread widely. Hard to predict.</li>
+    </ul>
+    <p>In a normal distribution the SD sets the width of the bell, which is why 68% of values land within one SD of the mean.</p>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Rendu batsman-um 5 match-la average 50 dhaan. A daily 48 to 52 adippaaru; B oru naal duck, adutha naal century. Selector-aa irundhaa World Cup-ku yaarai eduppeenga? Andha consistency-ai number-aa sollradhu dhaan standard deviation."</p>
+
+    <p class="lbl fxl">Formula</p>
+    <p class="fx">Deviation = x − <span class="xbar">x</span><br>Σ(x − <span class="xbar">x</span>) = 0, always<br>Sample SD: s = √[ Σ(x − <span class="xbar">x</span>)² / (n − 1) ]<br>Population SD: σ = √[ Σ(x − μ)² / N ]</p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>Two batsmen with the same average</h4>
+      <p>Runs in their last five matches.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Match</th><th class="num">A runs</th><th class="num">A deviation</th><th class="num">B runs</th><th class="num">B deviation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td class="num">48</td><td class="num">−2</td><td class="num">0</td><td class="num">−50</td></tr>
+          <tr><td>2</td><td class="num">50</td><td class="num">0</td><td class="num">100</td><td class="num">+50</td></tr>
+          <tr><td>3</td><td class="num">52</td><td class="num">+2</td><td class="num">10</td><td class="num">−40</td></tr>
+          <tr><td>4</td><td class="num">49</td><td class="num">−1</td><td class="num">90</td><td class="num">+40</td></tr>
+          <tr><td>5</td><td class="num">51</td><td class="num">+1</td><td class="num">50</td><td class="num">0</td></tr>
+          <tr class="total"><td>Total</td><td class="num">250</td><td class="num">0</td><td class="num">250</td><td class="num">0</td></tr>
+        </tbody>
+      </table></div>
+      <figure class="fig"><svg id="bat-svg" class="chart" viewBox="0 0 520 200" role="img" aria-label="Dot plot of both batsmen's scores. Batsman A's scores cluster tightly around 50; Batsman B's are spread from 0 to 100."></svg>
+        <figcaption class="fig-note">Dashed line: the mean of 50. Shaded band: mean ± 1 SD.</figcaption></figure>
+      <p>Both average 50 and both sets of deviations add up to zero. The difference is spread: A's SD is 1.58 runs and B's is 45.28. For a tense chase the selector wants A. For a gamble on a big score, maybe B. Either way the choice now rests on a number, not a feeling.</p>
+    </div>
+    <div class="ex">
+      <h4>Two mutual funds with the same return</h4>
+      <p>Funds X and Y both averaged a 12% return a year over ten years. Fund X's yearly returns have an SD of 2%; Fund Y's have an SD of 15%. In finance the SD of returns is called volatility. In a bad year Fund Y could easily post a loss (12% − 15% = −3%), while Fund X barely moves. Same mean, very different risk.</p>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>a = pd.Series([48, 50, 52, 49, 51])
+b = pd.Series([0, 100, 10, 90, 50])
+
+(a - a.mean()).sum()   <span class="c"># 0.0, deviations always cancel out</span>
+a.std()                <span class="c"># 1.58</span>
+b.std()                <span class="c"># 45.28</span></pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>StandardScaler divides by the SD, z-score outlier detection, volatility and risk metrics, control charts in manufacturing, and error bars in reports.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>SD is in the same units as the data (runs, rupees, minutes), which makes it easy to explain. But because it squares deviations, a single outlier inflates it heavily. On skewed data, report the IQR alongside it.</p></div>
+  </article>
+
+  <!-- Variance -->
+  <article class="topic" id="variance">
+    <h3>Variance</h3>
+    <p class="plain">Square each distance from the mean and average the squares. That's variance. Take its square root and you're back to standard deviation.</p>
+
+    <p>Variance is the average of the squared deviations, the step just before taking the square root. So SD = √variance, and variance = SD².</p>
+    <p>Squaring does two jobs: it removes the minus signs, and it punishes large deviations far more than small ones. The catch is the unit. The variance of runs is measured in runs², which nobody can picture. That's why we report the SD and keep variance for the maths underneath.</p>
+    <p><strong>Sample or population?</strong> Divide by N when you have the whole population. Divide by n − 1 when you have a sample, which is almost always the case in data science. The smaller divisor corrects a sample's habit of underestimating the true spread; this is called Bessel's correction.</p>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Deviation-ai square panni average pannaa variance. Aana commentary-la 'avar consistency 2.5 runs-square' nu yaarum solla maattaanga. Adhanaala square root eduthu thirumba runs unit-ku kondu varom. Adhu dhaan SD."</p>
+
+    <p class="lbl fxl">Formula</p>
+    <p class="fx">Sample variance: s² = Σ(x − <span class="xbar">x</span>)² / (n − 1)<br>Population variance: σ² = Σ(x − μ)² / N<br>Standard deviation = √variance</p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>Working it out for both batsmen</h4>
+      <p>Do it on the board in this order:</p>
+      <ol>
+        <li>Find the mean.</li>
+        <li>Subtract the mean from each value to get the deviations.</li>
+        <li>Square each deviation.</li>
+        <li>Add up the squares.</li>
+        <li>Divide by n − 1 for a sample (or N for a population). That's the variance.</li>
+        <li>Take the square root. That's the standard deviation.</li>
+      </ol>
+      <div class="tbl"><table>
+        <thead><tr><th>Match</th><th class="num">A deviation</th><th class="num">A squared</th><th class="num">B deviation</th><th class="num">B squared</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td class="num">−2</td><td class="num">4</td><td class="num">−50</td><td class="num">2,500</td></tr>
+          <tr><td>2</td><td class="num">0</td><td class="num">0</td><td class="num">+50</td><td class="num">2,500</td></tr>
+          <tr><td>3</td><td class="num">+2</td><td class="num">4</td><td class="num">−40</td><td class="num">1,600</td></tr>
+          <tr><td>4</td><td class="num">−1</td><td class="num">1</td><td class="num">+40</td><td class="num">1,600</td></tr>
+          <tr><td>5</td><td class="num">+1</td><td class="num">1</td><td class="num">0</td><td class="num">0</td></tr>
+          <tr class="total"><td>Total</td><td class="num">0</td><td class="num">10</td><td class="num">0</td><td class="num">8,200</td></tr>
+        </tbody>
+      </table></div>
+      <figure class="pic"><svg id="v-squares" viewBox="0 0 520 280" role="img" aria-label="Batsman A's deviations drawn as squares: two squares of area 4, two of area 1 and none for the score of 50. Their areas add to 10. Divided by 4 gives a variance of 2.5, and the side of a square with that area is 1.58, the standard deviation."></svg><figcaption>Variance is literally about squares. Each deviation becomes a square; average the areas to get the variance, and the side of that average square is the SD.</figcaption></figure>
+      <p class="calc">Batsman A: variance = 10 / 4 = 2.5 runs², SD = √2.5 = 1.58 runs<br>Batsman B: variance = 8,200 / 4 = 2,050 runs², SD = √2,050 = 45.28 runs</p>
+      <p>If these five matches were the entire population, A's variance would be 10 / 5 = 2 and the SD 1.41.</p>
+      <p><strong>Bonus:</strong> the coefficient of variation, SD / mean × 100, compares spread across different scales. A = 3.2%, B = 90.6%.</p>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>a.var()                   <span class="c"># 2.5     pandas default ddof=1 (sample)</span>
+b.var()                   <span class="c"># 2050.0</span>
+
+import numpy as np
+np.std(a.values)          <span class="c"># 1.41    NumPy default ddof=0 (population)</span>
+np.std(a.values, ddof=1)  <span class="c"># 1.58    now matches pandas</span></pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>PCA ranks directions by how much variance they capture, VarianceThreshold drops near-constant features, and the "variance" in the bias–variance tradeoff (next unit) borrows the same idea of spread.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>The pandas and NumPy defaults trip up almost everyone. On the same data, <code>Series.std()</code> gives 1.58 and <code>np.std()</code> gives 1.41. Pass <code>ddof=1</code> to NumPy when you're working with a sample.</p></div>
+  </article>
+
+  <aside class="gate" aria-labelledby="g3-h">
+    <h3 id="g3-h">Checkpoint 7.3</h3>
+    <p>Ask these before starting 7.4.</p>
+    <details class="q"><summary>Q1. Find the population SD of 2, 4, 4, 4, 5, 5, 7, 9.</summary><div class="ans"><p>Mean = 40 / 8 = 5. Squared deviations: 9, 1, 1, 1, 0, 0, 4, 16, which add to 32. Variance = 32 / 8 = 4, so SD = 2.</p></div></details>
+    <details class="q"><summary>Q2. Why do we square the deviations instead of just averaging them?</summary><div class="ans"><p>Deviations always sum to zero, so their plain average is always zero. Squaring removes the signs and gives bigger gaps more weight.</p></div></details>
+    <details class="q"><summary>Q3. Two delivery partners both average 30 minutes. Partner P has an SD of 3 minutes and partner Q has 12. Who should get the guaranteed 30-minute premium orders?</summary><div class="ans"><p>Partner P. Same mean, but the smaller SD means far more predictable delivery times.</p></div></details>
+    <details class="q"><summary>Q4. <code>df["salary"].std()</code> and <code>np.std(df["salary"].values)</code> give different answers. Why?</summary><div class="ans"><p>pandas divides by n − 1 (sample) and NumPy divides by N (population) by default. Use <code>ddof=1</code> in NumPy to match.</p></div></details>
+  </aside>
+</section>
+
+<!-- ============ 7.4 BIAS-VARIANCE ============ -->
+<section class="unit wrap" id="u4" aria-labelledby="u4-h">
+  <h2 id="u4-h"><span class="n">7.4</span> Bias–variance tradeoff</h2>
+  <p class="unit-intro">Every model makes two kinds of mistake. Bias is the error of being too simple to see the pattern. Variance is the error of being so flexible that the model learns the noise. Push one down and the other tends to go up, so the job is finding the balance.</p>
+  <p class="unit-meta">About 60 minutes</p>
+
+  <p class="plain">Too simple and the model misses the pattern. Too complex and it memorises the noise. Aim for the middle.</p>
+
+  <p class="aside"><strong>Bridge from 7.3:</strong> "variance" here is about the model. It means how much the model's predictions would change if you trained it on a different sample of the same data. It's the same idea of spread, applied to predictions instead of raw values.</p>
+
+  <p class="lbl cue">Say it in class</p>
+  <p class="say">"Exam-ku moonu vidha students. Onnu: book-ai thirandhe paakkaama ellaa question-ukkum ore answer ezhudhuravan. Adhu underfit. Rendu: last year question paper-ai vari vari-yaa mug-up pannavan. Same question vandhaa 100, konjam maathi kettaa zero. Adhu overfit. Moonu: concept purinju padichavan, endha question vandhaalum answer pannuvaan. Adhu good fit."</p>
+
+  <figure class="pic"><svg id="v-target" viewBox="0 0 520 350" role="img" aria-label="Four dartboards. Low bias and low variance: darts tightly grouped on the bullseye. Low bias and high variance: darts scattered around the bullseye. High bias and low variance: darts tightly grouped but away from the bullseye. High bias and high variance: scattered and off-centre."></svg><figcaption>Think of each dart as the model trained on a different sample of data. Bias is how far the group lands from the bullseye; variance is how spread out the darts are.</figcaption></figure>
+
+  <div class="panels" id="fit-panels"></div>
+
+  <figure class="fig">
+    <svg id="tradeoff-svg" class="chart" viewBox="0 0 520 300" role="img" aria-label="As model complexity grows, training error keeps falling while test error falls and then rises again, forming a U shape. The lowest point of test error is the sweet spot between underfitting and overfitting."></svg>
+    <ul class="legend" style="margin-top:.6rem">
+      <li style="--c:var(--teal)">Training error</li>
+      <li style="--c:var(--coral)">Test error</li>
+      <li class="dash" style="--c:var(--violet)">Bias²</li>
+      <li class="dash" style="--c:var(--gold)">Variance</li>
+    </ul>
+  </figure>
+
+  <p class="lbl fxl">Formula</p>
+  <p class="fx">Expected test error = Bias² + Variance + Irreducible noise<span class="fx-note">No model can remove the noise. Bias and variance can only be traded against each other.</span></p>
+
+  <div class="tbl"><table>
+    <thead><tr><th>Situation</th><th>Training error</th><th>Test error</th><th>Gap</th><th>Diagnosis</th></tr></thead>
+    <tbody>
+      <tr><th>Underfitting</th><td>High</td><td>High</td><td>Small</td><td>High bias</td></tr>
+      <tr class="hl"><th>Good fit</th><td>Low</td><td>Low</td><td>Small</td><td>Balanced</td></tr>
+      <tr><th>Overfitting</th><td>Very low</td><td>High</td><td>Large</td><td>High variance</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- Underfitting -->
+  <article class="topic" id="underfitting">
+    <h3>Underfitting</h3>
+    <p class="plain">The model is too simple. It does badly everywhere, even on data it has already seen.</p>
+
+    <p>The model is too simple for the pattern in the data: high bias, low variance. It performs badly on the training data and just as badly on new data, because it never learned the relationship in the first place.</p>
+    <p><strong>Signs:</strong> a low training score, and a test score that's about as low.</p>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Ellaa flat-kkum 'sq.ft × ₹5,000' nu ore rate pottaa, Adyar flat-um Tambaram flat-um same price aayidum. Simple-aa irukku, aana ellaa idathilum thappu."</p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>Predicting Chennai flat prices from square feet alone</h4>
+      <p>A straight-line model uses a single feature: area. It predicts roughly the same price for a 1,000 sq ft flat in Adyar and one in Tambaram, so it's wrong almost everywhere.</p>
+      <p class="calc">Illustrative scores: training R² 0.45, test R² 0.42</p>
+      <p>Both scores are poor and there's almost no gap between them. That's the signature of high bias.</p>
+    </div>
+
+    <div class="tbl"><table>
+      <thead><tr><th>Cause</th><th>Fix</th></tr></thead>
+      <tbody>
+        <tr><td>Too few or weak features</td><td>Add meaningful ones: locality, floor, building age, amenities</td></tr>
+        <tr><td>Model too simple for the pattern</td><td>Try polynomial features, tree-based models or ensembles</td></tr>
+        <tr><td>Too much regularisation</td><td>Reduce the penalty (lower alpha, or raise C)</td></tr>
+        <tr><td>Not trained enough</td><td>More iterations or epochs</td></tr>
+      </tbody>
+    </table></div>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>More data rarely rescues an underfit model. A straight line fitted to a million curved points is still a straight line. Fix the model or the features first.</p></div>
+  </article>
+
+  <!-- Overfitting -->
+  <article class="topic" id="overfitting">
+    <h3>Overfitting</h3>
+    <p class="plain">The model memorised the training data. Full marks in practice, poor marks in the real exam.</p>
+
+    <p>The model is too complex for the amount of data: low bias, high variance. It memorises the training rows, noise and one-off accidents included, so it scores brilliantly on training data and disappoints on anything new.</p>
+    <p><strong>Signs:</strong> a very high training score and a clearly lower test score, with a big gap between them.</p>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Model 'F-block 3rd floor flat ₹1.4 crore-ku vithuchu' nu kooda nyaabagam vechukkuchu. Training data-la full marks; pudhu flat vandhaa kolappam."</p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>The same flats, with an unlimited decision tree</h4>
+      <p>A fully grown tree creates a rule for nearly every training flat, including the one that sold for ₹1.4 crore only because the buyer was in a hurry.</p>
+      <p class="calc">Illustrative scores: training R² 0.99, test R² 0.58</p>
+      <p>That 0.41 gap is variance showing itself.</p>
+    </div>
+    <div class="ex">
+      <h4>A fraud model that learned the wrong lesson</h4>
+      <p>Trained on a small dataset, a fraud model learns that every transaction from one particular ATM is fraud, because two frauds happened there. In production it starts blocking every honest customer who uses that ATM.</p>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>from sklearn.datasets import make_moons
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+
+X, y = make_moons(n_samples=600, noise=0.35, random_state=42)
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.3, random_state=42)
+
+for depth in [1, 4, None]:
+    model = DecisionTreeClassifier(max_depth=depth, random_state=42).fit(X_tr, y_tr)
+    print(depth, round(model.score(X_tr, y_tr), 2), round(model.score(X_te, y_te), 2))
+
+<span class="c"># 1 0.82 0.78      underfitting: both scores low</span>
+<span class="c"># 4 0.9 0.86       good fit: both high, small gap</span>
+<span class="c"># None 1.0 0.81    overfitting: perfect on train, drops on test</span></pre>
+
+    <div class="tbl" style="margin-top:1.25rem"><table>
+      <thead><tr><th>Cause</th><th>Fix</th></tr></thead>
+      <tbody>
+        <tr><td>Model too complex</td><td>Limit <code>max_depth</code>, prune trees, use fewer polynomial terms</td></tr>
+        <tr><td>Too little data</td><td>Collect more rows, or augment the data</td></tr>
+        <tr><td>Too many irrelevant features</td><td>Feature selection, L1 (Lasso) regularisation</td></tr>
+        <tr><td>Judged only on training data</td><td>Use a validation set and k-fold cross-validation</td></tr>
+        <tr><td>Trained too long (neural networks)</td><td>Early stopping, dropout</td></tr>
+        <tr><td>One high-variance model</td><td>Ensembles like Random Forest average the variance out</td></tr>
+      </tbody>
+    </table></div>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>A 100% training score is a warning, not a win. Always report training and test (or cross-validation) scores side by side; the gap between them tells the story.</p></div>
+  </article>
+
+  <aside class="gate" aria-labelledby="g4-h">
+    <h3 id="g4-h">Checkpoint 7.4</h3>
+    <p>Ask these before starting 7.5.</p>
+    <details class="q"><summary>Q1. Training accuracy is 98% and test accuracy is 71%. What's happening, and what are two fixes?</summary><div class="ans"><p>Overfitting (high variance). Limit model complexity such as <code>max_depth</code>, add regularisation, get more data, or tune with cross-validation.</p></div></details>
+    <details class="q"><summary>Q2. Training accuracy is 62% and test accuracy is 60%, on a task where people score 95%. Diagnosis?</summary><div class="ans"><p>Underfitting (high bias). Add better features, use a more flexible model or reduce regularisation.</p></div></details>
+    <details class="q"><summary>Q3. Will collecting ten times more data fix an underfitting model?</summary><div class="ans"><p>Usually not. More data mainly helps overfitting; an underfit model needs more capacity or better features.</p></div></details>
+  </aside>
+</section>
+
+<!-- ============ 7.5 DISTANCE METRICS ============ -->
+<section class="unit wrap" id="u5" aria-labelledby="u5-h">
+  <h2 id="u5-h"><span class="n">7.5</span> Distance metrics</h2>
+  <p class="unit-intro">"How similar are these two?" is a distance question. KNN, K-means and recommendation systems all start by measuring how far apart two rows of data are. Two rulers do most of that work.</p>
+  <p class="unit-meta">About 45 minutes</p>
+
+  <figure class="pic"><svg id="v-grid" viewBox="0 0 520 360" role="img" aria-label="A street grid. A restaurant at point 1, 2 and a home at point 4, 6. A straight teal line joins them: the drone path, 5 kilometres. A dashed coral path follows the streets, 3 blocks across then 4 blocks up: the auto path, 7 kilometres."></svg>
+    <figcaption>Same two points, two answers. The drone flies straight (Euclidean, 5 km). The auto follows the streets (Manhattan, 3 + 4 = 7 km).</figcaption></figure>
+
+  <!-- Euclidean -->
+  <article class="topic" id="euclidean">
+    <h3>Euclidean distance</h3>
+    <p class="plain">The straight-line distance between two points, as the crow flies.</p>
+    <p>It comes straight from Pythagoras: square the difference along each axis, add them, take the square root. It works the same way with 2 features or 200.</p>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Drone-la biriyani anuppina, building mela straight-aa parandhu varum. Road, signal, U-turn edhuvum kidaiyaadhu. Adhu dhaan Euclidean distance: kaakka parakkura distance."</p>
+
+    <p class="lbl fxl">Formula</p>
+    <p class="fx">Two features: d = √[ (x₂ − x₁)² + (y₂ − y₁)² ]<br>Any number of features: d = √[ Σ (pᵢ − qᵢ)² ]</p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>Drone delivery from a restaurant to a home</h4>
+      <p>On the city grid the restaurant is at (1, 2) and the home is at (4, 6), in kilometres.</p>
+      <p class="calc">Across: 4 − 1 = 3 &nbsp; Up: 6 − 2 = 4<br>d = √(3² + 4²) = √(9 + 16) = √25 = 5 km</p>
+      <p>The 3–4–5 triangle makes this the easiest example to do on the board.</p>
+    </div>
+    <div class="ex">
+      <h4>Which student is most like Student S?</h4>
+      <p>Marks in Maths, Science and English.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Student</th><th class="num">Maths</th><th class="num">Science</th><th class="num">English</th><th class="num">Distance from S</th></tr></thead>
+        <tbody>
+          <tr class="hl"><th>S</th><td class="num">80</td><td class="num">70</td><td class="num">60</td><td class="num">–</td></tr>
+          <tr><th>P</th><td class="num">85</td><td class="num">75</td><td class="num">65</td><td class="num">8.66</td></tr>
+          <tr><th>Q</th><td class="num">80</td><td class="num">70</td><td class="num">45</td><td class="num">15.0</td></tr>
+        </tbody>
+      </table></div>
+      <p class="calc">S to P: √(5² + 5² + 5²) = √75 ≈ 8.66<br>S to Q: √(0² + 0² + 15²) = √225 = 15</p>
+      <p>P is closer, so a KNN model would group S with P. Hold on to this table: Manhattan distance gives a surprising answer for it in the next topic.</p>
+    </div>
+
+    <div class="widget" id="w-dist">
+      <p class="lbl live">Try it live</p>
+      <p>Change the two points, or tap anywhere on the grid to move point B. Both distances update together.</p>
+      <div class="field-grid">
+        <label>A: x<input id="dx1" type="number" min="0" max="10" step="1" value="1"></label>
+        <label>A: y<input id="dy1" type="number" min="0" max="10" step="1" value="2"></label>
+        <label>B: x<input id="dx2" type="number" min="0" max="10" step="1" value="4"></label>
+        <label>B: y<input id="dy2" type="number" min="0" max="10" step="1" value="6"></label>
+      </div>
+      <svg id="dist-svg" class="chart" viewBox="0 0 520 330" role="img" aria-label="Grid showing points A and B with the straight Euclidean path and the stepped Manhattan path between them."></svg>
+      <div class="readout" aria-live="polite">
+        <span>Euclidean<b id="d-euc">5</b></span>
+        <span>Manhattan<b id="d-man">7</b></span>
+      </div>
+      <p class="calc" id="d-calc"></p>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>from scipy.spatial import distance
+
+distance.euclidean((1, 2), (4, 6))                  <span class="c"># 5.0</span>
+distance.euclidean((80, 70, 60), (85, 75, 65))      <span class="c"># 8.66</span>
+
+import numpy as np
+np.linalg.norm(np.array([4, 6]) - np.array([1, 2]))  <span class="c"># 5.0, same thing by hand</span></pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>The default distance in KNN and K-means, finding similar customers or products, and clustering locations on a map.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box">
+      <p><strong>Always scale your features first.</strong> Three customers: A is 25 years old earning ₹40,000; B is 45 earning ₹40,500; C is 26 earning ₹45,000. Who is closest to A?</p>
+    </div>
+    <figure class="pic"><svg id="v-scaletrap" viewBox="0 0 520 200" role="img" aria-label="Unscaled distances: A to B is 500.4 and A to C is 5000. The income column swamps the age column, so B looks ten times closer even though B is 20 years older."></svg>
+      <figcaption>Without scaling, income (thousands) drowns out age (tens). B looks 10 times closer even though B is 20 years older. StandardScaler puts both features on the same footing.</figcaption></figure>
+  </article>
+
+  <!-- Manhattan -->
+  <article class="topic" id="manhattan">
+    <h3>Manhattan distance</h3>
+    <p class="plain">The distance you travel when you can only move along the streets: across, then up. No shortcuts through buildings.</p>
+    <p>Add up the plain differences along each axis, with no squaring. It's also called city-block or taxicab distance, after the street grid of Manhattan in New York.</p>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Auto-la vandhaa T. Nagar street-la right, left nu turn adichu dhaan varanum. Building-ukku naduvula poga mudiyaadhu. Street-oda poradhu dhaan Manhattan distance."</p>
+
+    <p class="lbl fxl">Formula</p>
+    <p class="fx">Two features: d = |x₂ − x₁| + |y₂ − y₁|<br>Any number of features: d = Σ |pᵢ − qᵢ|</p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>The same trip, by auto</h4>
+      <p>Restaurant at (1, 2), home at (4, 6). The auto goes 3 blocks across and 4 blocks up.</p>
+      <p class="calc">d = |4 − 1| + |6 − 2| = 3 + 4 = 7 km</p>
+      <p>Manhattan is never shorter than Euclidean. For a delivery app estimating road distance, 7 km is the honest number.</p>
+    </div>
+    <div class="ex">
+      <h4>The student tie</h4>
+      <p>Back to Student S. With Manhattan distance:</p>
+      <p class="calc">S to P: 5 + 5 + 5 = 15<br>S to Q: 0 + 0 + 15 = 15</p>
+      <p>A tie. Manhattan treats "a little different in every subject" and "very different in one subject" the same. Euclidean squares the gaps, so one big gap counts more; that's why it picked P. Neither is wrong. Ask: does one big difference matter more than several small ones?</p>
+    </div>
+    <div class="ex">
+      <h4>A warehouse picking robot</h4>
+      <p>In an Amazon-style warehouse the robot can only drive along the aisles. To reach a shelf 6 aisles across and 8 slots down, it travels 6 + 8 = 14 units, not the straight-line 10.</p>
+    </div>
+
+    <div class="tbl"><table>
+      <thead><tr><th></th><th>Euclidean</th><th>Manhattan</th></tr></thead>
+      <tbody>
+        <tr><th>Picture</th><td>Drone, crow flight</td><td>Auto on city streets</td></tr>
+        <tr><th>Maths</th><td>Square, add, square root</td><td>Plain differences, added</td></tr>
+        <tr><th>(1, 2) to (4, 6)</th><td>5</td><td>7</td></tr>
+        <tr><th>One big difference</th><td>Counts extra</td><td>Counts normally</td></tr>
+        <tr><th>Good for</th><td>Continuous features on similar scales</td><td>Grid movement, many features, data with outliers</td></tr>
+        <tr><th>In scikit-learn</th><td><code>metric="euclidean"</code> or <code>p=2</code></td><td><code>metric="manhattan"</code> or <code>p=1</code></td></tr>
+      </tbody>
+    </table></div>
+
+    <p class="lbl py">Python</p>
+<pre>from scipy.spatial import distance
+distance.cityblock((1, 2), (4, 6))                  <span class="c"># 7</span>
+distance.cityblock((80, 70, 60), (80, 70, 45))      <span class="c"># 15</span>
+
+from sklearn.neighbors import KNeighborsClassifier
+knn = KNeighborsClassifier(n_neighbors=5, metric="manhattan")</pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>Route estimates on road grids, KNN on high-dimensional data (it copes better than Euclidean when there are many features), and L1 regularisation, which is Manhattan distance applied to model weights.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>Scaling matters here too, for exactly the same reason. And when two points differ in only one feature, both distances give the same answer, so don't be surprised when they match.</p></div>
+  </article>
+
+  <aside class="gate" aria-labelledby="g5-h">
+    <h3 id="g5-h">Checkpoint 7.5</h3>
+    <p>Ask these before starting 7.6.</p>
+    <details class="q"><summary>Q1. Find the Euclidean and Manhattan distance between (1, 1) and (7, 9).</summary><div class="ans"><p>Differences are 6 and 8. Euclidean = √(36 + 64) = √100 = 10. Manhattan = 6 + 8 = 14.</p></div></details>
+    <details class="q"><summary>Q2. A cab app wants to estimate the fare from road distance. Which metric fits better?</summary><div class="ans"><p>Manhattan. Cabs follow streets, so the straight-line distance underestimates the trip.</p></div></details>
+    <details class="q"><summary>Q3. Why must you scale age and income before running KNN?</summary><div class="ans"><p>Income is in thousands and age is in tens, so income decides the distance almost on its own. Unscaled, a 20-year age gap looked 10 times smaller than a ₹5,000 income gap.</p></div></details>
+    <details class="q"><summary>Q4. When do Euclidean and Manhattan give the same answer?</summary><div class="ans"><p>When the two points differ along only one feature, for example (3, 5) and (9, 5): both give 6.</p></div></details>
+  </aside>
+</section>
+
+<!-- ============ 7.6 OUTLIERS ============ -->
+<section class="unit wrap" id="u6" aria-labelledby="u6-h">
+  <h2 id="u6-h"><span class="n">7.6</span> Outlier analysis</h2>
+  <p class="unit-intro">One strange value can wreck a mean, blow up a standard deviation and mislead a model. This unit shows how to spot it with a simple rule, how to draw it, and what to do about it.</p>
+  <p class="unit-meta">About 75 minutes</p>
+
+  <div class="ex">
+    <h4>The dataset for this whole unit</h4>
+    <p>Daily orders at a Velachery cloud kitchen over 13 days:</p>
+    <p class="calc">55, 48, 60, 120, 52, 45, 58, 62, 50, 42, 65, 53, 57</p>
+    <p>Sorted: 42, 45, 48, 50, 52, 53, 55, 57, 58, 60, 62, 65, 120. The 120 was the day of the IPL final.</p>
+  </div>
+
+  <!-- What is an outlier -->
+  <article class="topic" id="outlier">
+    <h3>What is an outlier?</h3>
+    <p class="plain">A value that sits far away from the rest of the data, like one very tall person in a class photo.</p>
+    <figure class="pic"><svg id="v-dots" viewBox="0 0 520 150" role="img" aria-label="Dot plot of 13 daily order counts. Twelve dots cluster between 42 and 65; one coral dot sits alone at 120."></svg>
+      <figcaption>Twelve days cluster together. One day stands alone. You can see it before you calculate anything.</figcaption></figure>
+    <p>Outliers come in two kinds, and telling them apart is the most important skill in this unit:</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Kind</th><th>What it is</th><th>Example</th><th>Usual action</th></tr></thead>
+      <tbody>
+        <tr><th>Error</th><td>A mistake in collecting or typing the data</td><td>Rent typed as ₹1,50,000 instead of ₹15,000; a sensor reading 999 °C</td><td>Fix it, or remove it</td></tr>
+        <tr><th>Genuine</th><td>A real but rare event</td><td>IPL final day orders; a ₹5 crore villa in a housing dataset; a fraud transaction</td><td>Keep it, and handle it carefully</td></tr>
+      </tbody>
+    </table></div>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Class photo-la ellarum 5 adi, 5.5 adi; oru basketball player mattum 6.5 adi. Avar thappu illa, real dhaan. Aana class-oda average height-ai avar mela izhuthuduvaar. Adhu dhaan outlier."</p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>What one day does to the averages</h4>
+      <div class="tbl"><table>
+        <thead><tr><th></th><th class="num">With 120</th><th class="num">Without 120</th><th class="num">Change</th></tr></thead>
+        <tbody>
+          <tr><th>Mean</th><td class="num">59.0</td><td class="num">53.9</td><td class="num">5.1</td></tr>
+          <tr><th>Median</th><td class="num">55</td><td class="num">54</td><td class="num">1</td></tr>
+        </tbody>
+      </table></div>
+      <p>The mean moves five times as much as the median. If the owner plans stock from the mean, the kitchen over-orders vegetables on every normal day.</p>
+    </div>
+
+    <p class="lbl use">Where it's used</p>
+    <p>Data cleaning before every model, fraud and anomaly detection (where the outlier is the whole point), and quality control.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>Never delete an outlier just because it's inconvenient. Ask why it's there first. In fraud detection, the outliers are exactly what you are trying to catch.</p></div>
+  </article>
+
+  <!-- IQR -->
+  <article class="topic" id="iqr">
+    <h3>Interquartile range (IQR)</h3>
+    <p class="plain">Cut the sorted data into four equal parts. The IQR is the width of the middle two parts, where the central 50% of the data lives.</p>
+    <p>Quartiles split sorted data into quarters. Q1 has 25% of values below it, Q2 is the median, and Q3 has 75% below it. Because the IQR ignores the top and bottom quarters, extreme values can't stretch it. That makes it the right ruler for measuring what counts as "too far".</p>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Marks-ai sort pannunga. Keezha irukkura 25% students-aiyum, mela irukkura 25% students-aiyum konjam oram vachidunga. Naduvula irukkura 50% students-oda range dhaan IQR."</p>
+
+    <p class="lbl fxl">Formula</p>
+    <p class="fx">IQR = Q3 − Q1<br>Lower fence = Q1 − 1.5 × IQR<br>Upper fence = Q3 + 1.5 × IQR<span class="fx-note">Anything below the lower fence or above the upper fence is flagged as an outlier.</span></p>
+
+    <figure class="pic"><svg id="v-iqr" viewBox="0 0 520 230" role="img" aria-label="Number line of the sorted orders. Q1 at 50, median at 55 and Q3 at 60, with a bracket showing the IQR of 10 between Q1 and Q3. Dashed fences at 35 and 75. The value 120 is beyond the upper fence."></svg>
+      <figcaption>The shaded middle is the IQR. Step 1.5 IQRs out from each end to set the fences. Anything past a fence is an outlier. The axis is broken to fit 120.</figcaption></figure>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>Finding the outliers in the order data</h4>
+      <ol>
+        <li>Sort: 42, 45, 48, 50, 52, 53, 55, 57, 58, 60, 62, 65, 120.</li>
+        <li>Quartiles: Q1 = 50, median = 55, Q3 = 60.</li>
+        <li>IQR = 60 − 50 = 10.</li>
+        <li>Lower fence = 50 − 1.5 × 10 = 35. Upper fence = 60 + 1.5 × 10 = 75.</li>
+        <li>Check: nothing is below 35; 120 is above 75. So 120 is the only outlier.</li>
+      </ol>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>orders = pd.Series([55, 48, 60, 120, 52, 45, 58, 62, 50, 42, 65, 53, 57])
+
+q1, q3 = orders.quantile([0.25, 0.75])     <span class="c"># 50.0, 60.0</span>
+iqr = q3 - q1                               <span class="c"># 10.0</span>
+lower = q1 - 1.5 * iqr                      <span class="c"># 35.0</span>
+upper = q3 + 1.5 * iqr                      <span class="c"># 75.0</span>
+orders[(orders &lt; lower) | (orders &gt; upper)]  <span class="c"># 120</span></pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>The standard outlier rule in data cleaning, the basis of every box plot, and a spread measure you can trust on skewed data like salaries and prices.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>Hand calculations can give slightly different quartiles. Using the "median of each half" method, learners get Q1 = 49 and Q3 = 61, so IQR = 12 and fences of 31 and 79. pandas interpolates and gives 50 and 60. Both are accepted methods; 120 is an outlier either way. Just use one method consistently.</p></div>
+  </article>
+
+  <!-- Box plot -->
+  <article class="topic" id="boxplot">
+    <h3>Box and whisker plot</h3>
+    <p class="plain">A picture of the five key numbers: a box for the middle 50%, a line for the median, whiskers for the normal range, and dots for outliers.</p>
+    <figure class="pic"><svg id="v-box" viewBox="0 0 520 260" role="img" aria-label="Annotated box plot of the orders. The box runs from Q1 50 to Q3 60 with the median line at 55. Whiskers reach down to 42 and up to 65. Dashed fences at 35 and 75. The outlier 120 is drawn as a separate coral dot."></svg>
+      <figcaption>Every part of the box plot, labelled. Real box plots don't draw the fences; they're shown dashed here so you can see where the whiskers stop and why.</figcaption></figure>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Oru petti, rendu meesai. Petti-kulla naduvula irukkura 50% data. Meesai varaikkum normal data. Meesaikku veliya thani-aa nikkira pulli dhaan outlier."</p>
+
+    <div class="tbl"><table>
+      <thead><tr><th>Part</th><th>What it shows</th><th class="num">Orders data</th></tr></thead>
+      <tbody>
+        <tr><th>Left edge of box</th><td>Q1</td><td class="num">50</td></tr>
+        <tr><th>Line inside box</th><td>Median</td><td class="num">55</td></tr>
+        <tr><th>Right edge of box</th><td>Q3</td><td class="num">60</td></tr>
+        <tr><th>Box width</th><td>IQR, the middle 50%</td><td class="num">10</td></tr>
+        <tr><th>Lower whisker</th><td>Smallest value inside the lower fence</td><td class="num">42</td></tr>
+        <tr><th>Upper whisker</th><td>Largest value inside the upper fence</td><td class="num">65</td></tr>
+        <tr><th>Separate dots</th><td>Outliers</td><td class="num">120</td></tr>
+      </tbody>
+    </table></div>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>Reading a box plot like a business analyst</h4>
+      <p>Put the box plots of weekday orders and weekend orders side by side. If the weekend box sits higher and is wider, weekends are busier and less predictable, so the kitchen needs extra staff on standby. The median line tells you the typical day, the box width tells you how predictable it is, and the dots are the days to investigate.</p>
+      <p>Where the median sits inside the box shows skew: nearer the left edge with a long right whisker means a right-skewed distribution, just like the delivery times in 7.1.</p>
+    </div>
+
+    <div class="widget" id="w-box">
+      <p class="lbl live">Try it live</p>
+      <p>Paste any numbers separated by commas and draw the box plot. Every value in the readout is calculated the same way pandas does.</p>
+      <textarea id="bx-in" aria-label="Numbers for the box plot">55, 48, 60, 120, 52, 45, 58, 62, 50, 42, 65, 53, 57</textarea>
+      <div class="btn-row" style="margin-top:.75rem">
+        <button type="button" id="bx-go">Draw box plot</button>
+        <button type="button" class="ghost" id="bx-ex">Use checkpoint data</button>
+      </div>
+      <p class="err" id="bx-err" aria-live="polite"></p>
+      <svg id="bx-svg" class="chart" viewBox="0 0 520 200" role="img" aria-label="Box plot of the numbers you entered."></svg>
+      <div class="tbl" style="margin-top:.75rem"><table>
+        <tbody id="bx-out"></tbody>
+      </table></div>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>import matplotlib.pyplot as plt
+import seaborn as sns
+
+plt.boxplot(orders, vert=False)   <span class="c"># matplotlib</span>
+sns.boxplot(x=orders)             <span class="c"># seaborn, same picture</span>
+sns.boxplot(data=df, x="day_type", y="orders")   <span class="c"># side-by-side comparison</span></pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>The first plot in almost every EDA notebook, comparing groups (salary by department, delivery time by area), and spotting skew and outliers across many columns at once.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>A box plot hides the shape inside the box. Two very different datasets can produce the same box. Pair it with a histogram when the shape matters.</p></div>
+  </article>
+
+  <!-- Upper whisker -->
+  <article class="topic" id="whisker">
+    <h3>Upper whisker</h3>
+    <p class="plain">The upper whisker stops at the largest real value that is still inside the upper fence. It is a data point, not the fence.</p>
+    <figure class="pic"><svg id="v-whisker" viewBox="0 0 520 170" role="img" aria-label="The 13 sorted order values as chips. A dashed fence line at 75 sits between the chip for 65 and the chip for 120. The 65 chip is highlighted as the upper whisker; the 120 chip is highlighted as the outlier."></svg>
+      <figcaption>Walk along the sorted values until you hit the fence. The last value before the fence is the upper whisker (65). There is no data point at 75, so the whisker can't end there.</figcaption></figure>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Fence enbadhu oru rule, oru kodu mattum. Whisker enbadhu real-aa data-la irukkura oru value. Fence-ku ulla irukkura biggest value dhaan upper whisker. Interview-la idhu dhaan trap question."</p>
+
+    <p class="lbl fxl">Formula</p>
+    <p class="fx">Upper whisker = the largest value that is ≤ Q3 + 1.5 × IQR<br>Lower whisker = the smallest value that is ≥ Q1 − 1.5 × IQR<span class="fx-note">If there are no outliers on a side, the whisker simply ends at the maximum (or minimum).</span></p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>Where does the upper whisker end?</h4>
+      <p class="calc">Upper fence = 75<br>Values at or below 75: 42, 45, 48, 50, 52, 53, 55, 57, 58, 60, 62, 65<br>Largest of these = 65, so the upper whisker ends at 65</p>
+      <p>The common wrong answers are 75 (that's the fence, not a data point) and 120 (that's the outlier).</p>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>upper_whisker = orders[orders &lt;= upper].max()   <span class="c"># 65</span>
+lower_whisker = orders[orders &gt;= lower].min()   <span class="c"># 42</span></pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>Reading box plots correctly in reports and dashboards, capping outliers (some teams cap at the whisker instead of the fence), and interview questions on EDA.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>Different tools can draw whiskers differently: some go to the minimum and maximum, some to fixed percentiles. matplotlib and seaborn use the 1.5 × IQR rule by default (<code>whis=1.5</code>). Check the setting before explaining a chart someone else made.</p></div>
+  </article>
+
+  <!-- Treatment -->
+  <h3 class="sub-h">What to do with an outlier</h3>
+  <p>Once you've found one, choose deliberately. Here is each option applied to the 120-order day:</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Option</th><th>When to use it</th><th class="num">Mean after</th></tr></thead>
+    <tbody>
+      <tr><th>Keep</th><td>It's genuine and important (fraud, record sales days)</td><td class="num">59.0</td></tr>
+      <tr><th>Cap at the fence</th><td>It's genuine but you don't want it to dominate a model</td><td class="num">55.5</td></tr>
+      <tr><th>Remove</th><td>It's a data error you can't fix</td><td class="num">53.9</td></tr>
+      <tr><th>Fix</th><td>It's an error and you know the true value</td><td class="num">depends</td></tr>
+      <tr><th>Transform</th><td>The whole column is skewed; a log transform pulls the tail in</td><td class="num">–</td></tr>
+      <tr><th>Use robust tools</th><td>Median instead of mean, IQR instead of SD, tree-based models</td><td class="num">–</td></tr>
+    </tbody>
+  </table></div>
+
+  <aside class="gate" aria-labelledby="g6-h">
+    <h3 id="g6-h">Checkpoint 7.6</h3>
+    <p>Ask these before the practice assignment.</p>
+    <details class="q"><summary>Q1. For 10, 12, 13, 15, 16, 18, 19, 21, 48, find Q1, Q3, IQR, the fences, any outliers and the upper whisker.</summary><div class="ans"><p>Q1 = 13, median = 16, Q3 = 19, IQR = 6. Fences: 13 − 9 = 4 and 19 + 9 = 28. 48 is an outlier. Upper whisker = 21, the largest value at or below 28.</p></div></details>
+    <details class="q"><summary>Q2. The upper fence is 75 and the largest non-outlier is 65. Where does the upper whisker end?</summary><div class="ans"><p>At 65. The whisker always ends on a real data point.</p></div></details>
+    <details class="q"><summary>Q3. In a dataset of routine hospital bills, one bill is ₹12 lakh. Should you delete it?</summary><div class="ans"><p>Not straight away. Check whether it's an error (an extra zero) or genuine (a major surgery). Fix errors; keep genuine values, possibly capped or log-transformed for modelling. If you're building a fraud model, this could be the row that matters most.</p></div></details>
+    <details class="q"><summary>Q4. Why is the median a better "typical day" than the mean for the order data?</summary><div class="ans"><p>The median barely moves with the outlier (55 vs 54) while the mean jumps (59.0 vs 53.9).</p></div></details>
+  </aside>
+</section>
+
+<!-- ============ CHEAT SHEET ============ -->
+<section class="endsec wrap" id="cheatsheet" aria-labelledby="cs-h">
+  <h2 id="cs-h">Cheat sheet</h2>
+  <p>The whole module on one screen. Project it for the final revision, or share it with the batch.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Concept</th><th>In one line</th><th>Formula or rule</th></tr></thead>
+    <tbody>
+      <tr><th>Mean</th><td>Fair share; the balance point</td><td>Σx / n</td></tr>
+      <tr><th>Median</th><td>The middle value once sorted</td><td>Middle value, or the average of the two middle values</td></tr>
+      <tr><th>Mode</th><td>The most frequent value</td><td>Highest count</td></tr>
+      <tr><th>Skewness</th><td>Which side has the long tail</td><td>Right: mean &gt; median &gt; mode. Left: the reverse</td></tr>
+      <tr><th>Normal distribution</th><td>The symmetric bell</td><td>68% within 1σ, 95% within 2σ, 99.7% within 3σ</td></tr>
+      <tr><th>z-score</th><td>How many SDs from the mean</td><td>z = (x − μ) / σ</td></tr>
+      <tr><th>Probability</th><td>0 is never, 1 is always</td><td>Favourable / total. P(not A) = 1 − P(A)</td></tr>
+      <tr><th>Conditional probability</th><td>Chance of A once you know B happened</td><td>P(A | B) = P(A ∩ B) / P(B)</td></tr>
+      <tr><th>Odds</th><td>Happens vs doesn't happen</td><td>p / (1 − p)</td></tr>
+      <tr><th>Odds ratio</th><td>Odds in group 1 vs group 2</td><td>(a × d) / (b × c)</td></tr>
+      <tr><th>Variance</th><td>Average squared distance from the mean</td><td>Σ(x − x̄)² / (n − 1)</td></tr>
+      <tr><th>Standard deviation</th><td>The typical distance from the mean</td><td>√variance</td></tr>
+      <tr><th>Coefficient of variation</th><td>Spread compared across scales</td><td>SD / mean × 100</td></tr>
+      <tr><th>Underfitting</th><td>Too simple: bad on train and test</td><td>High bias. Add features or complexity</td></tr>
+      <tr><th>Overfitting</th><td>Memorised: great on train, poor on test</td><td>High variance. Simplify, regularise, add data</td></tr>
+      <tr><th>Euclidean distance</th><td>Straight line, drone path</td><td>√Σ(pᵢ − qᵢ)²</td></tr>
+      <tr><th>Manhattan distance</th><td>Along the streets, auto path</td><td>Σ|pᵢ − qᵢ|</td></tr>
+      <tr><th>IQR</th><td>Width of the middle 50%</td><td>Q3 − Q1</td></tr>
+      <tr><th>Outlier fences</th><td>The "too far" lines</td><td>Q1 − 1.5 × IQR and Q3 + 1.5 × IQR</td></tr>
+      <tr><th>Upper whisker</th><td>Largest real value inside the fence</td><td>max(x ≤ upper fence)</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ PRACTICE ============ -->
+<section class="endsec wrap" id="practice" aria-labelledby="pr-h">
+  <h2 id="pr-h">Practice assignment: Chennai flat rents</h2>
+  <p class="plain">One small dataset that uses every unit in this module. Two values are suspicious; finding out why is part of the job.</p>
+  <p>Give learners the table and the starter code, and ask them to work through the tasks in order. Each answer is hidden underneath its task so you can reveal it during review.</p>
+
+  <div class="tbl"><table>
+    <thead><tr><th>Flat</th><th>Locality</th><th class="num">BHK</th><th class="num">Sq ft</th><th class="num">Rent (₹)</th></tr></thead>
+    <tbody>
+      <tr><td>F01</td><td>Velachery</td><td class="num">2</td><td class="num">950</td><td class="num">18,000</td></tr>
+      <tr><td>F02</td><td>Tambaram</td><td class="num">2</td><td class="num">900</td><td class="num">12,000</td></tr>
+      <tr><td>F03</td><td>OMR</td><td class="num">2</td><td class="num">1,050</td><td class="num">20,000</td></tr>
+      <tr><td>F04</td><td>Adyar</td><td class="num">3</td><td class="num">1,400</td><td class="num">38,000</td></tr>
+      <tr><td>F05</td><td>Tambaram</td><td class="num">1</td><td class="num">600</td><td class="num">8,000</td></tr>
+      <tr><td>F06</td><td>Velachery</td><td class="num">3</td><td class="num">1,300</td><td class="num">28,000</td></tr>
+      <tr><td>F07</td><td>OMR</td><td class="num">3</td><td class="num">1,450</td><td class="num">30,000</td></tr>
+      <tr><td>F08</td><td>Anna Nagar</td><td class="num">2</td><td class="num">1,000</td><td class="num">25,000</td></tr>
+      <tr><td>F09</td><td>Tambaram</td><td class="num">2</td><td class="num">850</td><td class="num">1,50,000</td></tr>
+      <tr><td>F10</td><td>OMR</td><td class="num">1</td><td class="num">650</td><td class="num">11,000</td></tr>
+      <tr><td>F11</td><td>Adyar</td><td class="num">4</td><td class="num">3,200</td><td class="num">95,000</td></tr>
+      <tr><td>F12</td><td>Velachery</td><td class="num">2</td><td class="num">1,000</td><td class="num">18,000</td></tr>
+      <tr><td>F13</td><td>Anna Nagar</td><td class="num">3</td><td class="num">1,500</td><td class="num">36,000</td></tr>
+      <tr><td>F14</td><td>OMR</td><td class="num">2</td><td class="num">1,100</td><td class="num">18,000</td></tr>
+      <tr><td>F15</td><td>Tambaram</td><td class="num">1</td><td class="num">550</td><td class="num">9,000</td></tr>
+    </tbody>
+  </table></div>
+
+  <p class="lbl py">Starter code</p>
+<pre>import pandas as pd
+
+flats = pd.DataFrame({
+    "flat_id":  [f"F{i:02d}" for i in range(1, 16)],
+    "locality": ["Velachery", "Tambaram", "OMR", "Adyar", "Tambaram", "Velachery", "OMR",
+                 "Anna Nagar", "Tambaram", "OMR", "Adyar", "Velachery", "Anna Nagar", "OMR", "Tambaram"],
+    "bhk":      [2, 2, 2, 3, 1, 3, 3, 2, 2, 1, 4, 2, 3, 2, 1],
+    "sqft":     [950, 900, 1050, 1400, 600, 1300, 1450, 1000, 850, 650, 3200, 1000, 1500, 1100, 550],
+    "rent":     [18000, 12000, 20000, 38000, 8000, 28000, 30000, 25000, 150000,
+                 11000, 95000, 18000, 36000, 18000, 9000],
+})</pre>
+
+  <h3 class="sub-h">Tasks</h3>
+
+  <details class="q"><summary>1. Find the mean, median and mode of rent. Which one best describes a typical flat? (7.1)</summary><div class="ans">
+    <p>Mean ₹34,400, median ₹20,000, mode ₹18,000. The median (or mode) is the typical flat. The mean is pulled up by two very high rents, and 11 of the 15 flats rent for less than it.</p></div></details>
+
+  <details class="q"><summary>2. Is rent skewed? In which direction, and how can you tell without code? (7.1)</summary><div class="ans">
+    <p>Positively (right) skewed: pandas <code>skew()</code> gives 2.47. Without code: mean &gt; median &gt; mode, so the tail is on the right.</p></div></details>
+
+  <details class="q"><summary>3. Find the standard deviation of rent. Why is it so large? (7.3)</summary><div class="ans">
+    <p>Sample SD = ₹38,364.4 (<code>flats.rent.std()</code>). It's larger than the mean itself because two extreme rents create huge squared deviations.</p></div></details>
+
+  <details class="q"><summary>4. Use the IQR method: Q1, Q3, IQR, fences, outliers and both whiskers. (7.6)</summary><div class="ans">
+    <p>Q1 = ₹15,000, Q3 = ₹33,000, IQR = ₹18,000. Lower fence = −₹12,000, upper fence = ₹60,000. Outliers: F09 (₹1,50,000) and F11 (₹95,000). Upper whisker = ₹38,000, lower whisker = ₹8,000.</p></div></details>
+
+  <details class="q"><summary>5. Investigate both outliers. Which is an error and which is genuine? (7.6)</summary><div class="ans">
+    <p>Compare rent per square foot. F09 is a 2 BHK, 850 sq ft flat in Tambaram at about ₹176 per sq ft, roughly nine times the typical ₹19. That's almost certainly a typo for ₹15,000: an error.</p>
+    <p>F11 is a 4 BHK, 3,200 sq ft flat in Adyar at about ₹30 per sq ft. It's a big flat in a premium area, so it is genuine. Keep it.</p></div></details>
+
+  <details class="q"><summary>6. Correct F09 to ₹15,000 and recalculate everything from tasks 1, 3 and 4. What changed most? (7.1, 7.3, 7.6)</summary><div class="ans">
+    <p>Mean ₹25,400, median ₹18,000, mode ₹18,000, SD ₹21,386.9. Q1 = ₹13,500, Q3 = ₹29,000, IQR = ₹15,500, upper fence = ₹52,250. Only F11 is still an outlier; the upper whisker stays at ₹38,000.</p>
+    <p>One typo had moved the mean by ₹9,000 and nearly doubled the SD, but moved the median by only ₹2,000.</p></div></details>
+
+  <details class="q"><summary>7. What is P(rent &gt; ₹25,000)? And P(rent &gt; ₹25,000 | 2 BHK)? Answer before and after the fix. (7.2)</summary><div class="ans">
+    <p>Before the fix: 6/15 = 0.40, and 1/7 ≈ 0.14 for 2 BHKs. After the fix: 5/15 ≈ 0.33, and 0/7 = 0 for 2 BHKs.</p>
+    <p>The typo made it look as though some 2 BHKs rent above ₹25,000. None do. Dirty data changes probabilities, not just averages.</p></div></details>
+
+  <details class="q"><summary>8. Find the Euclidean and Manhattan distance between F03 and F07 using bhk and sqft, first raw and then after StandardScaler. (7.5)</summary><div class="ans">
+    <p>Raw: Euclidean ≈ 400.0, Manhattan = 401. The 400 sq ft gap swallows the 1 BHK difference completely.</p>
+    <p>Scaled (after fixing F09): Euclidean ≈ 1.37, Manhattan ≈ 1.85. Now both features count.</p></div></details>
+
+  <details class="q"><summary>9. A learner trains an unlimited decision tree on these 15 flats to predict rent. Training R² is 1.0 but new flats are predicted badly. Diagnose and fix. (7.4)</summary><div class="ans">
+    <p>Overfitting (high variance): with only 15 rows, the tree memorised each flat, including the typo. Fix the data first, then limit <code>max_depth</code>, collect more flats, and judge the model with cross-validation instead of the training score.</p></div></details>
+</section>
+
+</main>
+
+<footer class="foot wrap">
+  <p><strong>Darunz</strong> · Darun N ·  Chennai</p>
+  <p>Module 7: Statistics basics, trainer's guide. Every worked number in this guide was checked in Python.</p>
+</footer>
+
+<script>
+(function () {
+"use strict";
+var NS = "http://www.w3.org/2000/svg";
+var reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+function $(id) { return document.getElementById(id); }
+function el(tag, attrs, parent, text) {
+  var e = document.createElementNS(NS, tag);
+  if (attrs) for (var k in attrs) if (attrs[k] !== undefined && attrs[k] !== null) e.setAttribute(k, attrs[k]);
+  if (text !== undefined && text !== null) e.textContent = text;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function T(p, x, y, s, cls, anchor, style) {
+  return el("text", { x: x, y: y, "class": cls || "s-text", "text-anchor": anchor || "middle", style: style }, p, s);
+}
+function L(p, x1, y1, x2, y2, cls, style) {
+  return el("line", { x1: x1, y1: y1, x2: x2, y2: y2, "class": cls, style: style }, p);
+}
+function R(p, x, y, w, h, style, cls, rx) {
+  return el("rect", { x: x, y: y, width: Math.max(0, w), height: Math.max(0, h), style: style, "class": cls, rx: rx }, p);
+}
+function C(p, x, y, r, style, cls) { return el("circle", { cx: x, cy: y, r: r, style: style, "class": cls }, p); }
+function clear(s) { while (s.firstChild) s.removeChild(s.firstChild); }
+function fmt(n, d) {
+  var dd = d === undefined ? 2 : d;
+  var v = Math.round(n * Math.pow(10, dd)) / Math.pow(10, dd);
+  return v.toLocaleString("en-IN", { maximumFractionDigits: dd });
+}
+function safe(fn) { try { fn(); } catch (e) { if (window.console) console.warn(e); } }
+function gauss(z) { return Math.exp(-z * z / 2); }
+function bracket(p, x1, x2, y, color, label) {
+  var st = "stroke:" + color;
+  L(p, x1, y, x2, y, "bracket", st);
+  L(p, x1, y - 6, x1, y + 6, "bracket", st);
+  L(p, x2, y - 6, x2, y + 6, "bracket", st);
+  if (label) T(p, x2 + 10, y + 5, label, "s-text s-strong", "start", "fill:" + color);
+}
+function quantile(sorted, q) {
+  var pos = (sorted.length - 1) * q, lo = Math.floor(pos), hi = Math.ceil(pos);
+  return sorted[lo] + (sorted[hi] - sorted[lo]) * (pos - lo);
+}
+var DOT = "fill:var(--text)";
+
+/* ---------- Hero bell ---------- */
+function heroBell() {
+  var s = $("hero-bell"); if (!s) return;
+  var mu = 400, sd = 110, base = 250, h = 195;
+  function X(z) { return mu + z * sd; }
+  function Y(z) { return base - h * gauss(z); }
+  function area(a, b) {
+    var d = "M" + X(a) + "," + base;
+    for (var z = a; z <= b + 1e-9; z += 0.05) d += " L" + X(z).toFixed(1) + "," + Y(z).toFixed(1);
+    return d + " L" + X(b) + "," + base + " Z";
+  }
+  [[3, "b3", "0.2s"], [2, "b2", "0.45s"], [1, "b1", "0.7s"]].forEach(function (b) {
+    el("path", { d: area(-b[0], b[0]), "class": "band " + b[1], style: "--d:" + b[2] }, s);
+  });
+  L(s, 40, base, 760, base, "s-axis");
+  var d = "M" + X(-3.6) + "," + Y(-3.6);
+  for (var z = -3.6; z <= 3.6 + 1e-9; z += 0.04) d += " L" + X(z).toFixed(1) + "," + Y(z).toFixed(1);
+  var curve = el("path", { d: d, "class": "bell-line" }, s);
+  L(s, X(0), Y(0), X(0), base, "s-grid");
+  var labs = ["−3σ", "−2σ", "−1σ", "μ", "+1σ", "+2σ", "+3σ"];
+  for (var i = -3; i <= 3; i++) { L(s, X(i), base, X(i), base + 6, "s-axis"); T(s, X(i), base + 24, labs[i + 3]); }
+  T(s, X(-0.5), base - 60, "34%", "s-text s-strong s-big"); T(s, X(0.5), base - 60, "34%", "s-text s-strong s-big");
+  T(s, X(-1.5), base - 16, "13.5%", "s-text s-strong"); T(s, X(1.5), base - 16, "13.5%", "s-text s-strong");
+  T(s, X(-2.5), base - 22, "2.35%", "s-text"); T(s, X(2.5), base - 22, "2.35%", "s-text");
+  bracket(s, X(-1), X(1), 292, "var(--teal)", "68%");
+  bracket(s, X(-2), X(2), 314, "var(--violet)", "95%");
+  bracket(s, X(-3), X(3), 336, "var(--gold)", "99.7%");
+  if (!reduceMotion) {
+    var len = 0;
+    try { len = curve.getTotalLength(); } catch (e) { len = 0; }
+    if (len > 0) { curve.style.setProperty("--len", String(Math.ceil(len))); s.classList.add("animate"); }
+  }
+}
+
+/* ---------- 7.1 Mean ---------- */
+function seesaw() {
+  var s = $("v-seesaw"); if (!s) return;
+  function X(v) { return 40 + v * 44; }
+  L(s, 20, 160, 500, 160, "s-axis");
+  el("polygon", { points: X(6) + ",118 " + (X(6) - 22) + ",160 " + (X(6) + 22) + ",160", style: "fill:var(--coral)" }, s);
+  R(s, 40, 110, 440, 8, "fill:var(--ink-3);stroke:var(--muted)", null, 4);
+  [4, 5, 6, 7, 8].forEach(function (v) {
+    R(s, X(v) - 17, 70, 34, 38, "fill:rgba(67,210,195,.3);stroke:var(--teal)", null, 6);
+    T(s, X(v), 95, String(v), "s-text s-strong");
+  });
+  T(s, X(0), 138, "0", "s-text s-small"); T(s, X(10), 138, "10 LPA", "s-text s-small");
+  T(s, X(6), 182, "Balance point = mean = 6 LPA", "s-text s-strong", "middle", "fill:var(--coral)");
+  T(s, 260, 30, "4 + 5 + 6 + 7 + 8 = 30,  30 ÷ 5 = 6", "s-text");
+}
+
+function meanWidget() {
+  var s = $("mm-svg"), btn = $("mm-toggle"); if (!s || !btn) return;
+  var on = false;
+  function X(v) { return 40 + v * (440 / 62); }
+  clear(s);
+  L(s, 40, 95, 480, 95, "s-axis");
+  for (var t = 0; t <= 60; t += 10) { L(s, X(t), 95, X(t), 101, "s-axis"); T(s, X(t), 117, t === 60 ? "60 LPA" : String(t), "s-text s-small"); }
+  var dots = el("g", {}, s);
+  var mg = el("g", { "class": "mover" }, s), dg = el("g", { "class": "mover" }, s);
+  L(mg, 0, 30, 0, 95, "mark st-coral");
+  var mt = T(mg, 0, 22, "Mean 6", "s-text s-strong", "middle", "fill:var(--coral)");
+  L(dg, 0, 50, 0, 95, "mark st-teal", "stroke-width:4");
+  var dt = T(dg, 0, 142, "Median 6", "s-text s-strong", "middle", "fill:var(--teal)");
+  function draw() {
+    clear(dots);
+    var vals = on ? [4, 5, 6, 7, 8, 60] : [4, 5, 6, 7, 8];
+    vals.forEach(function (v) { C(dots, X(v), 82, 7, v === 60 ? "fill:var(--gold)" : DOT, "dot"); });
+    var mean = on ? 15 : 6, med = on ? 6.5 : 6;
+    mg.style.transform = "translate(" + X(mean) + "px,0)";
+    dg.style.transform = "translate(" + X(med) + "px,0)";
+    mt.textContent = "Mean " + mean; dt.textContent = "Median " + med;
+    $("mm-mean").textContent = String(mean); $("mm-med").textContent = String(med);
+    btn.textContent = on ? "Remove the founder" : "Add the founder at 60 LPA";
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+  }
+  btn.addEventListener("click", function () { on = !on; draw(); });
+  draw();
+}
+
+/* ---------- 7.1 Median ---------- */
+function medianBars() {
+  var s = $("v-median"); if (!s) return;
+  var rents = [12000, 14000, 15000, 18000, 85000], base = 185;
+  function H(v) { return v / 90000 * 150; }
+  L(s, 50, base, 500, base, "s-axis");
+  rents.forEach(function (v, i) {
+    var x = 70 + i * 90, mid = i === 2;
+    R(s, x, base - H(v), 60, H(v), mid ? "fill:var(--teal)" : "fill:var(--ink-3);stroke:var(--line)", null, 4);
+    T(s, x + 30, base + 20, "₹" + (v / 1000) + "k", mid ? "s-text s-strong" : "s-text", "middle", mid ? "fill:var(--teal)" : null);
+    if (mid) T(s, x + 30, base + 40, "median", "s-text s-strong", "middle", "fill:var(--teal)");
+  });
+  var ym = base - H(28800);
+  L(s, 50, ym, 500, ym, "mark st-coral dashed", "stroke-width:2");
+  T(s, 52, ym - 8, "Mean ₹28,800", "s-text s-strong", "start", "fill:var(--coral)");
+}
+
+/* ---------- 7.1 Mode ---------- */
+function modeBars() {
+  var s = $("v-mode"); if (!s) return;
+  var sizes = [7, 8, 9, 10], counts = [2, 4, 2, 1], base = 165;
+  L(s, 60, base, 500, base, "s-axis");
+  sizes.forEach(function (sz, i) {
+    var x = 90 + i * 110, h = counts[i] * 30, mode = sz === 8;
+    R(s, x, base - h, 70, h, mode ? "fill:var(--gold)" : "fill:var(--ink-3);stroke:var(--line)", null, 4);
+    T(s, x + 35, base - h - 9, mode ? "4 sold: the mode" : counts[i] + " sold", mode ? "s-text s-strong" : "s-text", "middle", mode ? "fill:var(--gold)" : null);
+    T(s, x + 35, base + 22, "Size " + sz, "s-text");
+  });
+}
+
+/* ---------- 7.1 Skew panels ---------- */
+function skewPanels() {
+  var host = $("skew-panels"); if (!host) return;
+  var shapes = [
+    { f: function (t) { return Math.pow(t, 1.2) * Math.exp(-t / 1.1); }, cap: "Positive (right) skew. Long tail on the right, so mean > median > mode. Delivery times, salaries." },
+    { f: function (t) { return gauss((t - 5) / 1.5); }, cap: "Zero skew. Balanced, so all three sit together. Heights, machine fill volumes." },
+    { f: function (t) { return Math.pow(10 - t, 1.2) * Math.exp(-(10 - t) / 1.1); }, cap: "Negative (left) skew. Long tail on the left, so mean < median < mode. Marks in an easy test." }
+  ];
+  shapes.forEach(function (sh) {
+    var fig = document.createElement("figure");
+    var s = el("svg", { viewBox: "0 0 240 150", role: "img", "aria-label": sh.cap }, null);
+    fig.appendChild(s);
+    var cap = document.createElement("figcaption"); cap.textContent = sh.cap; fig.appendChild(cap);
+    host.appendChild(fig);
+    var ts = [], fs = [], max = 0, tot = 0, mean = 0, modeT = 0;
+    for (var t = 0; t <= 10.0001; t += 0.02) { var v = sh.f(t); ts.push(t); fs.push(v); tot += v; mean += t * v; if (v > max) { max = v; modeT = t; } }
+    mean /= tot;
+    var acc = 0, med = 5;
+    for (var i = 0; i < fs.length; i++) { acc += fs[i]; if (acc >= tot / 2) { med = ts[i]; break; } }
+    function X(t) { return 15 + t * 21; }
+    function Y(v) { return 125 - v / max * 100; }
+    var d = "M" + X(0) + ",125";
+    ts.forEach(function (t, k) { d += " L" + X(t).toFixed(1) + "," + Y(fs[k]).toFixed(1); });
+    d += " L" + X(10) + ",125 Z";
+    el("path", { d: d, "class": "skew-area" }, s);
+    L(s, 10, 125, 230, 125, "s-axis");
+    [[modeT, "var(--gold)"], [med, "var(--teal)"], [mean, "var(--coral)"]].forEach(function (m) {
+      L(s, X(m[0]), 125, X(m[0]), Y(sh.f(m[0])) - 4, "mark", "stroke:" + m[1] + ";stroke-width:3");
+    });
+  });
+}
+
+/* ---------- 7.1 Milk bell ---------- */
+function milkBell() {
+  var s = $("milk-bell"); if (!s) return;
+  s.setAttribute("viewBox", "0 0 520 320");
+  var mu = 502, sd = 3, base = 210, h = 165;
+  function X(v) { return 30 + (v - 486) * (460 / 32); }
+  function Y(v) { return base - h * gauss((v - mu) / sd); }
+  function area(a, b) {
+    var d = "M" + X(a) + "," + base;
+    for (var v = a; v <= b + 1e-9; v += 0.1) d += " L" + X(v).toFixed(1) + "," + Y(v).toFixed(1);
+    return d + " L" + X(b) + "," + base + " Z";
+  }
+  el("path", { d: area(493, 511), "class": "b3" }, s);
+  el("path", { d: area(496, 508), "class": "b2" }, s);
+  el("path", { d: area(499, 505), "class": "b1" }, s);
+  var d = "M" + X(488) + "," + Y(488);
+  for (var v = 488; v <= 516 + 1e-9; v += 0.1) d += " L" + X(v).toFixed(1) + "," + Y(v).toFixed(1);
+  el("path", { d: d, "class": "bell-line" }, s);
+  L(s, 25, base, 500, base, "s-axis");
+  for (var t = 493; t <= 511; t += 3) { L(s, X(t), base, X(t), base + 6, "s-axis"); T(s, X(t), base + 24, String(t), "s-text s-small"); }
+  T(s, X(502), base - 60, "68%", "s-text s-strong s-big");
+  L(s, X(490), 150, X(490), base, "mark st-coral", "stroke-width:3");
+  T(s, X(490) + 4, 140, "490 ml: z = −4", "s-text s-strong", "middle", "fill:var(--coral)");
+  bracket(s, X(499), X(505), 256, "var(--teal)", "68%");
+  bracket(s, X(496), X(508), 280, "var(--violet)", "95%");
+  bracket(s, X(493), X(511), 304, "var(--gold)", "99.7%");
+}
+
+/* ---------- 7.2 Probability scale ---------- */
+function probScale() {
+  var s = $("v-scale"); if (!s) return;
+  var defs = el("defs", {}, s);
+  var g = el("linearGradient", { id: "gscale", x1: "0", x2: "1", y1: "0", y2: "0" }, defs);
+  el("stop", { offset: "0", style: "stop-color:var(--coral)" }, g);
+  el("stop", { offset: "0.5", style: "stop-color:var(--violet)" }, g);
+  el("stop", { offset: "1", style: "stop-color:var(--teal)" }, g);
+  function X(p) { return 60 + p * 400; }
+  R(s, 60, 74, 400, 12, "fill:url(#gscale)", null, 6);
+  [[0, "Impossible", true], [0.17, "Rolling a 6", false], [0.5, "Coin: heads", true], [0.92, "Fraud score", true], [1, "Certain", false]].forEach(function (m) {
+    var x = X(m[0]);
+    if (m[2]) { L(s, x, 58, x, 74, "s-axis"); T(s, x, 52, String(m[0]), "s-text s-strong"); T(s, x, 30, m[1], "s-text"); }
+    else { L(s, x, 86, x, 100, "s-axis"); T(s, x, 118, String(m[0]), "s-text s-strong"); T(s, x, 140, m[1], "s-text"); }
+  });
+}
+
+/* ---------- 7.2 Churn waffle ---------- */
+function churnWaffle() {
+  var s = $("v-churn"); if (!s) return;
+  [[45, 40, "Prepaid"], [285, 10, "Postpaid"]].forEach(function (b) {
+    T(s, b[0] + 95, 32, b[2] + " (100 customers)", "s-text s-strong");
+    for (var i = 0; i < 100; i++) {
+      var r = Math.floor(i / 10), c = i % 10, churn = i < b[1];
+      R(s, b[0] + c * 19, 45 + r * 19, 17, 17, churn ? "fill:var(--coral)" : "fill:var(--ink-3)", null, 3);
+    }
+    T(s, b[0] + 95, 258, b[1] + " of 100 left", "s-text s-strong", "middle", "fill:var(--coral)");
+  });
+}
+
+/* ---------- 7.2 Odds bars ---------- */
+function oddsBars() {
+  var s = $("v-odds"); if (!s) return;
+  [[45, "Prepaid", 40, 60, "0.67"], [115, "Postpaid", 10, 90, "0.11"]].forEach(function (r) {
+    var y = r[0];
+    T(s, 10, y + 5, r[1], "s-text s-strong", "start");
+    R(s, 100, y - 15, r[2] * 2.8, 30, "fill:var(--coral)");
+    R(s, 100 + r[2] * 2.8, y - 15, r[3] * 2.8, 30, "fill:var(--ink-3);stroke:var(--line)");
+    T(s, 100, y + 34, r[2] + " left, " + r[3] + " stayed", "s-text s-small", "start");
+    T(s, 400, y - 18, "odds = " + r[2] + " ÷ " + r[3], "s-text s-small", "start");
+    T(s, 400, y + 8, r[4], "s-text s-strong s-big", "start");
+  });
+  T(s, 260, 188, "Odds ratio = 0.667 ÷ 0.111 = 6", "s-text s-strong s-big", "middle", "fill:var(--gold)");
+}
+
+/* ---------- 7.2 Odds widget ---------- */
+function probWidget() {
+  var inputs = ["pa", "pb", "pc", "pd"].map($);
+  var out = $("p-out"), note = $("p-note"), interp = $("p-interp");
+  if (inputs.some(function (i) { return !i; }) || !out) return;
+  function row(name, calc, val) {
+    var tr = document.createElement("tr");
+    [name, calc, val].forEach(function (t, i) {
+      var td = document.createElement(i === 0 ? "th" : "td"); td.textContent = t;
+      if (i === 2) td.className = "num"; tr.appendChild(td);
+    });
+    out.appendChild(tr);
+  }
+  function upd() {
+    var v = inputs.map(function (i) { return Number(i.value); });
+    out.textContent = ""; note.textContent = ""; interp.textContent = "";
+    if (v.some(function (x) { return i_bad(x); })) { note.textContent = "Use whole numbers of 0 or more in every cell."; return; }
+    var a = v[0], b = v[1], c = v[2], d = v[3];
+    if (a + b === 0 || c + d === 0) { note.textContent = "Each row needs at least one customer."; return; }
+    var p1 = a / (a + b), p2 = c / (c + d);
+    row("P(churn | prepaid)", a + " / " + (a + b), p1.toFixed(2));
+    row("P(churn | postpaid)", c + " / " + (c + d), p2.toFixed(2));
+    row("Odds, prepaid", a + " / " + b, b > 0 ? (a / b).toFixed(3) : "undefined");
+    row("Odds, postpaid", c + " / " + d, d > 0 ? (c / d).toFixed(3) : "undefined");
+    if (b * c === 0) {
+      row("Odds ratio", "(" + a + " × " + d + ") / (" + b + " × " + c + ")", "undefined");
+      note.textContent = "A zero in the table makes the odds ratio undefined. The usual fix is to add 0.5 to every cell.";
+      return;
+    }
+    var or = (a * d) / (b * c);
+    row("Odds ratio", "(" + a + " × " + d + ") / (" + b + " × " + c + ")", or.toFixed(2));
+    var rr = p2 > 0 ? p1 / p2 : null;
+    row("Relative risk", p1.toFixed(2) + " / " + p2.toFixed(2), rr === null ? "undefined" : rr.toFixed(2));
+    if (Math.abs(or - 1) < 0.005) interp.textContent = "The plan makes no difference to the odds of churning.";
+    else if (or > 1) interp.textContent = "Prepaid customers have " + or.toFixed(1) + " times the odds of churning compared with postpaid customers" + (rr ? ", and are " + rr.toFixed(1) + " times as likely to churn." : ".");
+    else interp.textContent = "Prepaid customers have lower odds of churning: " + or.toFixed(2) + " times the odds of postpaid customers.";
+  }
+  function i_bad(x) { return !isFinite(x) || x < 0 || Math.floor(x) !== x; }
+  inputs.forEach(function (i) { i.addEventListener("input", upd); });
+  upd();
+}
+
+/* ---------- 7.3 Batsmen dot plot ---------- */
+function batPlot() {
+  var s = $("bat-svg"); if (!s) return;
+  s.setAttribute("viewBox", "0 0 520 220");
+  function X(v) { return 70 + v * 4.1; }
+  var rows = [[75, "Batsman A: SD 1.58 runs", [48, 50, 52, 49, 51], 1.58], [150, "Batsman B: SD 45.28 runs", [0, 100, 10, 90, 50], 45.28]];
+  rows.forEach(function (r) {
+    var y = r[0];
+    R(s, X(50 - r[3]), y - 20, r[3] * 2 * 4.1, 40, null, "sd-band", 6);
+    T(s, 70, y - 28, r[1], "s-text s-strong", "start");
+    r[2].forEach(function (v, i) {
+      var yy = y + (i - 2) * 6;
+      L(s, X(50), yy, X(v), yy, "mark", "stroke:var(--violet);stroke-width:2");
+      C(s, X(v), yy, 5.5, DOT, "dot");
+    });
+  });
+  L(s, X(50), 30, X(50), 180, "mark st-coral dashed", "stroke-width:2");
+  T(s, X(50), 22, "Mean 50", "s-text s-strong", "middle", "fill:var(--coral)");
+  L(s, X(0), 190, X(100), 190, "s-axis");
+  for (var t = 0; t <= 100; t += 25) { L(s, X(t), 190, X(t), 196, "s-axis"); T(s, X(t), 212, String(t), "s-text s-small"); }
+}
+
+/* ---------- 7.3 Variance as squares ---------- */
+function squares() {
+  var s = $("v-squares"); if (!s) return;
+  var k = 26, scores = [48, 50, 52, 49, 51];
+  T(s, 260, 24, "Batsman A: each distance from 50 becomes a square", "s-text s-strong");
+  scores.forEach(function (v, i) {
+    var cx = 60 + i * 100, dev = v - 50, side = Math.abs(dev) * k;
+    if (side > 0) {
+      R(s, cx - side / 2, 115 - side, side, side, "fill:rgba(164,147,255,.35);stroke:var(--violet);stroke-width:2", null, 3);
+      T(s, cx, 115 - side / 2 + 5, String(dev * dev), "s-text s-strong");
+    } else {
+      L(s, cx - 10, 115, cx + 10, 115, "mark", "stroke:var(--violet);stroke-width:3");
+      T(s, cx, 105, "0", "s-text s-strong");
+    }
+    T(s, cx, 137, "Score " + v, "s-text s-strong");
+    T(s, cx, 156, (dev > 0 ? "+" : dev < 0 ? "−" : "") + Math.abs(dev) + " → " + (dev * dev), "s-text s-small");
+  });
+  T(s, 20, 200, "Add the areas: 4 + 0 + 4 + 1 + 1 = 10", "s-text", "start");
+  T(s, 20, 224, "Divide by n − 1 = 4:  2.5", "s-text", "start");
+  T(s, 20, 248, "That's the variance (runs²).", "s-text s-strong", "start", "fill:var(--violet)");
+  var side = Math.sqrt(2.5) * k;
+  R(s, 310, 252 - side, side, side, "fill:rgba(67,210,195,.35);stroke:var(--teal);stroke-width:2", null, 3);
+  T(s, 310 + side / 2, 252 - side / 2 + 5, "2.5", "s-text s-strong");
+  T(s, 362, 204, "Side = √2.5", "s-text", "start");
+  T(s, 362, 226, "= 1.58 runs", "s-text", "start");
+  T(s, 362, 248, "That's the SD.", "s-text s-strong", "start", "fill:var(--teal)");
+}
+
+/* ---------- 7.4 Dartboards ---------- */
+function targets() {
+  var s = $("v-target"); if (!s) return;
+  var offs = [[0.2, 0.1], [-0.5, 0.3], [0.4, -0.6], [-0.2, -0.4], [0.7, 0.5], [-0.7, -0.1], [0.1, 0.8]];
+  var boards = [
+    [190, 105, 0, 0, 7, "Good fit", "var(--teal)"],
+    [390, 105, 0, 0, 38, "Overfit", "var(--gold)"],
+    [190, 255, 24, -20, 7, "Underfit", "var(--coral)"],
+    [390, 255, 22, -18, 30, "Worst of both", "var(--muted)"]
+  ];
+  T(s, 190, 30, "Low variance", "s-text s-strong"); T(s, 390, 30, "High variance", "s-text s-strong");
+  el("text", { x: 60, y: 110, "class": "s-text s-strong", "text-anchor": "middle", transform: "rotate(-90 60 105)" }, s, "Low bias");
+  el("text", { x: 60, y: 260, "class": "s-text s-strong", "text-anchor": "middle", transform: "rotate(-90 60 255)" }, s, "High bias");
+  boards.forEach(function (b) {
+    [[55, "var(--ink-3)"], [38, "var(--ink-2)"], [21, "var(--ink-3)"]].forEach(function (r) { C(s, b[0], b[1], r[0], "fill:" + r[1] + ";stroke:var(--line)"); });
+    C(s, b[0], b[1], 8, "fill:var(--gold)");
+    offs.forEach(function (o) { C(s, b[0] + b[2] + o[0] * b[4], b[1] + b[3] + o[1] * b[4], 4.5, DOT, "dot"); });
+    T(s, b[0], b[1] + 75, b[5], "s-text s-strong", "middle", "fill:" + b[6]);
+  });
+}
+
+/* ---------- 7.4 Fit panels ---------- */
+function fitPanels() {
+  var host = $("fit-panels"); if (!host) return;
+  var xs = [0.02, 0.1, 0.18, 0.26, 0.34, 0.42, 0.5, 0.58, 0.66, 0.74, 0.82, 0.9, 0.98];
+  var noise = [0.06, -0.08, 0.05, 0.09, -0.06, 0.04, -0.1, 0.07, -0.05, 0.08, -0.07, 0.05, -0.04];
+  function f(x) { return 0.5 + 0.3 * Math.sin(2 * Math.PI * x * 0.9); }
+  var ys = xs.map(function (x, i) { return f(x) + noise[i]; });
+  function X(x) { return 15 + x * 210; }
+  function Y(y) { return 145 - y * 120; }
+  var n = xs.length, mx = 0, my = 0, sxy = 0, sxx = 0;
+  xs.forEach(function (x, i) { mx += x / n; my += ys[i] / n; });
+  xs.forEach(function (x, i) { sxy += (x - mx) * (ys[i] - my); sxx += (x - mx) * (x - mx); });
+  var slope = sxy / sxx, icpt = my - slope * mx;
+  var panels = [
+    { color: "var(--coral)", cap: "Underfit: a straight line can't follow the curve. Like the depth-1 tree: train 0.82, test 0.78.",
+      path: "M" + X(0) + "," + Y(icpt) + " L" + X(1) + "," + Y(icpt + slope) },
+    { color: "var(--teal)", cap: "Good fit: follows the shape and ignores the noise. Like the depth-4 tree: train 0.90, test 0.86.",
+      path: (function () { var d = ""; for (var x = 0; x <= 1.0001; x += 0.02) d += (d ? " L" : "M") + X(x).toFixed(1) + "," + Y(f(x)).toFixed(1); return d; })() },
+    { color: "var(--gold)", cap: "Overfit: bends to touch every point, noise included. Like the unlimited tree: train 1.00, test 0.81.",
+      path: xs.map(function (x, i) { return (i ? "L" : "M") + X(x).toFixed(1) + "," + Y(ys[i]).toFixed(1); }).join(" ") }
+  ];
+  panels.forEach(function (p) {
+    var fig = document.createElement("figure");
+    var s = el("svg", { viewBox: "0 0 240 160", role: "img", "aria-label": p.cap }, null);
+    fig.appendChild(s);
+    var cap = document.createElement("figcaption"); cap.textContent = p.cap; fig.appendChild(cap);
+    host.appendChild(fig);
+    L(s, 10, 150, 230, 150, "s-axis");
+    el("path", { d: p.path, "class": "fit", style: "stroke:" + p.color }, s);
+    xs.forEach(function (x, i) { C(s, X(x), Y(ys[i]), 4.5, DOT, "dot"); });
+  });
+}
+
+/* ---------- 7.4 Tradeoff curves ---------- */
+function tradeoff() {
+  var s = $("tradeoff-svg"); if (!s) return;
+  function X(c) { return 60 + c * 430; }
+  function Y(v) { return 240 - v * 200; }
+  function bias2(c) { return 0.75 * Math.exp(-3.5 * c) + 0.02; }
+  function vari(c) { return 0.03 * Math.exp(3.3 * c); }
+  function test(c) { return bias2(c) + vari(c) + 0.08; }
+  function train(c) { return 0.78 * Math.exp(-4 * c) + 0.01; }
+  L(s, 60, 240, 490, 240, "s-axis"); L(s, 60, 30, 60, 240, "s-axis");
+  var best = 0, bestV = 9;
+  for (var c = 0; c <= 1; c += 0.005) { if (test(c) < bestV) { bestV = test(c); best = c; } }
+  L(s, X(best), 40, X(best), 240, "s-grid dashed");
+  T(s, X(best), 34, "Sweet spot", "s-text s-strong", "middle", "fill:var(--teal)");
+  [[train, "var(--teal)", false], [test, "var(--coral)", false], [bias2, "var(--violet)", true], [vari, "var(--gold)", true]].forEach(function (k) {
+    var d = "";
+    for (var c2 = 0; c2 <= 1.0001; c2 += 0.01) { var v = Math.min(k[0](c2), 1.02); d += (d ? " L" : "M") + X(c2).toFixed(1) + "," + Y(v).toFixed(1); }
+    el("path", { d: d, "class": "fit" + (k[2] ? " dashed" : ""), style: "stroke:" + k[1] + (k[2] ? ";stroke-width:2.5" : "") }, s);
+  });
+  C(s, X(best), Y(bestV), 6, "fill:var(--teal)");
+  T(s, 70, 30, "Underfitting", "s-text s-strong", "start");
+  T(s, 488, 30, "Overfitting", "s-text s-strong", "end");
+  T(s, 275, 272, "Model complexity →", "s-text");
+  el("text", { x: 30, y: 140, "class": "s-text", "text-anchor": "middle", transform: "rotate(-90 30 135)" }, s, "Error");
+}
+
+/* ---------- 7.5 Street grid ---------- */
+function streetGrid() {
+  var s = $("v-grid"); if (!s) return;
+  function X(i) { return 60 + i * 44; }
+  function Y(j) { return 330 - j * 44; }
+  for (var i = 0; i < 7; i++) for (var j = 0; j < 7; j++) R(s, X(i) + 6, Y(j + 1) + 6, 32, 32, "fill:var(--ink-3)", null, 3);
+  L(s, X(1), Y(2), X(4), Y(6), "path-euc");
+  el("path", { d: "M" + X(1) + "," + Y(2) + " L" + X(4) + "," + Y(2) + " L" + X(4) + "," + Y(6), "class": "path-man" }, s);
+  C(s, X(1), Y(2), 8, null, "pt"); C(s, X(4), Y(6), 8, null, "pt");
+  T(s, X(1) - 12, Y(2) + 26, "Restaurant (1, 2)", "s-text s-strong", "start");
+  T(s, X(4), Y(6) - 16, "Home (4, 6)", "s-text s-strong");
+  T(s, X(2.5), Y(2) - 10, "3 across", "s-text s-strong", "middle", "fill:var(--coral)");
+  T(s, X(4) + 10, Y(4), "4 up", "s-text s-strong", "start", "fill:var(--coral)");
+  T(s, X(2.4) - 10, Y(4.2), "5", "s-text s-strong s-big", "end", "fill:var(--teal)");
+  L(s, 372, 120, 394, 120, "path-euc"); T(s, 400, 125, "Drone: 5 km", "s-text s-strong", "start");
+  L(s, 372, 160, 394, 160, "path-man"); T(s, 400, 165, "Auto: 7 km", "s-text s-strong", "start");
+}
+
+/* ---------- 7.5 Distance widget ---------- */
+function distWidget() {
+  var s = $("dist-svg"), ids = ["dx1", "dy1", "dx2", "dy2"].map($);
+  if (!s || ids.some(function (i) { return !i; })) return;
+  function X(i) { return 60 + i * 28; }
+  function Y(j) { return 300 - j * 28; }
+  function val(i) { var v = Math.round(Number(i.value)); if (!isFinite(v)) v = 0; return Math.max(0, Math.min(10, v)); }
+  function draw() {
+    var x1 = val(ids[0]), y1 = val(ids[1]), x2 = val(ids[2]), y2 = val(ids[3]);
+    clear(s);
+    for (var k = 0; k <= 10; k++) {
+      L(s, X(k), Y(0), X(k), Y(10), "s-grid"); L(s, X(0), Y(k), X(10), Y(k), "s-grid");
+      if (k % 2 === 0) { T(s, X(k), Y(0) + 20, String(k), "s-text s-small"); T(s, X(0) - 12, Y(k) + 5, String(k), "s-text s-small", "end"); }
+    }
+    el("path", { d: "M" + X(x1) + "," + Y(y1) + " L" + X(x2) + "," + Y(y1) + " L" + X(x2) + "," + Y(y2), "class": "path-man" }, s);
+    L(s, X(x1), Y(y1), X(x2), Y(y2), "path-euc");
+    C(s, X(x1), Y(y1), 8, null, "pt"); C(s, X(x2), Y(y2), 8, "fill:var(--gold)", "pt");
+    T(s, X(x1) - 12, Y(y1) - 10, "A", "s-text s-strong s-big", "end");
+    T(s, X(x2) + 12, Y(y2) - 10, "B", "s-text s-strong s-big", "start");
+    L(s, 370, 60, 395, 60, "path-euc"); T(s, 403, 65, "Euclidean", "s-text", "start");
+    L(s, 370, 95, 395, 95, "path-man"); T(s, 403, 100, "Manhattan", "s-text", "start");
+    var dx = Math.abs(x2 - x1), dy = Math.abs(y2 - y1), e = Math.sqrt(dx * dx + dy * dy), m = dx + dy;
+    $("d-euc").textContent = fmt(e, 2); $("d-man").textContent = String(m);
+    $("d-calc").innerHTML = "Across = " + dx + ", up = " + dy + "<br>Euclidean = √(" + dx + "² + " + dy + "²) = √" + (dx * dx + dy * dy) + " = " + fmt(e, 2) + "<br>Manhattan = " + dx + " + " + dy + " = " + m;
+  }
+  ids.forEach(function (i) { i.addEventListener("input", draw); });
+  s.style.cursor = "crosshair";
+  s.addEventListener("click", function (ev) {
+    if (!s.getScreenCTM || !s.createSVGPoint) return;
+    var pt = s.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    var ctm = s.getScreenCTM(); if (!ctm) return;
+    var p = pt.matrixTransform(ctm.inverse());
+    var i = Math.round((p.x - 60) / 28), j = Math.round((300 - p.y) / 28);
+    if (i < 0 || i > 10 || j < 0 || j > 10) return;
+    ids[2].value = i; ids[3].value = j; draw();
+  });
+  draw();
+}
+
+/* ---------- 7.5 Scaling trap ---------- */
+function scaleTrap() {
+  var s = $("v-scaletrap"); if (!s) return;
+  T(s, 20, 26, "Unscaled distance from A (25 yrs, ₹40,000)", "s-text s-strong", "start");
+  [[75, "A to B", 500.4, "B: 45 yrs, ₹40,500 (20 years older)", "var(--teal)", "500.4: looks closest"], [145, "A to C", 5000, "C: 26 yrs, ₹45,000 (1 year older)", "var(--coral)", "5,000"]].forEach(function (r) {
+    var y = r[0], w = r[2] / 5000 * 290;
+    T(s, 20, y + 5, r[1], "s-text s-strong", "start");
+    R(s, 100, y - 14, w, 28, "fill:" + r[4], null, 4);
+    T(s, 100 + w + 10, y + 5, r[5], "s-text s-strong", "start");
+    T(s, 100, y + 32, r[3], "s-text s-small", "start");
+  });
+}
+
+/* ---------- 7.6 Outlier shared scale ---------- */
+var ORD = [42, 45, 48, 50, 52, 53, 55, 57, 58, 60, 62, 65, 120];
+function OX(v) { return v > 100 ? 495 : 40 + (v - 30) * 8.4; }
+function brokenAxis(s, y) {
+  L(s, 40, y, 462, y, "s-axis"); L(s, 482, y, 505, y, "s-axis");
+  L(s, 464, y + 7, 472, y - 7, "s-axis"); L(s, 472, y + 7, 480, y - 7, "s-axis");
+  for (var t = 30; t <= 80; t += 10) { L(s, OX(t), y, OX(t), y + 6, "s-axis"); T(s, OX(t), y + 22, String(t), "s-text s-small"); }
+  L(s, 495, y, 495, y + 6, "s-axis"); T(s, 495, y + 22, "120", "s-text s-small", "middle", "fill:var(--coral)");
+}
+
+function outlierDots() {
+  var s = $("v-dots"); if (!s) return;
+  function X(v) { return 40 + (v - 40) * (440 / 85); }
+  L(s, 40, 100, 480, 100, "s-axis");
+  for (var t = 40; t <= 120; t += 20) { L(s, X(t), 100, X(t), 106, "s-axis"); T(s, X(t), 122, String(t), "s-text s-small"); }
+  var last = [];
+  ORD.forEach(function (v) {
+    var x = X(v), lvl = 0;
+    while (last[lvl] !== undefined && x - last[lvl] < 15) lvl++;
+    last[lvl] = x;
+    C(s, x, 84 - lvl * 15, 7, v === 120 ? "fill:var(--coral)" : "fill:var(--teal)", "dot");
+  });
+  T(s, X(120), 60, "120: far from the pack", "s-text s-strong", "end", "fill:var(--coral)");
+  T(s, X(53), 40, "12 normal days", "s-text", "middle");
+}
+
+function iqrLine() {
+  var s = $("v-iqr"); if (!s) return;
+  R(s, OX(50), 82, OX(60) - OX(50), 36, "fill:rgba(67,210,195,.22);stroke:var(--teal)", null, 4);
+  bracket(s, OX(50), OX(60), 70, "var(--teal)");
+  T(s, OX(55), 60, "IQR = 10", "s-text s-strong", "middle", "fill:var(--teal)");
+  [[OX(35), OX(50)], [OX(60), OX(75)]].forEach(function (a) {
+    L(s, a[0], 34, a[1], 34, "mark", "stroke:var(--gold);stroke-width:2");
+    L(s, a[0], 28, a[0], 40, "mark", "stroke:var(--gold);stroke-width:2"); L(s, a[1], 28, a[1], 40, "mark", "stroke:var(--gold);stroke-width:2");
+    T(s, (a[0] + a[1]) / 2, 24, "1.5 × IQR = 15", "s-text s-small", "middle", "fill:var(--gold)");
+  });
+  [35, 75].forEach(function (v) { L(s, OX(v), 44, OX(v), 150, "fence"); });
+  brokenAxis(s, 100);
+  ORD.forEach(function (v) { C(s, OX(v), 100, v === 120 ? 7 : 4.5, v === 120 ? "fill:var(--coral)" : DOT, "dot"); });
+  [50, 55, 60].forEach(function (v) { L(s, OX(v), 82, OX(v), 118, "mark", "stroke:var(--text);stroke-width:" + (v === 55 ? 3 : 1.5)); });
+  T(s, OX(50), 160, "Q1 = 50", "s-text s-strong"); T(s, OX(60), 160, "Q3 = 60", "s-text s-strong");
+  T(s, OX(55), 182, "Median = 55", "s-text s-strong");
+  T(s, OX(35), 208, "Lower fence 35", "s-text s-strong", "middle", "fill:var(--gold)");
+  T(s, OX(75), 208, "Upper fence 75", "s-text s-strong", "middle", "fill:var(--gold)");
+  T(s, 505, 150, "Outlier", "s-text s-strong", "end", "fill:var(--coral)");
+}
+
+function boxAnnotated() {
+  var s = $("v-box"); if (!s) return;
+  var cy = 125;
+  [35, 75].forEach(function (v) { L(s, OX(v), 78, OX(v), 172, "fence"); });
+  L(s, OX(42), cy, OX(50), cy, "whisk"); L(s, OX(60), cy, OX(65), cy, "whisk");
+  L(s, OX(42), cy - 14, OX(42), cy + 14, "whisk"); L(s, OX(65), cy - 14, OX(65), cy + 14, "whisk");
+  R(s, OX(50), cy - 25, OX(60) - OX(50), 50, null, "box", 4);
+  L(s, OX(55), cy - 25, OX(55), cy + 25, "mark", "stroke:var(--text);stroke-width:3.5");
+  C(s, 495, cy, 8, "fill:var(--coral)", "dot");
+  T(s, OX(50), 92, "Q1 = 50", "s-text s-strong"); T(s, OX(60), 92, "Q3 = 60", "s-text s-strong");
+  T(s, OX(55), 68, "Median = 55", "s-text s-strong");
+  T(s, OX(42), 190, "Lower whisker 42", "s-text s-strong");
+  T(s, OX(65), 190, "Upper whisker 65", "s-text s-strong", "middle", "fill:var(--teal)");
+  T(s, OX(35), 214, "Lower fence 35", "s-text", "middle", "fill:var(--gold)");
+  T(s, OX(75), 214, "Upper fence 75", "s-text", "middle", "fill:var(--gold)");
+  T(s, 510, 100, "Outlier 120", "s-text s-strong", "end", "fill:var(--coral)");
+  brokenAxis(s, 232);
+}
+
+function whiskerChips() {
+  var s = $("v-whisker"); if (!s) return;
+  T(s, 10, 22, "Sorted orders, walking left to right", "s-text", "start");
+  L(s, 10, 58, 438, 58, "bracket", "stroke:var(--teal)");
+  T(s, 224, 50, "12 values inside the fence (75 or less)", "s-text s-small", "middle", "fill:var(--teal)");
+  ORD.forEach(function (v, i) {
+    var x = i < 12 ? 10 + i * 36 : 466, w = i === 11 ? "fill:var(--teal)" : i === 12 ? "fill:var(--coral)" : "fill:var(--ink-3)";
+    R(s, x, 70, 32, 34, w, "chip", 6);
+    T(s, x + 16, 92, String(v), "s-text s-strong", "middle", (i >= 11) ? "fill:var(--deep)" : null);
+  });
+  L(s, 452, 34, 452, 125, "fence");
+  T(s, 452, 28, "Fence 75", "s-text s-strong", "middle", "fill:var(--gold)");
+  T(s, 482, 124, "Outlier", "s-text s-strong", "middle", "fill:var(--coral)");
+  T(s, 426, 142, "Upper whisker = 65", "s-text s-strong", "end", "fill:var(--teal)");
+  T(s, 426, 162, "the last real value before the fence", "s-text s-small", "end");
+}
+
+/* ---------- 7.6 Box plot builder ---------- */
+function boxWidget() {
+  var s = $("bx-svg"), inp = $("bx-in"), go = $("bx-go"), ex = $("bx-ex"), out = $("bx-out"), err = $("bx-err");
+  if (!s || !inp || !go || !out) return;
+  function niceStep(range) {
+    var raw = range / 5, mag = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10)), n = raw / mag;
+    return (n < 1.5 ? 1 : n < 3 ? 2 : n < 7 ? 5 : 10) * mag;
+  }
+  function row(k, v) {
+    var tr = document.createElement("tr"), th = document.createElement("th"), td = document.createElement("td");
+    th.textContent = k; td.textContent = v; td.className = "num"; tr.appendChild(th); tr.appendChild(td); out.appendChild(tr);
+  }
+  function draw() {
+    err.textContent = ""; out.textContent = ""; clear(s);
+    var parts = inp.value.split(/[\s,;]+/).filter(function (p) { return p !== ""; });
+    var nums = parts.map(Number);
+    if (nums.some(function (n) { return !isFinite(n); })) { err.textContent = "Only numbers please, separated by commas."; return; }
+    if (nums.length < 4) { err.textContent = "Enter at least 4 numbers."; return; }
+    var a = nums.slice().sort(function (x, y) { return x - y; });
+    var q1 = quantile(a, 0.25), med = quantile(a, 0.5), q3 = quantile(a, 0.75), iqr = q3 - q1;
+    var lf = q1 - 1.5 * iqr, uf = q3 + 1.5 * iqr;
+    var inside = a.filter(function (v) { return v >= lf && v <= uf; });
+    var lw = inside[0], uw = inside[inside.length - 1];
+    var outs = a.filter(function (v) { return v < lf || v > uf; });
+    var lo = Math.min(a[0], lf), hi = Math.max(a[a.length - 1], uf);
+    if (hi === lo) { hi += 1; lo -= 1; }
+    var pad = (hi - lo) * 0.05; lo -= pad; hi += pad;
+    function X(v) { return 40 + (v - lo) / (hi - lo) * 440; }
+    var cy = 90;
+    L(s, X(lf), 40, X(lf), 140, "fence"); L(s, X(uf), 40, X(uf), 140, "fence");
+    T(s, X(lf), 32, "fence " + fmt(lf), "s-text s-small", "middle", "fill:var(--gold)");
+    T(s, X(uf), 32, "fence " + fmt(uf), "s-text s-small", "middle", "fill:var(--gold)");
+    L(s, X(lw), cy, X(q1), cy, "whisk"); L(s, X(q3), cy, X(uw), cy, "whisk");
+    L(s, X(lw), cy - 12, X(lw), cy + 12, "whisk"); L(s, X(uw), cy - 12, X(uw), cy + 12, "whisk");
+    R(s, X(q1), cy - 22, X(q3) - X(q1), 44, null, "box", 4);
+    L(s, X(med), cy - 22, X(med), cy + 22, "mark", "stroke:var(--text);stroke-width:3");
+    outs.forEach(function (v) { C(s, X(v), cy, 6, "fill:var(--coral)", "dot"); });
+    a.forEach(function (v) { C(s, X(v), 132, 3, "fill:var(--muted)"); });
+    L(s, 40, 160, 480, 160, "s-axis");
+    var step = niceStep(hi - lo), start = Math.ceil(lo / step) * step;
+    for (var t = start; t <= hi + 1e-9; t += step) { L(s, X(t), 160, X(t), 166, "s-axis"); T(s, X(t), 184, fmt(t), "s-text s-small"); }
+    row("Count", String(a.length));
+    row("Q1", fmt(q1)); row("Median", fmt(med)); row("Q3", fmt(q3)); row("IQR", fmt(iqr));
+    row("Lower fence", fmt(lf)); row("Upper fence", fmt(uf));
+    row("Lower whisker", fmt(lw)); row("Upper whisker", fmt(uw));
+    row("Outliers", outs.length ? outs.map(function (v) { return fmt(v); }).join(", ") : "none");
+  }
+  go.addEventListener("click", draw);
+  if (ex) ex.addEventListener("click", function () { inp.value = "10, 12, 13, 15, 16, 18, 19, 21, 48"; draw(); });
+  draw();
+}
+
+[heroBell, seesaw, meanWidget, medianBars, modeBars, skewPanels, milkBell,
+ probScale, churnWaffle, oddsBars, probWidget,
+ batPlot, squares, targets, fitPanels, tradeoff,
+ streetGrid, distWidget, scaleTrap,
+ outlierDots, iqrLine, boxAnnotated, whiskerChips, boxWidget].forEach(safe);
+})();
+</script>
+</body>
+</html>
