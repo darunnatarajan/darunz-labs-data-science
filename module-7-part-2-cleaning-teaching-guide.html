@@ -1,0 +1,1265 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 7: Statistics basics · Teaching guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Recursive:slnt,wght,CASL,CRSV,MONO@-15..0,300..1000,0..1,0..1,0..1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#17133A;--ink-2:#1F1A4A;--ink-3:#29235C;--deep:#120F2E;
+  --line:#3A3377;--text:#EEECFA;--muted:#B0AADB;
+  --violet:#A493FF;--teal:#43D2C3;--coral:#FF8472;--gold:#F6CB60;
+  --sans:"Recursive",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --measure:47rem;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:4.5rem}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--ink);color:var(--text);font-family:var(--sans);font-size:1.0625rem;line-height:1.65;font-variation-settings:"CASL" 0,"MONO" 0,"slnt" 0;-webkit-font-smoothing:antialiased}
+.wrap{max-width:var(--measure);margin-inline:auto;padding-inline:1.25rem}
+a{color:var(--teal);text-underline-offset:.2em}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
+h1,h2,h3,h4{margin:0;line-height:1.15;letter-spacing:-.015em;text-wrap:balance}
+p,ul,ol{margin:0 0 1rem}
+ul,ol{padding-left:1.3rem}
+li{margin-bottom:.35rem}
+li::marker{color:var(--muted)}
+code,pre,.calc,.fx{font-variation-settings:"MONO" 1,"CASL" 0,"slnt" 0}
+code{font-size:.9em;background:var(--ink-3);padding:.08em .38em;border-radius:5px}
+.xbar{text-decoration:overline}
+
+/* Hero */
+.hero{padding-top:clamp(2.5rem,7vw,5rem)}
+.hero h1{font-size:clamp(2.6rem,9vw,5.2rem);font-weight:900;letter-spacing:-.04em;line-height:.98;max-width:11ch}
+.lede{font-size:clamp(1.1rem,2.4vw,1.3rem);line-height:1.55;margin-top:1.5rem;max-width:38rem}
+.meta{color:var(--muted)}
+.bell-hero{display:block;width:100%;height:auto;margin:2.25rem 0 .5rem}
+
+/* Sticky contents */
+.toc{position:sticky;top:0;z-index:20;background:rgba(23,19,58,.94);border-block:1px solid var(--line);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.toc ol{display:flex;gap:.4rem;list-style:none;margin:0 auto;padding:.6rem 1.25rem;max-width:64rem;overflow-x:auto;scrollbar-width:none}
+.toc ol::-webkit-scrollbar{display:none}
+.toc li{margin:0;flex:none}
+.toc a{display:block;padding:.3rem .8rem;border:1px solid var(--line);border-radius:999px;color:var(--muted);text-decoration:none;font-size:.88rem;white-space:nowrap}
+.toc a:hover{color:var(--text);border-color:var(--violet)}
+
+/* Plan */
+.plan{padding-top:3rem}
+.plan h2{font-size:clamp(1.6rem,4vw,2.1rem);font-weight:800;margin-bottom:.75rem}
+.roadmap{list-style:none;padding:0;margin:1.5rem 0 2.5rem;border-bottom:1px solid var(--line)}
+.roadmap li{display:grid;grid-template-columns:3rem 1fr auto;column-gap:1rem;padding:.9rem 0;margin:0;border-top:1px solid var(--line)}
+.roadmap .n{font-weight:300;color:var(--muted);font-variant-numeric:tabular-nums}
+.roadmap a{color:var(--text);font-weight:700;text-decoration:none}
+.roadmap a:hover{color:var(--teal)}
+.roadmap .time{color:var(--gold);font-variant-numeric:tabular-nums;white-space:nowrap}
+.roadmap .sub{grid-column:2/-1;color:var(--muted);font-size:.95rem}
+.key-h{font-size:1.2rem;font-weight:750;margin-bottom:.9rem}
+.key{display:grid;grid-template-columns:repeat(auto-fit,minmax(14.5rem,1fr));gap:1rem 1.5rem;margin:0}
+.key div{margin:0}
+.key .lbl{margin:0 0 .15rem}
+.key dd{margin:0;color:var(--muted);font-size:.95rem}
+
+/* Units and topics */
+.unit{padding-top:4.5rem;margin-top:3rem;border-top:1px solid var(--line)}
+.unit h2{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 .9rem;font-size:clamp(2.2rem,7vw,3.4rem);font-weight:850;letter-spacing:-.035em}
+.unit h2 .n{font-weight:300;color:var(--muted);font-variant-numeric:tabular-nums}
+.unit-intro{font-size:1.15rem;margin-top:1.1rem}
+.unit-meta{color:var(--gold);font-size:.95rem}
+.topic{margin-top:3rem;padding-top:2.5rem;border-top:1px dashed var(--line)}
+.topic h3{font-size:clamp(1.5rem,4vw,1.9rem);font-weight:800;margin-bottom:.9rem}
+.ex h4{font-size:1.08rem;font-weight:750;margin:0 0 .5rem}
+.sub-h{font-size:1.15rem;font-weight:750;margin:2rem 0 .6rem}
+
+/* Block labels */
+.lbl{display:flex;align-items:center;gap:.55rem;margin:1.9rem 0 .55rem;font-size:.9rem;font-weight:700;color:var(--muted)}
+.lbl::before{content:"";flex:none;width:.72rem;height:.72rem;border-radius:2px;background:currentColor}
+.lbl.cue{color:var(--coral)}
+.lbl.cue::before{border-radius:50%}
+.lbl.fxl{color:var(--gold)}
+.lbl.exl{color:var(--teal)}
+.lbl.live{color:var(--teal)}
+.lbl.live::before{background:none;border:2px solid currentColor;border-radius:50%}
+.lbl.py{color:var(--violet)}
+.lbl.use{color:var(--muted)}
+.lbl.warn{color:var(--coral)}
+.lbl.warn::before{border-radius:0;clip-path:polygon(50% 0,100% 100%,0 100%)}
+
+/* Blocks */
+.say{margin:0;padding:.2rem 0 .2rem 1.15rem;border-left:3px solid var(--coral);font-size:1.2rem;line-height:1.55;font-weight:480;font-variation-settings:"CASL" 1,"MONO" 0,"slnt" -9}
+.fx{margin:0;padding:1rem 1.2rem;background:var(--deep);border:1px solid var(--line);border-radius:12px;color:var(--gold);font-size:1rem;line-height:2;overflow-x:auto;white-space:nowrap}
+.fx-note{display:block;white-space:normal;line-height:1.5;margin-top:.35rem;color:var(--muted);font-size:.9rem;font-variation-settings:"MONO" 0,"CASL" 0,"slnt" 0}
+.ex{background:var(--ink-2);border:1px solid var(--line);border-radius:16px;padding:1.2rem 1.25rem .35rem}
+.ex + .ex{margin-top:1rem}
+.calc{background:var(--deep);border-radius:8px;padding:.55rem .8rem;margin:0 0 1rem;font-size:.93rem;overflow-x:auto;white-space:nowrap}
+pre{margin:0;padding:1rem 1.15rem;background:var(--deep);border:1px solid var(--line);border-radius:10px;overflow-x:auto;font-size:.86rem;line-height:1.65}
+pre .c{color:#9089C6}
+.warn-box{background:rgba(255,132,114,.07);border:1px solid rgba(255,132,114,.34);border-radius:12px;padding:.95rem 1.15rem .1rem}
+.aside{border-left:3px solid var(--violet);padding:.1rem 0 .1rem 1rem;color:var(--muted);margin:1.25rem 0}
+
+/* Tables */
+.tbl{overflow-x:auto;margin:0 0 1.1rem;border:1px solid var(--line);border-radius:12px;background:var(--ink)}
+.ex .tbl{background:var(--deep)}
+table{width:100%;border-collapse:collapse;font-size:.93rem;font-variant-numeric:tabular-nums}
+th,td{padding:.55rem .8rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+thead th{background:var(--ink-3);color:var(--muted);font-weight:650;white-space:nowrap}
+tbody th{font-weight:650}
+tbody tr:last-child>*{border-bottom:0}
+.num{text-align:right}
+tr.total>*{font-weight:700;background:rgba(246,203,96,.06)}
+tr.hl>*{background:rgba(67,210,195,.1)}
+
+/* Figures */
+.fig{margin:1.25rem 0}
+.chart{display:block;width:100%;height:auto;max-width:620px}
+.fig-note{color:var(--muted);font-size:.9rem;margin-top:.5rem}
+.panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:.9rem;margin:1.25rem 0 .75rem}
+.panels figure{margin:0;padding:.7rem .7rem .6rem;background:var(--deep);border:1px solid var(--line);border-radius:14px}
+.panels svg{display:block;width:100%;height:auto}
+.panels figcaption{font-size:.88rem;color:var(--muted);margin-top:.45rem;line-height:1.45}
+.legend{display:flex;flex-wrap:wrap;gap:.35rem 1.25rem;margin:0 0 1rem;padding:0;list-style:none;font-size:.9rem;color:var(--muted)}
+.legend li{margin:0;display:flex;align-items:center;gap:.45rem}
+.legend li::before{content:"";width:1.1rem;height:3px;border-radius:2px;background:var(--c)}
+.legend li.dash::before{background:repeating-linear-gradient(90deg,var(--c) 0 5px,transparent 5px 9px)}
+
+/* SVG pieces */
+.s-axis{stroke:var(--muted);stroke-opacity:.55;stroke-width:1.5}
+.s-grid{stroke:var(--line);stroke-width:1}
+.s-text{fill:var(--muted);font-family:var(--sans);font-size:15px}
+.s-strong{fill:var(--text);font-weight:700}
+.bell-line{fill:none;stroke:var(--text);stroke-width:3;stroke-linejoin:round}
+.b3{fill:rgba(246,203,96,.16)}
+.b2{fill:rgba(164,147,255,.28)}
+.b1{fill:rgba(67,210,195,.36)}
+.bracket{fill:none;stroke-width:2}
+.mark{stroke-width:2.5;stroke-linecap:round}
+.dashed{stroke-dasharray:5 5}
+.fit{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.dot{stroke:var(--deep);stroke-width:1.5}
+.skew-area{fill:rgba(164,147,255,.22);stroke:var(--violet);stroke-width:2}
+.sd-band{fill:rgba(67,210,195,.22)}
+.path-euc{stroke:var(--teal);stroke-width:3.5;stroke-linecap:round}
+.path-man{fill:none;stroke:var(--coral);stroke-width:3.5;stroke-dasharray:8 6;stroke-linejoin:round}
+.pt{fill:var(--text);stroke:var(--deep);stroke-width:2}
+.box{fill:rgba(67,210,195,.2);stroke:var(--teal);stroke-width:2}
+.whisk{stroke:var(--text);stroke-width:2}
+.fence{stroke:var(--gold);stroke-width:1.5;stroke-dasharray:4 5}
+.st-teal{stroke:var(--teal)}.st-coral{stroke:var(--coral)}.st-gold{stroke:var(--gold)}.st-violet{stroke:var(--violet)}.st-text{stroke:var(--text)}
+.fl-teal{fill:var(--teal)}.fl-coral{fill:var(--coral)}.fl-gold{fill:var(--gold)}.fl-violet{fill:var(--violet)}.fl-text{fill:var(--text)}
+.mover{transition:transform .55s cubic-bezier(.3,.7,.2,1)}
+@media (prefers-reduced-motion:no-preference){
+  .animate .bell-line{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw 1.7s cubic-bezier(.3,.7,.2,1) .2s forwards}
+  .animate .band{opacity:0;animation:fade .8s ease-out forwards;animation-delay:var(--d)}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  @keyframes fade{to{opacity:1}}
+}
+@media (prefers-reduced-motion:reduce){.mover{transition:none}}
+
+/* Interactive widgets */
+.widget{margin:1.75rem 0;padding:1.2rem 1.25rem;background:var(--ink-2);border:1px solid rgba(67,210,195,.45);border-radius:20px}
+.widget .lbl{margin-top:0}
+.readout{display:flex;flex-wrap:wrap;gap:.5rem 2rem;margin:.5rem 0 1rem;color:var(--muted)}
+.readout b{display:block;font-size:1.6rem;line-height:1.2;color:var(--text);font-variant-numeric:tabular-nums}
+.readout .calc-out{display:block;color:var(--text);font-variation-settings:"MONO" 1,"CASL" 0,"slnt" 0;font-size:1rem}
+.btn-row{display:flex;flex-wrap:wrap;gap:.6rem;margin:.25rem 0 1rem}
+button{font:inherit;font-size:.95rem;font-weight:700;line-height:1.2;padding:.6rem 1.1rem;border-radius:999px;border:1px solid transparent;background:var(--teal);color:var(--deep);cursor:pointer}
+button:hover{filter:brightness(1.08)}
+button.ghost{background:transparent;color:var(--text);border-color:var(--line)}
+button.ghost:hover{border-color:var(--teal)}
+input,textarea{font:inherit;font-variation-settings:"MONO" 1,"CASL" 0,"slnt" 0;font-size:.95rem;color:var(--text);background:var(--deep);border:1px solid var(--line);border-radius:10px;padding:.5rem .65rem;width:100%}
+textarea{min-height:5.5rem;resize:vertical;line-height:1.5}
+.field-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;margin-bottom:1rem}
+.field-grid label{font-size:.85rem;color:var(--muted);display:grid;gap:.25rem}
+.err{color:var(--coral);font-weight:600;min-height:1.2em;margin:.25rem 0 .75rem}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1.25rem;align-items:start}
+.grid2 td{min-width:5.5rem}
+.interp{font-weight:600;margin-top:.75rem}
+
+/* Checkpoints */
+.gate{margin-top:3.5rem;padding:1.4rem 1.4rem .6rem;border:2px dashed rgba(246,203,96,.55);border-radius:24px;background:rgba(246,203,96,.035)}
+.gate h3{font-size:1.45rem;font-weight:800;color:var(--gold);margin-bottom:.4rem}
+.gate>p{color:var(--muted)}
+details.q{border-top:1px solid var(--line);padding:.8rem 0}
+details.q summary{display:flex;gap:.75rem;cursor:pointer;list-style:none;font-weight:600}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary::before{content:"+";flex:none;width:1.1rem;color:var(--gold);font-weight:800;font-size:1.15rem;line-height:1.45}
+details.q[open] summary::before{content:"\2212"}
+.ans{margin:.6rem 0 0 1.85rem;padding:.7rem .9rem;background:var(--ink-2);border-radius:10px}
+.ans p:last-child,.ans ol:last-child{margin-bottom:0}
+
+/* End matter */
+.endsec{padding-top:4.5rem;margin-top:3rem;border-top:1px solid var(--line)}
+.endsec h2{font-size:clamp(2rem,6vw,3rem);font-weight:850;letter-spacing:-.03em;margin-bottom:1rem}
+.foot{margin-top:5rem;border-top:1px solid var(--line);padding-block:2rem 3rem;color:var(--muted);font-size:.95rem}
+.foot strong{color:var(--text)}
+
+@media (max-width:640px){
+  body{font-size:1rem}
+  .say{font-size:1.08rem}
+  .split{grid-template-columns:1fr}
+  .field-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ex{padding:1rem 1rem .25rem}
+  .widget{padding:1rem}
+  .gate{padding:1.1rem 1rem .4rem}
+  .roadmap li{grid-template-columns:2.6rem 1fr auto}
+  .ans{margin-left:0}
+}
+
+/* Plain-words boxes and pictures */
+.plain{margin:0 0 1.3rem;padding:.9rem 1.15rem;border-radius:14px;background:rgba(164,147,255,.12);border:1px solid rgba(164,147,255,.38);font-size:1.14rem;line-height:1.5;font-weight:560}
+.plain::before{content:"In one line";display:block;font-size:.82rem;font-weight:700;color:var(--violet);margin-bottom:.2rem}
+.lbl.plain{color:var(--violet)}
+.lbl.plain::before{background:none;border:2px solid currentColor;border-radius:4px}
+.pic{margin:1.1rem 0 1.5rem;padding:.9rem .9rem .75rem;background:var(--deep);border:1px solid var(--line);border-radius:16px}
+.ex .pic{background:var(--ink)}
+.pic svg{display:block;width:100%;height:auto}
+.pic figcaption{color:var(--muted);font-size:.93rem;line-height:1.5;margin-top:.55rem}
+.s-big{font-size:18px;font-weight:700}
+.s-small{font-size:13px}
+.chip{stroke:var(--line);stroke-width:1}
+@media (max-width:640px){.plain{font-size:1.05rem}}
+</style>
+</head>
+<body>
+
+<header class="hero wrap">
+  <h1>Module 7, part 2: Cleaning your data</h1>
+  <p class="lede">A trainer's guide to missing values, encoding and correlation. Every concept opens with one plain sentence and a picture, then a Tanglish class cue, a worked real-time example, Python you can run live, and a checkpoint before you move on.</p>
+  <p class="meta">Three units, about four hours of class time. Follows Module 7 part 1 (statistics basics) and uses the same Chennai flats dataset.</p>
+  <svg id="hero-scatter" class="bell-hero" viewBox="0 0 800 352" role="img" aria-label="Scatter plot of flat size against rent for 15 Chennai flats, with a rising trend line. Bigger flats rent for more."></svg>
+</header>
+
+<nav class="toc" aria-label="Units in this guide">
+  <ol>
+    <li><a href="#u7">7.7 Missing values</a></li>
+    <li><a href="#u8">7.8 Encoding and scaling</a></li>
+    <li><a href="#u9">7.9 Correlation</a></li>
+    <li><a href="#cheatsheet">Cheat sheet</a></li>
+    <li><a href="#practice">Practice</a></li>
+  </ol>
+</nav>
+
+<main>
+<section class="plan wrap" aria-labelledby="plan-h">
+  <h2 id="plan-h">How to run this part</h2>
+  <p>This is the cleaning half of Module 7. Statistics told learners what the data says; this part gets the data into a state a model can actually read. Teach the units in order and end each one with its checkpoint.</p>
+  <ol class="roadmap">
+    <li><span class="n">7.7</span><span><a href="#u7">Missing value treatment</a></span><span class="time">90 min</span><span class="sub">What NA means, drop or fill, central imputation, KNN imputation</span></li>
+    <li><span class="n">7.8</span><span><a href="#u8">Encoding and scaling</a></span><span class="time">75 min</span><span class="sub">Label encoding, dummification, standardisation, min-max</span></li>
+    <li><span class="n">7.9</span><span><a href="#u9">Scatter plot and correlation</a></span><span class="time">75 min</span><span class="sub">Reading a scatter, Pearson correlation, correlation is not causation</span></li>
+  </ol>
+
+  <p class="aside"><strong>One dataset throughout:</strong> the same 15 Chennai flats from part 1, with a few values knocked out. Learners already know this data, so every new idea is the only new thing on the screen.</p>
+
+  <h3 class="key-h">What you'll find under every topic</h3>
+  <dl class="key">
+    <div><dt class="lbl plain">In one line</dt><dd>The whole idea in one simple sentence, with a picture right below it.</dd></div>
+    <div><dt class="lbl cue">Say it in class</dt><dd>A Tanglish analogy to open the topic before any formula.</dd></div>
+    <div><dt class="lbl fxl">Formula</dt><dd>The maths or the rule, written the way you'd put it on the board.</dd></div>
+    <div><dt class="lbl exl">Real-time example</dt><dd>A worked scenario with every number calculated.</dd></div>
+    <div><dt class="lbl live">Try it live</dt><dd>An interactive demo to project and play with in class.</dd></div>
+    <div><dt class="lbl py">Python</dt><dd>pandas or scikit-learn code with its real output in the comments.</dd></div>
+    <div><dt class="lbl use">Where it's used</dt><dd>Where the idea shows up again in data science and ML.</dd></div>
+    <div><dt class="lbl warn">Watch out</dt><dd>The mistake learners, and interview candidates, make most often.</dd></div>
+  </dl>
+</section>
+
+<!-- ============ 7.7 MISSING VALUES ============ -->
+<section class="unit wrap" id="u7" aria-labelledby="u7-h">
+  <h2 id="u7-h"><span class="n">7.7</span> Missing value treatment</h2>
+  <p class="unit-intro">Real datasets have holes in them. scikit-learn refuses to train on a single NaN, so every project starts here. The choice is never "fill it and move on": it's decide why it's missing, then choose the least damaging fix.</p>
+  <p class="unit-meta">About 90 minutes</p>
+
+  <div class="ex">
+    <h4>The dataset for this unit</h4>
+    <p>The 15 flats from part 1, as they arrived from the field team. Four values never made it in.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Flat</th><th>Locality</th><th class="num">BHK</th><th class="num">Sq ft</th><th class="num">Rent (₹)</th></tr></thead>
+      <tbody>
+        <tr><td>F01</td><td>Velachery</td><td class="num">2</td><td class="num">950</td><td class="num">18,000</td></tr>
+        <tr><td>F02</td><td>Tambaram</td><td class="num">2</td><td class="num">900</td><td class="num">12,000</td></tr>
+        <tr><td>F03</td><td>OMR</td><td class="num">2</td><td class="num">1,050</td><td class="num">20,000</td></tr>
+        <tr><td>F04</td><td>Adyar</td><td class="num">3</td><td class="num">1,400</td><td class="num">38,000</td></tr>
+        <tr class="hl"><td>F05</td><td>Tambaram</td><td class="num">1</td><td class="num">600</td><td class="num">missing</td></tr>
+        <tr><td>F06</td><td>Velachery</td><td class="num">3</td><td class="num">1,300</td><td class="num">28,000</td></tr>
+        <tr><td>F07</td><td>OMR</td><td class="num">3</td><td class="num">1,450</td><td class="num">30,000</td></tr>
+        <tr><td>F08</td><td>Anna Nagar</td><td class="num">2</td><td class="num">1,000</td><td class="num">25,000</td></tr>
+        <tr class="hl"><td>F09</td><td>Tambaram</td><td class="num">2</td><td class="num">850</td><td class="num">missing</td></tr>
+        <tr><td>F10</td><td>OMR</td><td class="num">1</td><td class="num">650</td><td class="num">11,000</td></tr>
+        <tr><td>F11</td><td>Adyar</td><td class="num">4</td><td class="num">3,200</td><td class="num">95,000</td></tr>
+        <tr class="hl"><td>F12</td><td>Velachery</td><td class="num">2</td><td class="num">missing</td><td class="num">18,000</td></tr>
+        <tr><td>F13</td><td>Anna Nagar</td><td class="num">3</td><td class="num">1,500</td><td class="num">36,000</td></tr>
+        <tr class="hl"><td>F14</td><td>OMR</td><td class="num">2</td><td class="num">1,100</td><td class="num">missing</td></tr>
+        <tr><td>F15</td><td>Tambaram</td><td class="num">1</td><td class="num">550</td><td class="num">9,000</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- What is NA -->
+  <article class="topic" id="na">
+    <h3>What is NA?</h3>
+    <p class="plain">A cell where no value was recorded. Not zero, not blank text: nothing at all.</p>
+    <figure class="pic"><svg id="v-nulls" viewBox="0 0 520 330" role="img" aria-label="A map of the dataset as a grid of cells. Three coral cells in the rent column and one in the square feet column mark the missing values. A bar beside each column shows 3 missing rents and 1 missing square footage."></svg>
+      <figcaption>A missing-value map. One row per flat, one column per field, and every hole marked. This is the first picture to draw for any new dataset.</figcaption></figure>
+    <p>pandas shows missing numbers as <code>NaN</code> and missing objects as <code>None</code> or <code>NaT</code> for dates. Whatever the label, the meaning is the same: the value was never captured.</p>
+    <p>Before fixing anything, ask <strong>why</strong> it's missing. The answer decides the fix:</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Why it's missing</th><th>Example in this data</th><th>Safe to fill?</th></tr></thead>
+      <tbody>
+        <tr><th>Random slip</th><td>The field team forgot to type F14's rent</td><td>Yes, filling is fine</td></tr>
+        <tr><th>Depends on something else</th><td>Rents missing only for flats visited on a rainy day</td><td>Fill, but use the related columns</td></tr>
+        <tr><th>Missing for a reason</th><td>Owners of very expensive flats refuse to share rent</td><td>Careful. Filling hides the pattern; add a flag column</td></tr>
+      </tbody>
+    </table></div>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Attendance register-la oru kattam kaaliya irukku. Student varala-nu artham-aa, illa sir kaiyezhuthu podave marandhutaara-nu artham-aa? Rendum vera vera. NA paathaa, 'edhukku miss aachu' nu dhaan mudhalla kekkanum. Adha kekkaama fill panna koodaadhu."</p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>Measuring the damage first</h4>
+      <p class="calc">Rent: 3 missing out of 15 = 20%<br>Sq ft: 1 missing out of 15 = 6.7%<br>Rows with no missing value at all: 11 of 15</p>
+      <p>Rough guide for what the percentage means:</p>
+      <div class="tbl"><table>
+        <thead><tr><th class="num">Missing</th><th>Usual move</th></tr></thead>
+        <tbody>
+          <tr><td class="num">Under 5%</td><td>Drop those rows, or fill simply. Either is fine</td></tr>
+          <tr><td class="num">5% to 30%</td><td>Fill carefully, using the other columns</td></tr>
+          <tr><td class="num">Over 50%</td><td>Consider dropping the whole column, or keep it only as a yes/no flag</td></tr>
+        </tbody>
+      </table></div>
+      <p>Rent at 20% is the interesting case: too much to throw away, too much to fill carelessly.</p>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>t.isna().sum()             <span class="c"># sqft 1, rent 3</span>
+t.isna().mean() * 100      <span class="c"># rent 20.0 percent</span>
+t.dropna().shape           <span class="c"># (11, 5)  rows with nothing missing</span>
+t[t["rent"].isna()]        <span class="c"># the three rows to investigate: F05, F09, F14</span>
+
+<span class="c"># Missing values disguised as text when the CSV was read:</span>
+pd.read_csv("flats.csv", na_values=["NA", "na", "-", "?", "", "null"])</pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>The first three lines of every EDA notebook, and the first question in most data science interviews.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>Zero is not missing. A flat with rent 0 is a data error or a free stay; a flat with NaN was simply never recorded. If someone fills missing values with 0, every average in the project is wrong from that point on.</p></div>
+  </article>
+
+  <!-- Drop or fill -->
+  <article class="topic" id="drop-or-fill">
+    <h3>Drop or fill?</h3>
+    <p class="plain">Dropping throws away whole rows to get rid of a few holes. Filling keeps the rows but invents the missing numbers.</p>
+    <p>Neither is free. Dropping costs you data, which hurts most when the dataset is small. Filling costs you honesty: the filled values look like real measurements but are guesses.</p>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Oru row-la onnu rendu cell miss aayiruntha, full row-aiyum thookki pottaa, andha row-la irukkura மீதி nalla data ellaam waste. Aduthadhu yosikkaama delete pannadheenga."</p>
+
+    <p class="lbl fxl">The rule I teach</p>
+    <p class="fx">Few missing rows, plenty of data → drop the rows<br>Column mostly empty → drop the column<br>Everything else → fill, and note what you filled<span class="fx-note">Never drop or fill before you have looked at why the values are missing.</span></p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>What dropping costs on 15 flats</h4>
+      <p class="calc">Start: 15 flats<br>After <code>dropna()</code>: 11 flats<br>Lost: 4 flats, 27% of the data</p>
+      <p>Losing 27% of a small dataset is expensive, and the flats you lose are not random: F05 and F15 are both small Tambaram flats, so the survivors lean towards bigger, costlier homes. On a dataset of 50,000 rows, dropping 4 would be the easy call. Size decides.</p>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>t.dropna()                            <span class="c"># drops any row with any missing value: 11 left</span>
+t.dropna(subset=["rent"])             <span class="c"># only rows whose rent is missing: 12 left</span>
+t.dropna(axis=1)                      <span class="c"># drops the whole column instead</span>
+t.dropna(thresh=4)                    <span class="c"># keep rows with at least 4 real values</span>
+
+t["rent_was_missing"] = t["rent"].isna().astype(int)   <span class="c"># keep the fact, then fill</span></pre>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p><code>dropna()</code> returns a new DataFrame; it does not change the original unless you assign it back. Half the "my code did nothing" questions in class are this line.</p></div>
+  </article>
+
+  <!-- Central imputation -->
+  <article class="topic" id="central">
+    <h3>Central imputation</h3>
+    <p class="plain">Fill the holes with the column's middle value: mean or median for numbers, mode for categories.</p>
+    <p>It's the fastest fix and the one every learner reaches for first. The skill is knowing which centre to use, and that comes straight from part 1: <strong>mean for roughly symmetric columns, median when the column is skewed or has outliers, mode for text columns.</strong> Rent here is heavily right-skewed with a ₹95,000 flat sitting in it, so the median is the honest choice.</p>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Oru student mark miss aayiduchu-nu vachukonga. Class average-ai pottutu போகலாம். Romba easy. Aana andha student-oda real mark adhu illa, and ellaa miss aana students-ukkum ore mark poduvom. Adhanaala class-oda spread suruki povum."</p>
+
+    <p class="lbl fxl">Formula</p>
+    <p class="fx">Numeric, symmetric: fill with the mean<br>Numeric, skewed or with outliers: fill with the median<br>Categorical: fill with the mode, or with the label "Unknown"</p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>Mean or median for the three missing rents?</h4>
+      <p>The 12 rents we do have:</p>
+      <p class="calc">Mean = ₹28,333 &nbsp; Median = ₹22,500 &nbsp; Mode = ₹18,000 &nbsp; SD = ₹23,031</p>
+      <p>The mean sits above the median, which tells you the column is right-skewed (part 1, unit 7.1). The ₹95,000 Adyar flat is doing that. Filling three small Tambaram and OMR flats with ₹28,333 would give them rents higher than most real flats in the table.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>After filling</th><th class="num">Mean</th><th class="num">Median</th><th class="num">SD</th></tr></thead>
+        <tbody>
+          <tr><th>Original 12 values</th><td class="num">28,333</td><td class="num">22,500</td><td class="num">23,031</td></tr>
+          <tr><th>Filled with the mean</th><td class="num">28,333</td><td class="num">28,000</td><td class="num">20,415</td></tr>
+          <tr class="hl"><th>Filled with the median</th><td class="num">27,167</td><td class="num">22,500</td><td class="num">20,557</td></tr>
+        </tbody>
+      </table></div>
+      <p>Look at the SD column. Both fills pull it down by around ₹2,500, because three identical values were added at the centre. That is the cost of central imputation: the data looks more consistent than it really is.</p>
+    </div>
+
+    <div class="widget" id="w-impute">
+      <p class="lbl live">Try it live</p>
+      <p>Same three missing rents, four different treatments. Watch the mean, the median and the spread move.</p>
+      <div class="btn-row">
+        <button type="button" id="im-drop">Drop the rows</button>
+        <button type="button" id="im-mean">Fill with mean</button>
+        <button type="button" id="im-median">Fill with median</button>
+        <button type="button" id="im-knn">KNN (k = 3)</button>
+      </div>
+      <svg id="im-svg" class="chart" viewBox="0 0 520 170" role="img" aria-label="Dot plot of the rents, with filled values shown in a different colour."></svg>
+      <div class="readout" aria-live="polite">
+        <span>Count<b id="im-n">12</b></span>
+        <span>Mean<b id="im-avg">28,333</b></span>
+        <span>Median<b id="im-med">22,500</b></span>
+        <span>SD<b id="im-sd">23,031</b></span>
+      </div>
+      <p class="interp" id="im-note" aria-live="polite"></p>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>t["rent"] = t["rent"].fillna(t["rent"].median())      <span class="c"># 22500 in all three holes</span>
+t["locality"] = t["locality"].fillna(t["locality"].mode()[0])
+
+<span class="c"># The scikit-learn way, which remembers the value for the test set:</span>
+from sklearn.impute import SimpleImputer
+imputer = SimpleImputer(strategy="median")            <span class="c"># mean | median | most_frequent | constant</span>
+X_train[["rent"]] = imputer.fit_transform(X_train[["rent"]])
+X_test[["rent"]]  = imputer.transform(X_test[["rent"]])   <span class="c"># transform only, never fit again</span></pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>The default first pass in almost every project, and inside <code>Pipeline</code> objects in production code.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>Fit the imputer on the training set only. If you calculate the median over the full dataset and then split, test-set information has leaked into training, and your accuracy score will be better in the notebook than in real life.</p></div>
+  </article>
+
+  <!-- KNN imputation -->
+  <article class="topic" id="knn">
+    <h3>KNN imputation</h3>
+    <p class="plain">Instead of the whole column's average, use the average of the few rows that look most like this one.</p>
+    <p>This is unit 7.5 doing real work. Measure the distance from the incomplete row to every complete row using the other columns, take the k nearest neighbours, and average their values for the missing field.</p>
+    <figure class="pic"><svg id="v-knn" viewBox="0 0 520 300" role="img" aria-label="Flats plotted by size and bedrooms. Flat F05, whose rent is missing, sits at the bottom left. Its three nearest neighbours F10, F15 and F02 are circled, and their rents of 11,000, 9,000 and 12,000 average to 10,667."></svg>
+      <figcaption>F05 has no rent. Its three nearest flats by size and bedrooms do. Their average becomes F05's filled value.</figcaption></figure>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Andha student-oda mark theriyala. Class average podadheenga. Avanoda close friends yaaru, same group, same level-la padikkuravanga yaaru-nu paarunga. Avanga marks-oda average dhaan romba nalla guess. Adhu dhaan KNN imputation."</p>
+
+    <p class="lbl fxl">Formula</p>
+    <p class="fx">1. Scale every numeric column first<br>2. Distance from the incomplete row to each complete row (Euclidean, unit 7.5)<br>3. Take the k nearest rows, usually k = 3 or 5<br>4. Fill with the average of their values<span class="fx-note">Step 1 is not optional. Without scaling, sq ft decides every neighbour and BHK is ignored.</span></p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>Filling F05's rent, by hand</h4>
+      <p>F05 is a 1 BHK of 600 sq ft in Tambaram. After scaling, the three nearest flats with a known rent are:</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Flat</th><th class="num">BHK</th><th class="num">Sq ft</th><th class="num">Distance</th><th class="num">Rent (₹)</th></tr></thead>
+        <tbody>
+          <tr><td>F10</td><td class="num">1</td><td class="num">650</td><td class="num">0.08</td><td class="num">11,000</td></tr>
+          <tr><td>F15</td><td class="num">1</td><td class="num">550</td><td class="num">0.08</td><td class="num">9,000</td></tr>
+          <tr><td>F02</td><td class="num">2</td><td class="num">900</td><td class="num">1.29</td><td class="num">12,000</td></tr>
+          <tr><td>F01</td><td class="num">2</td><td class="num">950</td><td class="num">1.32</td><td class="num">18,000</td></tr>
+        </tbody>
+      </table></div>
+      <p class="calc">Three nearest: F10, F15, F02<br>Filled rent = (11,000 + 9,000 + 12,000) ÷ 3 = ₹10,667</p>
+      <p>Compare that with ₹22,500 from the median. For a 600 sq ft 1 BHK, ₹10,667 is obviously the better guess, and it came from the flat's own neighbourhood of similar homes.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Flat</th><th>What's missing</th><th class="num">Median fill</th><th class="num">KNN fill (k = 3)</th></tr></thead>
+        <tbody>
+          <tr><th>F05 (1 BHK, 600 sq ft)</th><td>Rent</td><td class="num">22,500</td><td class="num">10,667</td></tr>
+          <tr><th>F09 (2 BHK, 850 sq ft)</th><td>Rent</td><td class="num">22,500</td><td class="num">16,000</td></tr>
+          <tr><th>F14 (2 BHK, 1,100 sq ft)</th><td>Rent</td><td class="num">22,500</td><td class="num">21,000</td></tr>
+          <tr><th>F12 (2 BHK, ₹18,000)</th><td>Sq ft</td><td class="num">1,050</td><td class="num">967</td></tr>
+        </tbody>
+      </table></div>
+      <p>Every KNN value respects the size of the flat. The median gave all three the same number.</p>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>from sklearn.impute import KNNImputer
+from sklearn.preprocessing import StandardScaler
+
+num = t[["bhk", "sqft", "rent"]]
+scaler = StandardScaler()
+Z = scaler.fit_transform(num)                       <span class="c"># scale first</span>
+filled = scaler.inverse_transform(
+    KNNImputer(n_neighbors=3).fit_transform(Z))     <span class="c"># impute, then scale back</span>
+
+<span class="c"># F05 10,667   F09 16,000   F14 21,000   F12 sqft 967</span></pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>Datasets where rows differ a lot from each other: house prices, patient records, customer profiles. Anywhere a single column average would be too blunt.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>KNN imputation is slow on large datasets because it measures distance to every other row, and it needs the other columns to be informative. If the remaining columns are unrelated to the missing one, the neighbours are meaningless and the median is just as good with none of the cost.</p></div>
+  </article>
+
+  <aside class="gate" aria-labelledby="g7-h">
+    <h3 id="g7-h">Checkpoint 7.7</h3>
+    <p>Ask these before starting 7.8.</p>
+    <details class="q"><summary>Q1. A column has 3 missing values out of 5,000 rows. What's the simplest reasonable fix?</summary><div class="ans"><p>Drop those three rows. At 0.06% of the data, nothing is lost and no values are invented.</p></div></details>
+    <details class="q"><summary>Q2. Salary is missing for 15% of employees and the column is right-skewed. Mean or median?</summary><div class="ans"><p>Median. The mean is dragged up by a few very high salaries, so it would overstate every filled row.</p></div></details>
+    <details class="q"><summary>Q3. Why must you scale before KNN imputation?</summary><div class="ans"><p>Distance is dominated by whichever column has the biggest numbers. Unscaled, sq ft (hundreds to thousands) decides every neighbour and BHK (1 to 4) is ignored. Same trap as unit 7.5.</p></div></details>
+    <details class="q"><summary>Q4. A learner fills missing values using the median of the whole dataset, then does the train/test split. What's wrong?</summary><div class="ans"><p>Data leakage. The median carries information from the test rows into training, so the test score is optimistic. Split first, fit the imputer on train, then transform test.</p></div></details>
+    <details class="q"><summary>Q5. Customers who did not give their income earn much more on average than those who did. What should you do?</summary><div class="ans"><p>Do not just fill it. The missingness itself carries information, so add a flag column like <code>income_missing</code> and then fill. The model can use the flag.</p></div></details>
+  </aside>
+</section>
+
+<!-- ============ 7.8 ENCODING AND SCALING ============ -->
+<section class="unit wrap" id="u8" aria-labelledby="u8-h">
+  <h2 id="u8-h"><span class="n">7.8</span> Encoding and scaling</h2>
+  <p class="unit-intro">A model only reads numbers, and it reads them literally. Text columns have to become numbers without inventing an order, and numeric columns often have to be put on a common ruler.</p>
+  <p class="unit-meta">About 75 minutes</p>
+
+  <!-- Encoding -->
+  <article class="topic" id="encoding">
+    <h3>Dummification (one-hot encoding)</h3>
+    <p class="plain">Turn one text column into several yes/no columns, one for each category.</p>
+    <p>The obvious shortcut is to number the categories: Adyar 1, Anna Nagar 2, OMR 3, Tambaram 4, Velachery 5. The model then believes Velachery is five times Adyar and that OMR sits exactly between Anna Nagar and Tambaram. None of that is true. Localities have no order, so they must not be given one.</p>
+    <p>Dummification avoids it: each locality gets its own column holding 1 or 0.</p>
+    <figure class="pic"><svg id="v-encode" viewBox="0 0 520 300" role="img" aria-label="One locality column of text turning into five columns of ones and zeros, one per locality, with a single 1 in each row."></svg>
+      <figcaption>One text column in, five 0/1 columns out. Each row has exactly one 1, marking its locality.</figcaption></figure>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Model-kku 'Velachery' nu sonnaa puriyaadhu, number dhaan puriyum. Aana Velachery = 1, Adyar = 2 nu pottaa, Adyar-ku rendu madangu mathippu-nu model nenachudum. Adhukku badhila 'Velachery-aa? aamaa illa illa-yaa?' nu ovvoru area-kkum thani column kudunga."</p>
+
+    <p class="lbl fxl">Which encoding when</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Type of column</th><th>Encoding</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><th>No order (nominal)</th><td>One-hot / dummies</td><td>Locality, gender, payment method</td></tr>
+        <tr><th>Real order (ordinal)</th><td>Label or ordinal encoding</td><td>Low &lt; Medium &lt; High, ratings 1 to 5</td></tr>
+        <tr><th>The target column</th><td>Label encoding</td><td>Churn: Yes → 1, No → 0</td></tr>
+        <tr><th>Very many categories</th><td>Group the rare ones, or use frequency encoding</td><td>Pin codes, product IDs</td></tr>
+      </tbody>
+    </table></div>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>Encoding the locality column</h4>
+      <p>Five localities appear in the data: Adyar, Anna Nagar, OMR, Tambaram and Velachery. One-hot encoding turns one column into five.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Flat</th><th>Locality</th><th class="num">Adyar</th><th class="num">Anna Nagar</th><th class="num">OMR</th><th class="num">Tambaram</th><th class="num">Velachery</th></tr></thead>
+        <tbody>
+          <tr><td>F01</td><td>Velachery</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">1</td></tr>
+          <tr><td>F02</td><td>Tambaram</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">0</td></tr>
+          <tr><td>F03</td><td>OMR</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">0</td><td class="num">0</td></tr>
+          <tr><td>F04</td><td>Adyar</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>Drop one column.</strong> With <code>drop_first=True</code> the Adyar column disappears and a flat with 0 in all four remaining columns is an Adyar flat. Four columns carry the same information as five. Keeping all five makes them perfectly predictable from each other, which upsets linear and logistic regression; this is the dummy variable trap. Tree models don't care either way.</p>
+      <p class="calc">5 localities → 5 dummy columns → 4 after dropping the first</p>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>pd.get_dummies(flats, columns=["locality"], dtype=int)
+pd.get_dummies(flats, columns=["locality"], drop_first=True, dtype=int)
+
+<span class="c"># Ordinal, where the order is real:</span>
+flats["size_band"] = flats["size_band"].map({"Small": 0, "Medium": 1, "Large": 2})
+
+<span class="c"># The scikit-learn way, which remembers the categories for new data:</span>
+from sklearn.preprocessing import OneHotEncoder
+enc = OneHotEncoder(drop="first", handle_unknown="ignore", sparse_output=False)
+enc.fit_transform(X_train[["locality"]])</pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>Before every linear or logistic regression, inside <code>ColumnTransformer</code> pipelines, and in feature engineering for almost any tabular model.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>A column with thousands of categories, like pin code, produces thousands of columns and a model that memorises noise. Group rare categories into "Other" first. And if a locality appears in the test set that was never in training, <code>OneHotEncoder</code> with <code>handle_unknown="ignore"</code> handles it; <code>pd.get_dummies</code> silently gives you mismatched columns.</p></div>
+  </article>
+
+  <!-- Scaling -->
+  <article class="topic" id="scaling">
+    <h3>Feature scaling</h3>
+    <p class="plain">Put every numeric column on the same ruler, so a big-numbered column can't shout down a small-numbered one.</p>
+    <p>Sq ft runs from 550 to 3,200. BHK runs from 1 to 4. Any method that measures distance, or that adds up weighted features, will hear sq ft and almost nothing else. Unit 7.5 showed exactly this with age and income.</p>
+    <figure class="pic"><svg id="v-scale" viewBox="0 0 520 280" role="img" aria-label="Before scaling, the square feet bar stretches far beyond the bedrooms bar. After standardisation both sit on the same short scale centred on zero."></svg>
+      <figcaption>Before: two columns, two completely different rulers. After: one ruler, so both features get a say.</figcaption></figure>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Oruthar height-ai centimeter-la, innoruthar weight-ai kilo-la sollitu, rendaiyum koota mudiyaadhu. Mudhalla rendaiyum ore alavukolla kondu vaanga. Adhu dhaan scaling."</p>
+
+    <p class="lbl fxl">Formula</p>
+    <p class="fx">Standardisation (StandardScaler): z = (x − mean) / SD<span class="fx-note">Centres on 0, typical range about −3 to +3. Outliers survive, which is usually what you want.</span><br>Min-max (MinMaxScaler): x′ = (x − min) / (max − min)<span class="fx-note">Squeezes everything into 0 to 1. One outlier pushes every other value into a tiny corner.</span></p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>Scaling three flats</h4>
+      <p class="calc">Sq ft: mean 1,166.7, SD 614.2 &nbsp;|&nbsp; BHK: mean 2.2, SD 0.83</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Flat</th><th class="num">BHK</th><th class="num">Sq ft</th><th class="num">BHK z</th><th class="num">Sq ft z</th><th class="num">BHK min-max</th><th class="num">Sq ft min-max</th></tr></thead>
+        <tbody>
+          <tr><td>F03</td><td class="num">2</td><td class="num">1,050</td><td class="num">−0.24</td><td class="num">−0.19</td><td class="num">0.33</td><td class="num">0.19</td></tr>
+          <tr><td>F07</td><td class="num">3</td><td class="num">1,450</td><td class="num">0.96</td><td class="num">0.46</td><td class="num">0.67</td><td class="num">0.34</td></tr>
+          <tr><td>F11</td><td class="num">4</td><td class="num">3,200</td><td class="num">2.16</td><td class="num">3.31</td><td class="num">1.00</td><td class="num">1.00</td></tr>
+        </tbody>
+      </table></div>
+      <p>Two things to point at on the screen. First, F11's sq ft z-score of 3.31 says it is more than three SDs above average, exactly the outlier from unit 7.6. Second, under min-max that outlier is pinned at 1.00 and everything else is squashed below 0.34, which is why min-max and outliers are a bad pairing.</p>
+    </div>
+
+    <div class="tbl"><table>
+      <thead><tr><th>Model</th><th>Scaling needed?</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><th>KNN, K-Means, SVM</th><td>Yes, always</td><td>They measure distance</td></tr>
+        <tr><th>Linear and logistic regression</th><td>Yes, with regularisation</td><td>The penalty treats all weights alike</td></tr>
+        <tr><th>Neural networks</th><td>Yes</td><td>Training converges faster and more stably</td></tr>
+        <tr><th>PCA</th><td>Yes</td><td>It ranks directions by variance</td></tr>
+        <tr class="hl"><th>Decision tree, Random Forest, XGBoost</th><td>No</td><td>They split one column at a time, so the units don't matter</td></tr>
+      </tbody>
+    </table></div>
+
+    <p class="lbl py">Python</p>
+<pre>from sklearn.preprocessing import StandardScaler, MinMaxScaler
+
+scaler = StandardScaler()
+X_train_s = scaler.fit_transform(X_train)   <span class="c"># learn mean and SD here</span>
+X_test_s  = scaler.transform(X_test)        <span class="c"># reuse them here</span>
+
+scaler.mean_       <span class="c"># bhk 2.2, sqft 1166.7</span>
+scaler.scale_      <span class="c"># bhk 0.833, sqft 614.2  (population SD, ddof=0)</span></pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>Before KNN, K-Means, SVM and PCA, inside KNN imputation as you saw in 7.7, and as a standard step in every scikit-learn <code>Pipeline</code>.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box">
+      <p>Two traps, both common in interviews:</p>
+      <p><strong>Scale after splitting.</strong> <code>fit_transform</code> on training, <code>transform</code> on test. Fitting the scaler on the whole dataset leaks the test set's mean and SD into training.</p>
+      <p><strong>Don't scale the target.</strong> Scale the features, leave <code>y</code> alone, or your predictions come out in z-scores instead of rupees.</p>
+      <p>Also note <code>scaler.scale_</code> for sq ft is 614.2, while <code>flats["sqft"].std()</code> gives 635.7. scikit-learn divides by N and pandas by n − 1, the same gotcha as unit 7.3.</p>
+    </div>
+  </article>
+
+  <aside class="gate" aria-labelledby="g8-h">
+    <h3 id="g8-h">Checkpoint 7.8</h3>
+    <p>Ask these before starting 7.9.</p>
+    <details class="q"><summary>Q1. A column holds Red, Green and Blue. A learner maps them to 1, 2, 3. What breaks?</summary><div class="ans"><p>The model now thinks Blue is three times Red and that Green sits between them. Colours have no order, so use one-hot encoding.</p></div></details>
+    <details class="q"><summary>Q2. Education level is School, Graduate, Post-graduate. One-hot or label encoding?</summary><div class="ans"><p>Label or ordinal encoding (0, 1, 2). Here the order is real and worth keeping.</p></div></details>
+    <details class="q"><summary>Q3. Why does <code>drop_first=True</code> exist?</summary><div class="ans"><p>With all the dummy columns present, any one of them can be worked out from the others, which destabilises regression coefficients. Dropping one makes that category the baseline. Trees are unaffected.</p></div></details>
+    <details class="q"><summary>Q4. Do you need to scale features for a Random Forest?</summary><div class="ans"><p>No. Trees split one column at a time, so the scale of each column is irrelevant. KNN, K-Means, SVM and regularised regression do need it.</p></div></details>
+    <details class="q"><summary>Q5. Your data has one huge outlier. MinMaxScaler or StandardScaler?</summary><div class="ans"><p>StandardScaler, or RobustScaler which uses the median and IQR. Min-max pins the outlier at 1 and crushes everything else into a small band.</p></div></details>
+  </aside>
+</section>
+
+<!-- ============ 7.9 CORRELATION ============ -->
+<section class="unit wrap" id="u9" aria-labelledby="u9-h">
+  <h2 id="u9-h"><span class="n">7.9</span> Scatter plot and correlation</h2>
+  <p class="unit-intro">Everything so far described one column at a time. This unit is about pairs: when one column goes up, what does the other one do? That question is the whole basis of regression, and of choosing which features to feed a model.</p>
+  <p class="unit-meta">About 75 minutes</p>
+
+  <!-- Scatter -->
+  <article class="topic" id="scatter">
+    <h3>Scatter plot</h3>
+    <p class="plain">One dot per row, placed by two columns at once. The shape of the cloud is the answer.</p>
+    <p>Read every scatter plot in four steps, and make the class say them out loud:</p>
+    <ol>
+      <li><strong>Direction:</strong> does the cloud rise, fall, or neither?</li>
+      <li><strong>Shape:</strong> a straight band, a curve, or no pattern?</li>
+      <li><strong>Strength:</strong> a tight line or a loose cloud?</li>
+      <li><strong>Odd ones out:</strong> any dot sitting far from the rest?</li>
+    </ol>
+    <figure class="pic"><svg id="v-scatter-kinds" viewBox="0 0 520 220" role="img" aria-label="Three scatter plots side by side: study hours against marks rising together, price against units sold falling, and two unrelated columns forming a shapeless cloud."></svg>
+      <figcaption>Rising, falling, and no pattern at all. Each plot shows the correlation calculated from the dots above it.</figcaption></figure>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Ovvoru pulli-yum oru flat. Idathula size, mela vadagai. Pulli ellaam mela yeri poitu irundhaa, 'periya veedu, adhika vadagai'. Padam-ey answer-ai sollidum, calculation kooda thevai illa."</p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>Size against rent, for our 15 flats</h4>
+      <p>Plot sq ft on the x-axis and rent on the y-axis, as in the picture at the top of this guide. The dots climb steadily from left to right, so bigger flats cost more. One dot sits far out on its own: the 3,200 sq ft Adyar flat at ₹95,000.</p>
+      <p>Now cover that one dot with your thumb and ask the class whether the pattern still holds. It does. That's the difference between an outlier that creates a pattern and one that merely sits at the end of a real one.</p>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>import seaborn as sns
+sns.scatterplot(data=flats, x="sqft", y="rent")
+sns.scatterplot(data=flats, x="sqft", y="rent", hue="locality")   <span class="c"># colour by a third column</span>
+sns.pairplot(flats[["bhk", "sqft", "rent"]])                      <span class="c"># every pair at once</span></pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>The standard first look at any two numeric columns, checking regression assumptions, and spotting clusters before running K-Means.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>With thousands of rows the dots pile on top of each other and the plot turns into a solid blob. Use <code>alpha=0.3</code>, or a hexbin or 2-D density plot instead.</p></div>
+  </article>
+
+  <!-- Pearson -->
+  <article class="topic" id="pearson">
+    <h3>Pearson correlation</h3>
+    <p class="plain">One number from −1 to +1 that says how close the dots sit to a straight line, and whether that line rises or falls.</p>
+    <p>The sign is the direction and the size is the strength. It is the scatter plot squeezed into a single number, which is what makes it useful across dozens of columns at once, and also what makes it easy to misuse.</p>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"r = +1 nu sonnaa, rendum perfect-aa ore direction-la. r = −1 nu sonnaa, onnu yeruchu na innonnu erangum. r = 0 nu sonnaa, relationship-ey illa. Padathula pakkiradhu dhaan, aana oru number-la."</p>
+
+    <p class="lbl fxl">Formula</p>
+    <p class="fx">r = Σ(x − <span class="xbar">x</span>)(y − ȳ) / √[ Σ(x − <span class="xbar">x</span>)² × Σ(y − ȳ)² ]<span class="fx-note">Each column's deviations from its own mean (unit 7.3), multiplied together and standardised. No units, so r never changes if you switch sq ft to square metres.</span></p>
+
+    <div class="tbl"><table>
+      <thead><tr><th class="num">|r|</th><th>Strength</th><th>What the scatter looks like</th></tr></thead>
+      <tbody>
+        <tr><td class="num">0.0 – 0.2</td><td>Very weak or none</td><td>A shapeless cloud</td></tr>
+        <tr><td class="num">0.2 – 0.4</td><td>Weak</td><td>A hint of a slope</td></tr>
+        <tr><td class="num">0.4 – 0.6</td><td>Moderate</td><td>A visible but loose band</td></tr>
+        <tr><td class="num">0.6 – 0.8</td><td>Strong</td><td>A clear band</td></tr>
+        <tr><td class="num">0.8 – 1.0</td><td>Very strong</td><td>Almost a straight line</td></tr>
+      </tbody>
+    </table></div>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>The correlation matrix for our flats</h4>
+      <div class="tbl"><table>
+        <thead><tr><th></th><th class="num">BHK</th><th class="num">Sq ft</th><th class="num">Rent</th></tr></thead>
+        <tbody>
+          <tr><th>BHK</th><td class="num">1.00</td><td class="num">0.88</td><td class="num">0.84</td></tr>
+          <tr><th>Sq ft</th><td class="num">0.88</td><td class="num">1.00</td><td class="num">0.99</td></tr>
+          <tr><th>Rent</th><td class="num">0.84</td><td class="num">0.99</td><td class="num">1.00</td></tr>
+        </tbody>
+      </table></div>
+      <figure class="pic"><svg id="v-corr-matrix" viewBox="0 0 520 250" role="img" aria-label="Heatmap of the correlation matrix. Square feet and rent are the darkest pair at 0.99, bedrooms and rent 0.84, bedrooms and square feet 0.88."></svg>
+        <figcaption>The same table as a heatmap. In a real project with 30 columns, this is how you spot the useful features in one glance.</figcaption></figure>
+      <p><strong>Reading it:</strong> sq ft and rent at 0.99 is very strong, so sq ft alone would predict rent well. BHK and rent at 0.84 is also strong. But BHK and sq ft at 0.88 means the two features largely repeat each other, which is called multicollinearity; in a linear regression you would keep one or combine them.</p>
+      <p><strong>Now drop the ₹95,000 flat</strong> and recalculate:</p>
+      <p class="calc">Sq ft and rent: 0.99 → 0.94<br>BHK and rent: 0.84 → 0.91<br>BHK and sq ft: 0.88 → 0.97</p>
+      <p>One row out of fifteen moved every number, and not all in the same direction. Correlation is as sensitive to outliers as the mean is.</p>
+    </div>
+    <div class="ex">
+      <h4>Two quick ones for the board</h4>
+      <p><strong>Hours studied against marks</strong> for ten students: r ≈ 0.98, a very strong positive relationship. <strong>Price against units sold</strong> for a product: r ≈ −0.96, a very strong negative one. Same strength, opposite directions.</p>
+      <p><strong>r squared:</strong> square the correlation to get the share of variation explained. For sq ft and rent without the outlier, 0.94² = 0.88, so about 88% of the variation in rent goes with the variation in size. You will meet this again as the R² score of a regression model.</p>
+    </div>
+
+    <div class="widget" id="w-corr">
+      <p class="lbl live">Try it live</p>
+      <p>Pick a pattern and the correlation is calculated from the dots on screen. Then add one outlier and watch how much a single point can move r.</p>
+      <div class="btn-row">
+        <button type="button" id="co-pos">Strong positive</button>
+        <button type="button" id="co-weak">Weak positive</button>
+        <button type="button" id="co-neg">Negative</button>
+        <button type="button" id="co-none">No pattern</button>
+        <button type="button" id="co-curve">Curved</button>
+        <button type="button" class="ghost" id="co-out" aria-pressed="false">Add an outlier</button>
+      </div>
+      <svg id="co-svg" class="chart" viewBox="0 0 520 300" role="img" aria-label="Scatter plot of the selected pattern with its correlation coefficient."></svg>
+      <div class="readout" aria-live="polite">
+        <span>Correlation r<b id="co-r">0.00</b></span>
+        <span>r squared<b id="co-r2">0.00</b></span>
+      </div>
+      <p class="interp" id="co-note" aria-live="polite"></p>
+    </div>
+
+    <p class="lbl py">Python</p>
+<pre>flats["sqft"].corr(flats["rent"])        <span class="c"># 0.99</span>
+flats[["bhk", "sqft", "rent"]].corr()    <span class="c"># the full matrix</span>
+
+sns.heatmap(flats[["bhk", "sqft", "rent"]].corr(), annot=True, cmap="coolwarm")
+
+<span class="c"># Ranks instead of values: safer when the relationship curves or outliers exist</span>
+flats["sqft"].corr(flats["rent"], method="spearman")    <span class="c"># 0.95</span></pre>
+
+    <p class="lbl use">Where it's used</p>
+    <p>Feature selection, spotting multicollinearity before linear regression, and quick sanity checks: if a feature has near-zero correlation with the target, ask whether it belongs in the model at all.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>A correlation near zero does not mean "no relationship". It means no <em>straight-line</em> relationship. The next topic shows a perfect curved relationship with r = 0.00.</p></div>
+  </article>
+
+  <!-- Causation -->
+  <article class="topic" id="causation">
+    <h3>Correlation is not causation</h3>
+    <p class="plain">Two things moving together does not mean one causes the other. Something else may be moving both.</p>
+    <figure class="pic"><svg id="v-nonlinear" viewBox="0 0 520 230" role="img" aria-label="A perfect U-shaped curve of points whose Pearson correlation is 0.00, next to a note that correlation only measures straight lines."></svg>
+      <figcaption>A perfect relationship, every point exactly on the curve, and r = 0.00. Pearson only sees straight lines, so always plot before you trust the number.</figcaption></figure>
+
+    <p class="lbl cue">Say it in class</p>
+    <p class="say">"Ice cream sales yeruchu, adhe time-la drowning cases-um yeruchu. Ice cream saapttaa moozhgiduvaangala? Illa. Rendaiyum yetharadhu veyil kaalam. Adhu dhaan lurking variable."</p>
+
+    <p class="lbl exl">Real-time example</p>
+    <div class="ex">
+      <h4>Three explanations for the same correlation</h4>
+      <p>Suppose AC sales and cold drink sales in Chennai correlate at 0.9. There are three possibilities, and the number alone cannot tell you which:</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Explanation</th><th>What it means here</th></tr></thead>
+        <tbody>
+          <tr><th>X causes Y</th><td>Buying an AC makes people thirsty. Unlikely</td></tr>
+          <tr><th>Y causes X</th><td>Drinking cold drinks makes people buy ACs. Unlikely</td></tr>
+          <tr class="hl"><th>Z causes both</th><td>Summer heat drives both. This is the real answer</td></tr>
+        </tbody>
+      </table></div>
+      <p>A fourth possibility exists in small datasets: coincidence. With enough columns, some pair will correlate strongly by pure chance.</p>
+      <p><strong>A business version:</strong> customers who use the mobile app spend more, so the marketing team wants everyone pushed onto the app. But heavy spenders may simply be the kind of customers who install apps. Only an experiment, where you randomly encourage half of them, can answer it. That is exactly why A/B tests exist.</p>
+    </div>
+
+    <p class="lbl fxl">The three questions to ask</p>
+    <p class="fx">1. Could a third factor be driving both?<br>2. Could the direction be the other way round?<br>3. Could this be a curve, or the work of a few outliers?<span class="fx-note">If you cannot rule all three out, say "associated with", not "causes".</span></p>
+
+    <p class="lbl use">Where it's used</p>
+    <p>Every business recommendation a data scientist writes. It is also the most commonly asked reasoning question in analyst interviews.</p>
+
+    <p class="lbl warn">Watch out</p>
+    <div class="warn-box"><p>Pearson also assumes numbers. Running <code>.corr()</code> on encoded categories (Adyar = 1, Velachery = 5) produces a number that looks meaningful and is not. For two categorical columns use a crosstab and a chi-square test instead.</p></div>
+  </article>
+
+  <aside class="gate" aria-labelledby="g9-h">
+    <h3 id="g9-h">Checkpoint 7.9</h3>
+    <p>Ask these before the practice assignment.</p>
+    <details class="q"><summary>Q1. What does r = −0.85 tell you?</summary><div class="ans"><p>A strong negative relationship: as one column rises, the other falls, with the dots close to a downward straight line.</p></div></details>
+    <details class="q"><summary>Q2. Two columns have r = 0.02, but the scatter is a clear U shape. Explain.</summary><div class="ans"><p>The relationship is real but curved, and Pearson only measures straight lines. Plot the data, or use Spearman, or fit a model that handles curves.</p></div></details>
+    <details class="q"><summary>Q3. Sq ft and BHK correlate at 0.88. Why might you not put both into a linear regression?</summary><div class="ans"><p>Multicollinearity. They carry much the same information, which makes the coefficients unstable and hard to interpret. Keep one, or combine them.</p></div></details>
+    <details class="q"><summary>Q4. "Students who attend more classes score higher, so attendance causes marks." What's the flaw?</summary><div class="ans"><p>A third factor, motivation, likely drives both attendance and marks. The two are associated; that does not prove one causes the other.</p></div></details>
+    <details class="q"><summary>Q5. Sq ft and rent correlate at 0.94. What share of the variation in rent goes with size?</summary><div class="ans"><p>0.94² = 0.88, so about 88%.</p></div></details>
+  </aside>
+</section>
+
+<!-- ============ CHEAT SHEET ============ -->
+<section class="endsec wrap" id="cheatsheet" aria-labelledby="cs-h">
+  <h2 id="cs-h">Cheat sheet</h2>
+  <p>The cleaning half of Module 7 on one screen.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Concept</th><th>In one line</th><th>Code</th></tr></thead>
+    <tbody>
+      <tr><th>NA</th><td>A value that was never recorded. Not zero</td><td><code>df.isna().sum()</code></td></tr>
+      <tr><th>How much is missing</th><td>Under 5% drop, 5–30% fill, over 50% consider dropping the column</td><td><code>df.isna().mean() * 100</code></td></tr>
+      <tr><th>Drop rows</th><td>Cheap when data is plentiful, costly when it isn't</td><td><code>df.dropna(subset=["col"])</code></td></tr>
+      <tr><th>Central imputation</th><td>Mean if symmetric, median if skewed, mode if text</td><td><code>df["c"].fillna(df["c"].median())</code></td></tr>
+      <tr><th>KNN imputation</th><td>Average of the k most similar rows. Scale first</td><td><code>KNNImputer(n_neighbors=3)</code></td></tr>
+      <tr><th>Missing flag</th><td>Keep the fact that it was missing, then fill</td><td><code>df["c_missing"] = df["c"].isna().astype(int)</code></td></tr>
+      <tr><th>One-hot / dummies</th><td>One 0/1 column per category, for unordered text</td><td><code>pd.get_dummies(df, drop_first=True)</code></td></tr>
+      <tr><th>Label / ordinal</th><td>Numbers only when the order is real</td><td><code>df["c"].map({"Low": 0, "High": 1})</code></td></tr>
+      <tr><th>Dummy trap</th><td>Drop one dummy column for regression models</td><td><code>drop_first=True</code></td></tr>
+      <tr><th>Standardisation</th><td>z = (x − mean) / SD. Centres on 0, keeps outliers visible</td><td><code>StandardScaler()</code></td></tr>
+      <tr><th>Min-max</th><td>Squeeze into 0 to 1. Avoid when outliers exist</td><td><code>MinMaxScaler()</code></td></tr>
+      <tr><th>Who needs scaling</th><td>KNN, K-Means, SVM, PCA, neural nets. Not trees</td><td><code>fit_transform</code> train, <code>transform</code> test</td></tr>
+      <tr><th>Scatter plot</th><td>Direction, shape, strength, odd ones out</td><td><code>sns.scatterplot(x=, y=)</code></td></tr>
+      <tr><th>Pearson r</th><td>−1 to +1, straight-line relationships only</td><td><code>df["a"].corr(df["b"])</code></td></tr>
+      <tr><th>r squared</th><td>Share of variation the two columns share</td><td><code>r ** 2</code></td></tr>
+      <tr><th>Multicollinearity</th><td>Two features saying the same thing. Keep one</td><td><code>df.corr()</code></td></tr>
+      <tr><th>Causation</th><td>Association is not proof. Look for a third factor</td><td>An experiment, not a formula</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ PRACTICE ============ -->
+<section class="endsec wrap" id="practice" aria-labelledby="pr-h">
+  <h2 id="pr-h">Practice assignment: cab rides in Chennai</h2>
+  <p class="plain">Fourteen cab rides with four values missing. Clean it, encode it, scale it, and see what drives the fare.</p>
+  <p>New data, so nobody can recall the answers from the flats examples. Reveal each answer during review.</p>
+
+  <div class="tbl"><table>
+    <thead><tr><th>Ride</th><th>Area</th><th class="num">Distance (km)</th><th class="num">Duration (min)</th><th class="num">Fare (₹)</th></tr></thead>
+    <tbody>
+      <tr><td>R01</td><td>Velachery</td><td class="num">4.0</td><td class="num">14</td><td class="num">110</td></tr>
+      <tr><td>R02</td><td>OMR</td><td class="num">12.5</td><td class="num">38</td><td class="num">275</td></tr>
+      <tr><td>R03</td><td>Adyar</td><td class="num">6.0</td><td class="num">22</td><td class="num">145</td></tr>
+      <tr><td>R04</td><td>T Nagar</td><td class="num">3.0</td><td class="num">12</td><td class="num">85</td></tr>
+      <tr class="hl"><td>R05</td><td>OMR</td><td class="num">15.0</td><td class="num">46</td><td class="num">missing</td></tr>
+      <tr><td>R06</td><td>Velachery</td><td class="num">5.5</td><td class="num">19</td><td class="num">140</td></tr>
+      <tr><td>R07</td><td>Adyar</td><td class="num">8.0</td><td class="num">28</td><td class="num">185</td></tr>
+      <tr><td>R08</td><td>OMR</td><td class="num">10.0</td><td class="num">33</td><td class="num">255</td></tr>
+      <tr class="hl"><td>R09</td><td>T Nagar</td><td class="num">missing</td><td class="num">10</td><td class="num">75</td></tr>
+      <tr><td>R10</td><td>Velachery</td><td class="num">7.0</td><td class="num">25</td><td class="num">160</td></tr>
+      <tr class="hl"><td>R11</td><td>Adyar</td><td class="num">9.5</td><td class="num">32</td><td class="num">missing</td></tr>
+      <tr><td>R12</td><td>OMR</td><td class="num">13.0</td><td class="num">40</td><td class="num">285</td></tr>
+      <tr class="hl"><td>R13</td><td>T Nagar</td><td class="num">2.5</td><td class="num">9</td><td class="num">missing</td></tr>
+      <tr><td>R14</td><td>Velachery</td><td class="num">6.5</td><td class="num">23</td><td class="num">175</td></tr>
+    </tbody>
+  </table></div>
+
+  <p class="lbl py">Starter code</p>
+<pre>import pandas as pd, numpy as np
+
+rides = pd.DataFrame({
+    "ride_id":      [f"R{i:02d}" for i in range(1, 15)],
+    "area":         ["Velachery", "OMR", "Adyar", "T Nagar", "OMR", "Velachery", "Adyar",
+                     "OMR", "T Nagar", "Velachery", "Adyar", "OMR", "T Nagar", "Velachery"],
+    "distance_km":  [4.0, 12.5, 6.0, 3.0, 15.0, 5.5, 8.0, 10.0, np.nan, 7.0, 9.5, 13.0, 2.5, 6.5],
+    "duration_min": [14, 38, 22, 12, 46, 19, 28, 33, 10, 25, 32, 40, 9, 23],
+    "fare":         [110, 275, 145, 85, np.nan, 140, 185, 255, 75, 160, np.nan, 285, np.nan, 175],
+})</pre>
+
+  <h3 class="sub-h">Tasks</h3>
+
+  <details class="q"><summary>1. How many values are missing in each column, and what percentage? (7.7)</summary><div class="ans">
+    <p>Fare: 3 of 14 = 21.4%. Distance: 1 of 14 = 7.1%. Everything else is complete.</p></div></details>
+
+  <details class="q"><summary>2. How many rows survive <code>dropna()</code>? Is dropping a good idea here? (7.7)</summary><div class="ans">
+    <p>10 of 14 rows survive, so dropping loses 29% of a small dataset. Worse, three of the four lost rides are the longest and the shortest trips, so the survivors are all mid-range. Fill instead.</p></div></details>
+
+  <details class="q"><summary>3. Find the mean, median and SD of the fares you do have. Should you fill with the mean or the median? (7.1, 7.7)</summary><div class="ans">
+    <p>Of the 11 known fares: mean ₹171.8, median ₹160, SD ₹72.9. The mean sits above the median, so the column leans right. The median is the safer single-value fill here, though neither is ideal, which task 5 shows.</p></div></details>
+
+  <details class="q"><summary>4. Fill the fares with the mean, then with the median. What happens to the spread? (7.3, 7.7)</summary><div class="ans">
+    <p>Mean fill: mean ₹171.8, median ₹171.8, SD ₹63.9. Median fill: mean ₹169.3, median ₹160, SD ₹64.1.</p>
+    <p>The SD drops from ₹72.9 to about ₹64 either way, because three identical values were added at the centre. Central imputation always makes data look tidier than it is.</p></div></details>
+
+  <details class="q"><summary>5. Use KNN imputation with k = 3 on distance, duration and fare. What does R05 get, and why is it better than the median? (7.5, 7.7)</summary><div class="ans">
+    <p>R05 is a 15 km, 46 minute ride: the longest in the table. Its three nearest rides are R12 (₹285), R02 (₹275) and R08 (₹255).</p>
+    <p class="calc">(285 + 275 + 255) ÷ 3 = ₹271.7</p>
+    <p>The median would have given it ₹160, less than a 6 km ride. KNN also fills R11 at ₹200, R13 at ₹90, and R09's missing distance at 3.2 km.</p></div></details>
+
+  <details class="q"><summary>6. Encode the area column. How many columns do you end up with, and which one is the baseline? (7.8)</summary><div class="ans">
+    <p>Four areas, so four dummy columns, or three with <code>drop_first=True</code>. The dropped one (Adyar, alphabetically first) becomes the baseline: a ride with 0 in all three remaining columns is an Adyar ride. Area has no order, so label encoding would be wrong.</p></div></details>
+
+  <details class="q"><summary>7. Standardise distance and duration. What are the z-scores for R01 and R05? (7.3, 7.8)</summary><div class="ans">
+    <p>Distance: mean 7.88, SD 3.77. Duration: mean 25.07, SD 11.27.</p>
+    <p>R01 (4 km, 14 min): z = −1.03 and −0.98. R05 (15 km, 46 min): z = 1.89 and 1.86. Both rides sit about the same distance from average on both features, which is exactly what scaling is for.</p></div></details>
+
+  <details class="q"><summary>8. Build the correlation matrix. What would you feed a fare-prediction model? (7.9)</summary><div class="ans">
+    <p>Distance and fare 0.99, duration and fare 0.99, distance and duration 0.99. Everything moves together, because cab fares are calculated from distance in the first place.</p>
+    <p>For a linear model, keep one of distance or duration rather than both: at 0.99 they are near-duplicates and the coefficients would be unstable. Distance is the natural choice.</p></div></details>
+
+  <details class="q"><summary>9. A colleague says "longer rides cause higher fares, so tell drivers to take longer routes." What's wrong? (7.9)</summary><div class="ans">
+    <p>Distance does drive the fare here, since the meter uses it. But the recommendation confuses a billing rule with a business lever: longer routes mean unhappy customers, not more profit. The lesson is that a strong correlation tells you what moves together, never what you should do about it.</p></div></details>
+</section>
+
+</main>
+
+<footer class="foot wrap">
+  <p><strong>Darunz</strong> · Darun N · Chennai</p>
+  <p>Module 7 part 2: cleaning your data, trainer's guide. Every worked number in this guide was checked in Python.</p>
+</footer>
+
+<style>
+@keyframes popIn { from { opacity: 0; transform: scale(.5); } to { opacity: 1; transform: scale(1); } }
+.hero-dot { transform-box: fill-box; transform-origin: center; animation: popIn .45s ease-out backwards; animation-delay: var(--d); }
+@media (prefers-reduced-motion: reduce) { .hero-dot { animation: none; } }
+.heat-cell { stroke: var(--deep); stroke-width: 2; }
+.cellbox { stroke: var(--line); stroke-width: 1; }
+</style>
+
+<script>
+(function () {
+"use strict";
+var NS = "http://www.w3.org/2000/svg";
+function $(id) { return document.getElementById(id); }
+function el(tag, attrs, parent, text) {
+  var e = document.createElementNS(NS, tag);
+  if (attrs) for (var k in attrs) if (attrs[k] !== undefined && attrs[k] !== null) e.setAttribute(k, attrs[k]);
+  if (text !== undefined && text !== null) e.textContent = text;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function T(p, x, y, s, cls, anchor, style) {
+  return el("text", { x: x, y: y, "class": cls || "s-text", "text-anchor": anchor || "middle", style: style }, p, s);
+}
+function L(p, x1, y1, x2, y2, cls, style) { return el("line", { x1: x1, y1: y1, x2: x2, y2: y2, "class": cls, style: style }, p); }
+function R(p, x, y, w, h, style, cls, rx) { return el("rect", { x: x, y: y, width: Math.max(0, w), height: Math.max(0, h), style: style, "class": cls, rx: rx }, p); }
+function C(p, x, y, r, style, cls) { return el("circle", { cx: x, cy: y, r: r, style: style, "class": cls }, p); }
+function clear(s) { while (s.firstChild) s.removeChild(s.firstChild); }
+function safe(fn) { try { fn(); } catch (e) { if (window.console) console.warn(e); } }
+function inr(n) { return "₹" + Math.round(n).toLocaleString("en-IN"); }
+function num(n, d) { var p = Math.pow(10, d === undefined ? 2 : d); return (Math.round(n * p) / p).toLocaleString("en-IN", { maximumFractionDigits: d === undefined ? 2 : d }); }
+var DOT = "fill:var(--text)";
+
+function mean(a) { return a.reduce(function (x, y) { return x + y; }, 0) / a.length; }
+function median(a) { var s = a.slice().sort(function (x, y) { return x - y; }), m = Math.floor(s.length / 2); return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; }
+function sd(a) { var m = mean(a); return Math.sqrt(a.reduce(function (t, v) { return t + (v - m) * (v - m); }, 0) / (a.length - 1)); }
+function pearson(x, y) {
+  var mx = mean(x), my = mean(y), sxy = 0, sxx = 0, syy = 0;
+  for (var i = 0; i < x.length; i++) { var a = x[i] - mx, b = y[i] - my; sxy += a * b; sxx += a * a; syy += b * b; }
+  return (sxx === 0 || syy === 0) ? 0 : sxy / Math.sqrt(sxx * syy);
+}
+function fitLine(x, y) {
+  var mx = mean(x), my = mean(y), sxy = 0, sxx = 0;
+  for (var i = 0; i < x.length; i++) { sxy += (x[i] - mx) * (y[i] - my); sxx += (x[i] - mx) * (x[i] - mx); }
+  var b = sxy / sxx; return { slope: b, intercept: my - b * mx };
+}
+function strength(r) {
+  var a = Math.abs(r);
+  return a < 0.2 ? "very weak or no" : a < 0.4 ? "weak" : a < 0.6 ? "moderate" : a < 0.8 ? "strong" : "very strong";
+}
+
+var FLATS = {
+  id: ["F01","F02","F03","F04","F05","F06","F07","F08","F09","F10","F11","F12","F13","F14","F15"],
+  area: ["Velachery","Tambaram","OMR","Adyar","Tambaram","Velachery","OMR","Anna Nagar","Tambaram","OMR","Adyar","Velachery","Anna Nagar","OMR","Tambaram"],
+  bhk: [2,2,2,3,1,3,3,2,2,1,4,2,3,2,1],
+  sqft: [950,900,1050,1400,600,1300,1450,1000,850,650,3200,1000,1500,1100,550],
+  rent: [18000,12000,20000,38000,8000,28000,30000,25000,15000,11000,95000,18000,36000,18000,9000]
+};
+
+/* ---------- Hero scatter ---------- */
+function heroScatter() {
+  var s = $("hero-scatter"); if (!s) return;
+  function X(v) { return 70 + v / 3400 * 660; }
+  function Y(v) { return 290 - v / 100000 * 250; }
+  for (var g = 0; g <= 100000; g += 25000) { L(s, 70, Y(g), 740, Y(g), "s-grid"); T(s, 60, Y(g) + 5, g === 0 ? "0" : (g / 1000) + "k", "s-text s-small", "end"); }
+  L(s, 70, 290, 740, 290, "s-axis");
+  for (var t = 0; t <= 3000; t += 1000) { L(s, X(t), 290, X(t), 296, "s-axis"); T(s, X(t), 314, String(t), "s-text s-small"); }
+  var f = fitLine(FLATS.sqft, FLATS.rent);
+  el("path", { d: "M" + X(400) + "," + Y(f.intercept + f.slope * 400) + " L" + X(3300) + "," + Y(f.intercept + f.slope * 3300), "class": "fit", style: "stroke:var(--violet);stroke-dasharray:6 6;stroke-width:2.5" }, s);
+  FLATS.sqft.forEach(function (v, i) {
+    C(s, X(v), Y(FLATS.rent[i]), 9, FLATS.rent[i] > 60000 ? "fill:var(--coral)" : "fill:var(--teal)", "dot hero-dot").style.setProperty("--d", (i * 55) + "ms");
+  });
+  T(s, 405, 336, "Flat size in square feet", "s-text");
+  el("text", { x: 22, y: 170, "class": "s-text", "text-anchor": "middle", transform: "rotate(-90 22 170)" }, s, "Monthly rent");
+  T(s, X(3200), Y(95000) - 20, "the Adyar outlier", "s-text s-strong", "end", "fill:var(--coral)");
+  T(s, 92, 72, "r = " + pearson(FLATS.sqft, FLATS.rent).toFixed(2), "s-text s-strong s-big", "start", "fill:var(--teal)");
+}
+
+/* ---------- 7.7 missing map ---------- */
+function nullMap() {
+  var s = $("v-nulls"); if (!s) return;
+  var cols = ["Flat", "Locality", "BHK", "Sq ft", "Rent"];
+  var missRent = { F05: 1, F09: 1, F14: 1 }, missSqft = { F12: 1 };
+  var x0 = 52, cw = 84, rh = 16, y0 = 44;
+  cols.forEach(function (c, j) { T(s, x0 + j * cw + cw / 2 - 2, 34, c, "s-text s-small s-strong"); });
+  FLATS.id.forEach(function (id, i) {
+    var y = y0 + i * rh;
+    T(s, 44, y + 11, id, "s-text s-small", "end");
+    for (var j = 0; j < 5; j++) {
+      var miss = (j === 4 && missRent[id]) || (j === 3 && missSqft[id]);
+      R(s, x0 + j * cw, y, cw - 4, rh - 4, miss ? "fill:var(--coral)" : "fill:var(--ink-3)", "cellbox", 2);
+    }
+  });
+  var by = y0 + 15 * rh + 16;
+  [0, 0, 0, 1, 3].forEach(function (n, j) {
+    var cx = x0 + j * cw + (cw - 4) / 2;
+    T(s, cx, by + 4, n === 0 ? "complete" : n + " missing", "s-text s-small", "middle", n === 0 ? null : "fill:var(--coral)");
+    if (n) R(s, x0 + j * cw, by + 12, (cw - 4) * (n / 15), 8, "fill:var(--coral)", null, 4);
+  });
+  T(s, 260, by + 44, "15 flats  ·  4 holes  ·  11 complete rows", "s-text s-strong");
+}
+
+/* ---------- 7.7 KNN picture ---------- */
+function knnPic() {
+  var s = $("v-knn"); if (!s) return;
+  function X(v) { return 60 + (v - 500) / 550 * 270; }
+  function Y(v) { return 225 - (v - 0.5) / 2 * 150; }
+  L(s, 55, 232, 340, 232, "s-axis"); L(s, 55, 40, 55, 232, "s-axis");
+  for (var t = 600; t <= 1000; t += 200) { L(s, X(t), 232, X(t), 238, "s-axis"); T(s, X(t), 254, String(t), "s-text s-small"); }
+  T(s, 48, Y(1) + 5, "1 BHK", "s-text s-small", "end"); T(s, 48, Y(2) + 5, "2 BHK", "s-text s-small", "end");
+  T(s, 195, 284, "Flat size in square feet", "s-text s-small");
+  var near = { F10: 1, F15: 1, F02: 1 }, fx = X(600), fy = Y(1);
+  FLATS.id.forEach(function (id, i) {
+    if (FLATS.sqft[i] > 1000 || id === "F05" || !near[id]) return;
+    L(s, fx, fy, X(FLATS.sqft[i]), Y(FLATS.bhk[i]), "mark", "stroke:var(--teal);stroke-dasharray:4 4;stroke-width:2");
+  });
+  FLATS.id.forEach(function (id, i) {
+    if (FLATS.sqft[i] > 1000 || id === "F05") return;
+    C(s, X(FLATS.sqft[i]), Y(FLATS.bhk[i]), near[id] ? 8 : 6, near[id] ? "fill:var(--teal)" : "fill:var(--ink-3);stroke:var(--line);stroke-width:2", "dot");
+  });
+  C(s, fx, fy, 9, "fill:var(--coral)", "dot");
+  T(s, fx, fy + 28, "F05: rent = ?", "s-text s-small s-strong", "middle", "fill:var(--coral)");
+  T(s, 358, 58, "The 3 nearest flats", "s-text s-strong", "start", "fill:var(--teal)");
+  [["F10", "1 BHK, 650 sq ft", "₹11,000"], ["F15", "1 BHK, 550 sq ft", "₹9,000"], ["F02", "2 BHK, 900 sq ft", "₹12,000"]].forEach(function (r, k) {
+    var y = 92 + k * 42;
+    T(s, 358, y, r[0] + "   " + r[1], "s-text s-small", "start");
+    T(s, 358, y + 18, r[2], "s-text s-small s-strong", "start", "fill:var(--teal)");
+  });
+  L(s, 358, 228, 505, 228, "s-axis");
+  T(s, 358, 252, "average = ₹10,667", "s-text s-strong", "start", "fill:var(--teal)");
+}
+/* ---------- 7.7 imputation widget ---------- */
+function imputeWidget() {
+  var s = $("im-svg"); if (!s) return;
+  var obs = [18000,12000,20000,38000,28000,30000,25000,11000,95000,18000,36000,9000];
+  var modes = {
+    "im-drop": { fill: [], note: "Three flats dropped. Nothing was invented, but the dataset is now 12 flats instead of 15, and the ones lost were all small homes." },
+    "im-mean": { fill: [28333.33, 28333.33, 28333.33], note: "All three holes got ₹28,333, which is more than 9 of the 12 real rents. The spread shrinks because three identical values landed at the centre." },
+    "im-median": { fill: [22500, 22500, 22500], note: "All three got ₹22,500. Reasonable for a mid-sized flat, far too high for a 600 sq ft one." },
+    "im-knn": { fill: [10667, 16000, 21000], note: "Each flat got a value from its own neighbours: ₹10,667, ₹16,000 and ₹21,000, instead of one number for all three." }
+  };
+  function X(v) { return 40 + v / 100000 * 440; }
+  function draw(key) {
+    var m = modes[key], all = obs.concat(m.fill);
+    clear(s);
+    L(s, 40, 120, 490, 120, "s-axis");
+    for (var t = 0; t <= 100000; t += 20000) { L(s, X(t), 120, X(t), 126, "s-axis"); T(s, X(t), 144, t === 0 ? "0" : (t / 1000) + "k", "s-text s-small"); }
+    var mu = mean(all), md = median(all);
+    L(s, X(mu), 36, X(mu), 120, "mark st-coral", "stroke-width:2");
+    T(s, X(mu), 28, "mean", "s-text s-small s-strong", "middle", "fill:var(--coral)");
+    L(s, X(md), 50, X(md), 120, "mark st-teal", "stroke-width:2");
+    T(s, X(md), 162, "median", "s-text s-small s-strong", "middle", "fill:var(--teal)");
+    var last = [];
+    all.slice().sort(function (a, b) { return a - b; }).forEach(function (v) {
+      var x = X(v), lvl = 0;
+      while (last[lvl] !== undefined && x - last[lvl] < 13) lvl++;
+      last[lvl] = x;
+      var filled = m.fill.indexOf(v) >= 0;
+      C(s, x, 104 - lvl * 13, filled ? 6.5 : 5.5, filled ? "fill:var(--gold)" : DOT, "dot");
+    });
+    $("im-n").textContent = String(all.length);
+    $("im-avg").textContent = num(mu, 0);
+    $("im-med").textContent = num(md, 0);
+    $("im-sd").textContent = num(sd(all), 0);
+    $("im-note").textContent = m.note;
+    Object.keys(modes).forEach(function (k) { var b = $(k); if (b) b.setAttribute("aria-pressed", k === key ? "true" : "false"); });
+  }
+  Object.keys(modes).forEach(function (k) { var b = $(k); if (b) b.addEventListener("click", function () { draw(k); }); });
+  draw("im-median");
+}
+
+/* ---------- 7.8 encoding ---------- */
+function encodePic() {
+  var s = $("v-encode"); if (!s) return;
+  var rows = ["Velachery", "Tambaram", "OMR", "Adyar", "Anna Nagar"];
+  var cols = ["Adyar", "AnnaNgr", "OMR", "Tambrm", "Velachy"];
+  T(s, 70, 30, "locality", "s-text s-strong");
+  rows.forEach(function (r, i) {
+    var y = 50 + i * 40;
+    R(s, 10, y, 120, 32, "fill:var(--ink-3)", "cellbox", 5);
+    T(s, 70, y + 21, r, "s-text s-small");
+  });
+  T(s, 152, 150, "→", "s-text s-strong s-big");
+  cols.forEach(function (c, j) { T(s, 185 + j * 66 + 26, 30, c, "s-text s-small s-strong"); });
+  rows.forEach(function (r, i) {
+    var y = 50 + i * 40;
+    cols.forEach(function (c, j) {
+      var one = (c === "Adyar" && r === "Adyar") || (c === "AnnaNgr" && r === "Anna Nagar") || (c === "OMR" && r === "OMR") || (c === "Tambrm" && r === "Tambaram") || (c === "Velachy" && r === "Velachery");
+      R(s, 185 + j * 66, y, 52, 32, one ? "fill:var(--teal)" : "fill:var(--ink-3)", "cellbox", 5);
+      T(s, 185 + j * 66 + 26, y + 21, one ? "1" : "0", "s-text s-strong", "middle", one ? "fill:var(--deep)" : "fill:var(--muted)");
+    });
+  });
+  T(s, 260, 278, "One column of text becomes five columns of 0 and 1", "s-text");
+}
+
+/* ---------- 7.8 scaling ---------- */
+function scalePic() {
+  var s = $("v-scale"); if (!s) return;
+  var sq = FLATS.sqft, bh = FLATS.bhk;
+  function X1(v) { return 60 + v / 3400 * 400; }
+  T(s, 20, 28, "Before scaling", "s-text s-strong", "start");
+  L(s, 60, 100, 470, 100, "s-axis");
+  for (var t = 0; t <= 3000; t += 1000) { L(s, X1(t), 100, X1(t), 106, "s-axis"); T(s, X1(t), 124, String(t), "s-text s-small"); }
+  sq.forEach(function (v) { C(s, X1(v), 58, 5, "fill:var(--violet)", "dot"); });
+  bh.forEach(function (v) { C(s, X1(v), 80, 5, "fill:var(--gold)", "dot"); });
+  T(s, 478, 62, "sq ft", "s-text s-small s-strong", "start", "fill:var(--violet)");
+  T(s, 478, 84, "BHK", "s-text s-small s-strong", "start", "fill:var(--gold)");
+  L(s, 150, 84, 74, 80, "mark", "stroke:var(--gold);stroke-width:1.5");
+  T(s, 158, 88, "all 15 BHK values are stuck here", "s-text s-small", "start", "fill:var(--gold)");
+  var msq = mean(sq), ssq = sd(sq), mbh = mean(bh), sbh = sd(bh);
+  function X2(z) { return 230 + z * 64; }
+  T(s, 20, 176, "After standardising", "s-text s-strong", "start");
+  L(s, 60, 250, 470, 250, "s-axis");
+  for (var z = -2; z <= 3; z++) { L(s, X2(z), 250, X2(z), 256, "s-axis"); T(s, X2(z), 274, (z > 0 ? "+" : "") + z, "s-text s-small"); }
+  sq.forEach(function (v) { C(s, X2((v - msq) / ssq), 208, 5, "fill:var(--violet)", "dot"); });
+  bh.forEach(function (v) { C(s, X2((v - mbh) / sbh), 230, 5, "fill:var(--gold)", "dot"); });
+  T(s, 478, 212, "sq ft", "s-text s-small s-strong", "start", "fill:var(--violet)");
+  T(s, 478, 234, "BHK", "s-text s-small s-strong", "start", "fill:var(--gold)");
+  var zx = X2((3200 - msq) / ssq);
+  L(s, zx - 6, 192, zx, 202, "mark", "stroke:var(--coral);stroke-width:1.5");
+  T(s, zx - 10, 190, "the 3,200 sq ft flat", "s-text s-small", "end", "fill:var(--coral)");
+}
+/* ---------- 7.9 datasets ---------- */
+var SETS = {
+  pos:   { x: [1,2,2,3,4,4,5,6,7,8], y: [38,45,52,50,63,58,72,70,82,88], xl: "Hours studied", yl: "Marks", out: [2, 92] },
+  weak:  { x: [1,2,3,4,5,6,7,8,9,10,11,12], y: [8,4,11,6,14,5,9,16,7,12,18,10], xl: "Ad spend", yl: "Walk-ins", out: [12, 2] },
+  neg:   { x: [10,20,30,40,50,60,70,80], y: [95,82,88,64,70,52,48,35], xl: "Price", yl: "Units sold", out: [80, 95] },
+  none:  { x: [3,5,5,8,9,11,12,14,15,17,18,20], y: [52,44,60,47,56,41,58,45,59,43,55,49], xl: "Shoe size", yl: "Salary", out: [20, 95] },
+  curve: { x: [-5,-4,-3,-2,-1,0,1,2,3,4,5], y: [25,16,9,4,1,0,1,4,9,16,25], xl: "Temperature change", yl: "Energy used", out: [5, 0] }
+};
+
+function miniScatter(s, key, x0, w) {
+  var d = SETS[key], X = d.x, Y = d.y;
+  var xmin = Math.min.apply(null, X), xmax = Math.max.apply(null, X);
+  var ymin = Math.min.apply(null, Y), ymax = Math.max.apply(null, Y);
+  function px(v) { return x0 + 14 + (v - xmin) / (xmax - xmin) * (w - 30); }
+  function py(v) { return 160 - (v - ymin) / (ymax - ymin) * 100; }
+  R(s, x0, 40, w, 140, "fill:var(--ink-3)", "cellbox", 8);
+  X.forEach(function (v, i) { C(s, px(v), py(Y[i]), 5, "fill:var(--teal)", "dot"); });
+  var r = pearson(X, Y);
+  T(s, x0 + w / 2, 202, "r = " + r.toFixed(2), "s-text s-strong s-big", "middle", "fill:" + (r > 0.2 ? "var(--teal)" : r < -0.2 ? "var(--coral)" : "var(--muted)"));
+  T(s, x0 + w / 2, 30, d.xl + " vs " + d.yl, "s-text s-small");
+}
+function scatterKinds() {
+  var s = $("v-scatter-kinds"); if (!s) return;
+  miniScatter(s, "pos", 10, 160);
+  miniScatter(s, "neg", 180, 160);
+  miniScatter(s, "none", 350, 160);
+}
+
+/* ---------- 7.9 heatmap ---------- */
+function heatmap() {
+  var s = $("v-corr-matrix"); if (!s) return;
+  s.setAttribute("viewBox", "0 0 520 300");
+  var labs = ["BHK", "Sq ft", "Rent"];
+  var m = [[1, 0.88, 0.84], [0.88, 1, 0.99], [0.84, 0.99, 1]];
+  var x0 = 140, y0 = 46, cell = 70;
+  labs.forEach(function (l, j) { T(s, x0 + j * cell + (cell - 4) / 2, 36, l, "s-text s-strong"); });
+  labs.forEach(function (l, i) { T(s, x0 - 12, y0 + i * cell + (cell - 4) / 2 + 5, l, "s-text s-strong", "end"); });
+  m.forEach(function (row, i) {
+    row.forEach(function (v, j) {
+      var a = 0.1 + Math.abs(v) * 0.75;
+      R(s, x0 + j * cell, y0 + i * cell, cell - 4, cell - 4, "fill:rgba(67,210,195," + a.toFixed(2) + ")", "heat-cell", 6);
+      T(s, x0 + j * cell + (cell - 4) / 2, y0 + i * cell + (cell - 4) / 2 + 6, v.toFixed(2), "s-text s-strong", "middle", v > 0.8 ? "fill:var(--deep)" : null);
+    });
+  });
+  T(s, 260, y0 + 3 * cell + 26, "Darker means the two columns move together more closely", "s-text s-small");
+}
+/* ---------- 7.9 non-linear ---------- */
+function nonlinear() {
+  var s = $("v-nonlinear"); if (!s) return;
+  var d = SETS.curve;
+  function X(v) { return 240 + (v + 5) * 24; }
+  function Y(v) { return 190 - v / 25 * 140; }
+  L(s, 230, 194, 480, 194, "s-axis");
+  d.x.forEach(function (v, i) { C(s, X(v), Y(d.y[i]), 6, "fill:var(--gold)", "dot"); });
+  T(s, 20, 64, "Every point sits", "s-text s-strong", "start");
+  T(s, 20, 90, "exactly on the curve,", "s-text s-strong", "start");
+  T(s, 20, 116, "yet Pearson says:", "s-text s-strong", "start");
+  T(s, 20, 156, "r = " + pearson(d.x, d.y).toFixed(2), "s-text s-strong s-big", "start", "fill:var(--coral)");
+  T(s, 355, 218, d.xl + " against " + d.yl, "s-text s-small");
+}
+/* ---------- 7.9 correlation widget ---------- */
+function corrWidget() {
+  var s = $("co-svg"); if (!s) return;
+  var current = "pos", withOutlier = false;
+  var btns = { "co-pos": "pos", "co-weak": "weak", "co-neg": "neg", "co-none": "none", "co-curve": "curve" };
+  function draw() {
+    var d = SETS[current];
+    var X = d.x.slice(), Y = d.y.slice();
+    if (withOutlier) { X.push(d.out[0]); Y.push(d.out[1]); }
+    var xmin = Math.min.apply(null, X), xmax = Math.max.apply(null, X);
+    var ymin = Math.min.apply(null, Y), ymax = Math.max.apply(null, Y);
+    var padx = (xmax - xmin) * 0.1 || 1, pady = (ymax - ymin) * 0.1 || 1;
+    xmin -= padx; xmax += padx; ymin -= pady; ymax += pady;
+    function px(v) { return 60 + (v - xmin) / (xmax - xmin) * 420; }
+    function py(v) { return 240 - (v - ymin) / (ymax - ymin) * 200; }
+    clear(s);
+    L(s, 60, 245, 490, 245, "s-axis"); L(s, 55, 30, 55, 245, "s-axis");
+    T(s, 275, 282, d.xl, "s-text");
+    el("text", { x: 24, y: 140, "class": "s-text", "text-anchor": "middle", transform: "rotate(-90 24 140)" }, s, d.yl);
+    var f = fitLine(X, Y);
+    el("path", { d: "M" + px(xmin) + "," + py(f.intercept + f.slope * xmin) + " L" + px(xmax) + "," + py(f.intercept + f.slope * xmax) + "", "class": "fit", style: "stroke:var(--violet);stroke-dasharray:6 6;stroke-width:2" }, s);
+    X.forEach(function (v, i) {
+      var isOut = withOutlier && i === X.length - 1;
+      C(s, px(v), py(Y[i]), isOut ? 9 : 6, isOut ? "fill:var(--coral)" : "fill:var(--teal)", "dot");
+    });
+    var r = pearson(X, Y);
+    $("co-r").textContent = r.toFixed(2);
+    $("co-r2").textContent = (r * r).toFixed(2);
+    var note = "A " + strength(r) + (Math.abs(r) < 0.2 ? " relationship" : r > 0 ? " positive relationship" : " negative relationship") + ".";
+    if (current === "curve") note += " The shape is perfect, but it is not a straight line, so r cannot see it.";
+    if (withOutlier) note += " One added point moved r from " + pearson(d.x, d.y).toFixed(2) + " to " + r.toFixed(2) + ".";
+    $("co-note").textContent = note;
+    var ob = $("co-out"); if (ob) ob.setAttribute("aria-pressed", withOutlier ? "true" : "false");
+    Object.keys(btns).forEach(function (k) { var b = $(k); if (b) b.setAttribute("aria-pressed", btns[k] === current ? "true" : "false"); });
+  }
+  Object.keys(btns).forEach(function (k) {
+    var b = $(k); if (b) b.addEventListener("click", function () { current = btns[k]; draw(); });
+  });
+  var ob = $("co-out");
+  if (ob) ob.addEventListener("click", function () { withOutlier = !withOutlier; draw(); });
+  draw();
+}
+
+[heroScatter, nullMap, knnPic, imputeWidget, encodePic, scalePic, scatterKinds, heatmap, nonlinear, corrWidget].forEach(safe);
+})();
+</script>
+</body>
+</html>
